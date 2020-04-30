@@ -18,7 +18,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        repository: 'elixir-lang/elixir'
+        repository: elixir-lang/elixir
 
       # Runs a set of commands using the runners shell
     - name: Run a multi-line script
