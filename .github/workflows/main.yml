@@ -25,7 +25,7 @@ jobs:
       run: make test
 
     - name: Create the dialyzer PLT file
-      run: make plt
+      run: make build_plt
 
     - name: Run dialyzer
       run: dialyzer -pa lib/elixir/ebin --plt .elixir.plt --fullpath lib/*/ebin
