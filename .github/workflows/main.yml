@@ -47,3 +47,4 @@ jobs:
 
     - name: Run dialyzer
       run: dialyzer -pa lib/elixir/ebin --plt erlang-plt-dir/.elixir.plt --fullpath lib/*/ebin
+      continue-on-error: true
