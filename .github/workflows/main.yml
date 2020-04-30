@@ -28,7 +28,15 @@ jobs:
       run: make test
       continue-on-error: true
 
+    - name: Dialyzer PLT cache handling
+      id: cache-plt
+      uses: actions/cache@v1
+      with:
+        path: .elixir.plt
+        key: erlang:22.3.3-alpine-3.11.3
+
     - name: Create the dialyzer PLT file
+      if: steps.cache-plt.outputs.cache-hit != 'true'
       run: make build_plt
 
     - name: Run dialyzer
