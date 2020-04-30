@@ -29,16 +29,21 @@ jobs:
       run: make test
       continue-on-error: true
 
+    - name: Create a directory where cached PLT is stored
+      run: mkdir erlang-plt-dir
+
     - name: Handle dialyzer PLT file caching
       id: cache-plt
       uses: actions/cache@v1
       with:
-        path: .elixir.plt
+        path: erlang-plt-dir
         key: erlang:22.3.3-alpine-3.11.3
 
     - name: Create the dialyzer PLT file
       if: steps.cache-plt.outputs.cache-hit != 'true'
-      run: make build_plt
+      run: |
+        make build_plt
+        mv .elixir.plt erlang-plt-dir/
 
     - name: Run dialyzer
-      run: dialyzer -pa lib/elixir/ebin --plt .elixir.plt --fullpath lib/*/ebin
+      run: dialyzer -pa lib/elixir/ebin --plt erlang-plt-dir/.elixir.plt --fullpath lib/*/ebin
