@@ -3,27 +3,47 @@ name: dialyzer
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  schedule:
+    - cron: '0 0 * * *'
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  dialyze:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    container: docker://hexpm/erlang:22.3.3-alpine-3.11.3
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
+    - name: Get elixir source code
+      uses: actions/checkout@v2
+      with:
+        repository: elixir-lang/elixir
 
-    # Runs a single command using the runners shell
-    - name: Run a one-line script
-      run: echo Hello, world!
+    - name: Install make
+      run: apk add --no-cache make
+    
+    - name: Compile elixir
+      run: make compile
 
-    # Runs a set of commands using the runners shell
-    - name: Run a multi-line script
+    - name: Install deps needed for testing elixir
+      run: apk add --no-cache git
+
+    - name: Test elixir
+      run: make test
+      continue-on-error: true
+
+    - name: Create a directory where cached PLT is stored
+      run: mkdir erlang-plt-dir
+
+    - name: Handle dialyzer PLT file caching
+      id: cache-plt
+      uses: actions/cache@v1
+      with:
+        path: erlang-plt-dir
+        key: erlang:22.3.3-alpine-3.11.3
+
+    - name: Create the dialyzer PLT file
+      if: steps.cache-plt.outputs.cache-hit != 'true'
       run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
+        make build_plt
+        mv .elixir.plt erlang-plt-dir/
+
+    - name: Run dialyzer
+      run: dialyzer -pa lib/elixir/ebin --plt erlang-plt-dir/.elixir.plt --fullpath lib/*/ebin
