@@ -19,6 +19,9 @@ jobs:
     - uses: actions/checkout@v2
       with:
         repository: elixir-lang/elixir
+
+    - name: Install make
+      run: apk add --no-cache make
     
     - name: Compile elixir
       run: make compile
