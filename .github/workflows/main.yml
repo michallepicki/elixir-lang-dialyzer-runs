@@ -21,11 +21,16 @@ jobs:
     - name: Compile elixir
       run: make compile
 
+    - name: Install deps needed for testing elixir
+      run: apk add --no-cache git
+
     - name: Test elixir
       run: make test
+      continue-on-error: true
 
     - name: Create the dialyzer PLT file
       run: make build_plt
 
     - name: Run dialyzer
       run: dialyzer -pa lib/elixir/ebin --plt .elixir.plt --fullpath lib/*/ebin
+      continue-on-error: true
