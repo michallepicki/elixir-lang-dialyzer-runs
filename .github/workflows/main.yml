@@ -43,4 +43,3 @@ jobs:
 
     - name: Run dialyzer
       run: dialyzer -pa lib/elixir/ebin --plt .elixir.plt --fullpath lib/*/ebin
-      continue-on-error: true
