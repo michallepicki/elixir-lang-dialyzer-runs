@@ -6,12 +6,12 @@ report = :dialyzer.run(
     :unknown
   ],
   files_rec: [
-    # 'elixir/lib/eex/ebin',
+    'elixir/lib/eex/ebin',
     'elixir/lib/elixir/ebin'
-    # 'elixir/lib/ex_unit/ebin',
-    # 'elixir/lib/iex/ebin',
-    # 'elixir/lib/logger/ebin',
-    # 'elixir/lib/mix/ebin'
+    'elixir/lib/ex_unit/ebin',
+    'elixir/lib/iex/ebin',
+    'elixir/lib/logger/ebin',
+    'elixir/lib/mix/ebin'
   ]
 )
 |> Enum.map(fn warning ->
