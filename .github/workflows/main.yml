@@ -16,10 +16,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        path: dialyzin
-    
-    - name: check if we got the source correctly
-      run: cat dialyzin/README.md
+        path: elixir-lang-dialyzer-runs
 
     - name: Get elixir source code
       uses: actions/checkout@v2
@@ -47,7 +44,7 @@ jobs:
       id: cache-plt
       uses: actions/cache@v1
       with:
-        path: dialyzin/plt-dir
+        path: elixir-lang-dialyzer-runs/plt-dir
         key: erlang:22.3.3-alpine-3.11.3
 
     - name: Create the dialyzer PLT file
@@ -55,9 +52,9 @@ jobs:
       run: |
         cd elixir
         make build_plt
-        mv .elixir.plt ../dialyzin/plt-dir
+        mv .elixir.plt ../elixir-lang-dialyzer-runs/plt-dir
         cd ../
 
     - name: Run dialyzer
-      run: dialyzer -pa elixir/lib/elixir/ebin --plt dialyzin/plt-dir/.elixir.plt --fullpath elixir/lib/*/ebin
+      run: dialyzer -pa elixir/lib/elixir/ebin --plt elixir-lang-dialyzer-runs/plt-dir/.elixir.plt --fullpath elixir/lib/*/ebin
       continue-on-error: true
