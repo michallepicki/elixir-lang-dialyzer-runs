@@ -32,12 +32,12 @@ jobs:
         make compile
         cd ../
 
-    - name: Test elixir
-      run: |
-        cd elixir
-        make test
-        cd ../
-      continue-on-error: true
+    # - name: Test elixir
+    #   run: |
+    #     cd elixir
+    #     make test
+    #     cd ../
+    #   continue-on-error: true
 
     - name: Handle dialyzer PLT file caching
       id: cache-plt
@@ -56,3 +56,9 @@ jobs:
 
     - name: Run dialyzer
       run: elixir/bin/elixir dialyze.exs
+
+    - name: Save the report
+      uses: actions/upload-artifact@v2
+      with:
+        name: report
+        path: report
