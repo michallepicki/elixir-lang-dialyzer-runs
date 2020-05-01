@@ -13,10 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     container: docker://hexpm/erlang:22.3.3-alpine-3.11.3
     steps:
+
     - name: Checkout
       uses: actions/checkout@v2
-      with:
-        path: elixir-lang-dialyzer-runs
 
     - name: Get elixir source code
       uses: actions/checkout@v2
@@ -44,7 +43,7 @@ jobs:
       id: cache-plt
       uses: actions/cache@v1
       with:
-        path: elixir-lang-dialyzer-runs/plt-dir
+        path: plt-dir
         key: erlang:22.3.3-alpine-3.11.3
 
     - name: Create the dialyzer PLT file
@@ -52,9 +51,8 @@ jobs:
       run: |
         cd elixir
         make build_plt
-        mv .elixir.plt ../elixir-lang-dialyzer-runs/plt-dir
+        mv .elixir.plt ../plt-dir
         cd ../
 
     - name: Run dialyzer
-      run: dialyzer -pa elixir/lib/elixir/ebin --plt elixir-lang-dialyzer-runs/plt-dir/.elixir.plt --fullpath elixir/lib/*/ebin
-      continue-on-error: true
+      run: elixir/bin/elixir dialyze.exs
