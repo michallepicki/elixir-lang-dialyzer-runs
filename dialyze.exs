@@ -15,11 +15,12 @@ report =
       'elixir/lib/mix/ebin'
     ]
   )
-  |> Enum.map(fn warning ->
+  |> Stream.map(fn warning ->
     warning
     |> :dialyzer.format_warning(indent_opt: true)
-    |> to_string()
+    |> (to_string() <>
+          "\n")
   end)
-  |> Enum.join("\n")
-
-File.write("report", report)
+  |> Stream.into(File.stream!("report", [:write, :utf8]))
+  |> Stream.into(IO.stream(:stdio, :line))
+  |> Stream.run()
