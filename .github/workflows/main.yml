@@ -11,7 +11,7 @@ on:
 jobs:
   dialyze:
     runs-on: ubuntu-latest
-    container: docker://hexpm/erlang:22.3.3-alpine-3.11.3
+    container: docker://hexpm/erlang:23.0.1-alpine-3.11.6
     steps:
 
     - name: Checkout
@@ -44,14 +44,14 @@ jobs:
       uses: actions/cache@v1
       with:
         path: plt-dir
-        key: erlang:22.3.3-alpine-3.11.3
+        key: erlang:23.0.1-alpine-3.11.6
 
     - name: Create the dialyzer PLT file
       if: steps.cache-plt.outputs.cache-hit != 'true'
       run: |
         cd elixir
         make build_plt
-        mv .elixir.plt ../plt-dir
+        mv .elixir.plt ../plt-dir/
         cd ../
 
     - name: Run dialyzer
