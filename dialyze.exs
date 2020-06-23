@@ -201,10 +201,19 @@ end)
       |> :dialyzer.format_warning(indent_opt: true, filename_opt: :fullpath)
       |> to_string()
 
-    "Potential issue: #{formatted_warning}\n\n" <> "raw form: #{inspect(warning)}\n\n"
+    "############################################################\n" <>
+      "Potential issue: \n#{formatted_warning}\n\n" <>
+      "raw form: #{inspect(warning)}\n\n"
 
   {:ok, message, warning} ->
-    "Filtered non-issue: (#{message})\n\n" <> "raw form: #{inspect(warning)}\n\n"
+    formatted_warning =
+      warning
+      |> :dialyzer.format_warning(indent_opt: true, filename_opt: :fullpath)
+      |> to_string()
+
+    "############################################################\n" <>
+      "Filtered non-issue (#{message}):\n#{formatted_warning}\n\n" <>
+      "raw form: #{inspect(warning)}\n\n"
 end)
 |> Stream.into(File.stream!("report", [:write, :utf8]))
 |> Stream.into(IO.stream(:stdio, :line))
