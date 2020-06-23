@@ -127,20 +127,40 @@ defmodule Dialyzin do
   defp filter_warning(warning = {:warn_not_called, {'lib/system.ex', 91}, {:unused_fun, [function, 1]}}) when function in [:read_stripped, :strip],
     do: {:ok, "functions called only during elixir compilation time", warning}
 
-  defp filter_warning(warning = {:warn_matching, {'lib/dynamic_supervisor.ex', 350}, {:pattern_match_cov, ['variable _other@1', '{_,_,_,_,_,_} | \#{\'id\':=_, \'start\':={atom(),atom(),[any()]}, \'modules\'=>\'dynamic\' | [atom()], \'restart\'=>\'permanent\' | \'temporary\' | \'transient\', \'shutdown\'=>\'brutal_kill\' | \'infinity\' | non_neg_integer(), \'type\'=>\'supervisor\' | \'worker\'}']}}),
-    do: {:ok, "overly defensive code", warning}
+  defp filter_warning(
+         warning =
+           {:warn_matching, {'lib/dynamic_supervisor.ex', 350},
+            {:pattern_match_cov,
+             [
+               'variable _other@1',
+               '{_,_,_,_,_,_} | \#{\'id\':=_, \'start\':={atom(),atom(),[any()]}, \'modules\'=>\'dynamic\' | [atom()], \'restart\'=>\'permanent\' | \'temporary\' | \'transient\', \'shutdown\'=>\'brutal_kill\' | \'infinity\' | non_neg_integer(), \'type\'=>\'supervisor\' | \'worker\'}'
+             ]}}
+       ),
+       do: {:ok, "overly defensive code", warning}
 
   defp filter_warning(warning = {:warn_matching, {'lib/string_io.ex', 410}, {:guard_fail, [:is_list, '(_data@1::binary())']}}),
     do: {:ok, "overly defensive code", warning}
 
-  defp filter_warning(warning = {:warn_matching, {'lib/mix/utils.ex', 672}, {:pattern_match, ['pattern \'nil\'', '\#{\'__struct__\':=\'Elixir.URI\', \'authority\':=\'nil\' | binary(), \'fragment\':=\'nil\' | binary(), \'host\':=\'nil\' | binary(), \'path\':=\'nil\' | binary(), \'port\':=\'nil\' | char(), \'query\':=\'nil\' | binary(), \'scheme\':=\'nil\' | binary(), \'userinfo\':=\'nil\' | binary()}']}}),
-    do: {:ok, "overly defensive code", warning}
+  defp filter_warning(
+         warning =
+           {:warn_matching, {'lib/mix/utils.ex', 672},
+            {:pattern_match,
+             [
+               'pattern \'nil\'',
+               '\#{\'__struct__\':=\'Elixir.URI\', \'authority\':=\'nil\' | binary(), \'fragment\':=\'nil\' | binary(), \'host\':=\'nil\' | binary(), \'path\':=\'nil\' | binary(), \'port\':=\'nil\' | char(), \'query\':=\'nil\' | binary(), \'scheme\':=\'nil\' | binary(), \'userinfo\':=\'nil\' | binary()}'
+             ]}}
+       ),
+       do: {:ok, "overly defensive code", warning}
 
   defp filter_warning(warning = {:warn_matching, {'lib/mix/tasks/deps.compile.ex', 236}, {:guard_fail, ['_@6::\'true\'', '=:=', '\'nil\'']}}),
     do: {:ok, "slightly dead code", warning}
 
-  defp filter_warning(warning = {:warn_matching, {'lib/calendar/time.ex', 642}, {:pattern_match, ['pattern {\'error\', _reason@1}', '{\'ok\',\#{\'__struct__\':=\'Elixir.Time\', \'calendar\':=atom(), \'hour\':=non_neg_integer(), \'microsecond\':={non_neg_integer(),non_neg_integer()}, \'minute\':=non_neg_integer(), \'second\':=non_neg_integer()}}']}}),
-    do: {:ok, "slightly dead code", warning}
+  defp filter_warning(
+         warning =
+           {:warn_matching, {'lib/calendar/time.ex', 642},
+            {:pattern_match, ['pattern {\'error\', _reason@1}', '{\'ok\',\#{\'__struct__\':=\'Elixir.Time\', \'calendar\':=atom(), \'hour\':=non_neg_integer(), \'microsecond\':={non_neg_integer(),non_neg_integer()}, \'minute\':=non_neg_integer(), \'second\':=non_neg_integer()}}']}}
+       ),
+       do: {:ok, "slightly dead code", warning}
 
   defp filter_warning(warning), do: {:warning, warning}
 end
