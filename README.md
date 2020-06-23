@@ -1,6 +1,6 @@
 # Daily dialyzer checks on Elixir source code
 
-![dialyzer](https://github.com/michallepicki/elixir-lang-dialyzer-runs/workflows/dialyzer/badge.svg?branch=master&event=schedule)
+[![dialyzer](https://github.com/michallepicki/elixir-lang-dialyzer-runs/workflows/dialyzer/badge.svg?branch=master&event=schedule)](https://github.com/michallepicki/elixir-lang-dialyzer-runs/actions?query=workflow%3Adialyzer+event%3Aschedule)
 
 This repository runs a dialyzer check on the Elixir source code.
 
