@@ -124,7 +124,7 @@ defmodule Dialyzin do
   defp filter_warning(warning = {:warn_not_called, {'lib/base.ex', _}, {:unused_fun, [function, _]}}) when function in [:encode_pair_clauses, :shift, :encode_clauses, :decode_char_clauses, :decode_mixed_clauses, :decode_clauses, :bad_digit_clause],
     do: {:ok, "functions inlined or only used to generate other functions at compile time", warning}
 
-  defp filter_warning(warning = {:warn_not_called, {'lib/system.ex', 91}, {:unused_fun, [function, 1]}}) when function in [:read_stripped, :strip],
+  defp filter_warning(warning = {:warn_not_called, {'lib/system.ex', _}, {:unused_fun, [function, 1]}}) when function in [:read_stripped, :strip],
     do: {:ok, "functions called only during elixir compilation time", warning}
 
   defp filter_warning(
@@ -151,6 +151,9 @@ defmodule Dialyzin do
              ]}}
        ),
        do: {:ok, "overly defensive code", warning}
+
+  defp filter_warning(warning = {:warn_matching, {'lib/iex/helpers.ex', 622}, {:pattern_match, ['pattern <__key@1, \'nil\'>', '<<<_:64,_:_*8>>,<<_:80>> | string() | non_neg_integer()>']}}),
+    do: {:ok, "overly_defensive code", warning}
 
   defp filter_warning(warning = {:warn_matching, {'lib/mix/tasks/deps.compile.ex', 236}, {:guard_fail, ['_@6::\'true\'', '=:=', '\'nil\'']}}),
     do: {:ok, "slightly dead code", warning}
