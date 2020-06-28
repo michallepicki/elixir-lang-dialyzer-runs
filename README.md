@@ -1,9 +1,9 @@
 # Daily dialyzer checks on Elixir source code
 
-[![dialyzer](https://github.com/michallepicki/elixir-lang-dialyzer-runs/workflows/dialyzer/badge.svg?branch=master&event=schedule)](https://github.com/michallepicki/elixir-lang-dialyzer-runs/actions?query=workflow%3Adialyzer+event%3Aschedule)
+[![dialyzer](https://github.com/michallepicki/elixir-lang-dialyzer-runs/workflows/dialyzer/badge.svg?branch=master)](https://github.com/michallepicki/elixir-lang-dialyzer-runs/actions?query=workflow%3Adialyzer+branch%3Amaster)
 
 This repository runs a dialyzer check on the [Elixir programming language source code](https://github.com/elixir-lang/elixir).
 
-Reports can be found at https://github.com/michallepicki/elixir-lang-dialyzer-runs/actions?query=workflow%3Adialyzer+event%3Aschedule . Click the last event, then `dialyze` on the left, then expand "Run dialyzer" step to see errors. The report is also uploaded as a build artifact. Potential issues are at the top of the output (if any). Filtered non-issues are printed but don't affect the success/failure status code.
+Reports can be found at https://github.com/michallepicki/elixir-lang-dialyzer-runs/actions?query=workflow%3Adialyzer+branch%3Amaster . Click the last event, then `dialyze` on the left, then expand "Run dialyzer" step to see errors. The report is also uploaded as a build artifact. Potential issues are at the top of the output (if any). Filtered non-issues are printed but don't affect the success/failure status code.
 
 Occasionally, filtering code will have to be updated when line numbers change.
