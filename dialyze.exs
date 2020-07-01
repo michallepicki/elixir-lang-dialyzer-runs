@@ -12,7 +12,7 @@ defmodule Dialyzin do
 
   defp filter_warning(
          warning =
-           {:warn_opaque, {'lib/mix/tasks/test.ex', 559},
+           {:warn_opaque, {'lib/mix/tasks/test.ex', 563},
             {:opaque_match,
              [
                'pattern \#{\'__struct__\':=\'Elixir.MapSet\'}',
@@ -22,7 +22,7 @@ defmodule Dialyzin do
        ),
        do: {:ok, "Elixir folks want to be able to pattern match on a struct name while keeping the struct type opaque", warning}
 
-  defp filter_warning(warning = {:warn_matching, {'lib/kernel.ex', line}, {:pattern_match, ['pattern \'false\'', '\'true\'']}}) when line in [1804, 3007, 3331, 3636, 3989, 3993, 4430],
+  defp filter_warning(warning = {:warn_matching, {'lib/kernel.ex', line}, {:pattern_match, ['pattern \'false\'', '\'true\'']}}) when line in [1804, 3007, 3331, 3636, 3975, 3979, 4416],
     do: {:ok, "inlined bootstrap check stuff", warning}
 
   defp filter_warning(warning = {:warn_matching, {'src/elixir_erl_compiler.erl', 59}, {:pattern_match, _lots_of_details}}),
@@ -31,7 +31,7 @@ defmodule Dialyzin do
   defp filter_warning(warning = {:warn_matching, {'lib/mix/tasks/compile.erlang.ex', 104}, {:pattern_match, ['pattern {\'error\', \'badarg\'}', _]}}),
     do: {:ok, "return type not documented in erlang", warning}
 
-  defp filter_warning(warning = {:warn_return_no_exit, {'lib/mix/tasks/test.ex', 404}, {:no_return, [:only_normal, :raise_with_shell, 2]}}),
+  defp filter_warning(warning = {:warn_return_no_exit, {'lib/mix/tasks/test.ex', 408}, {:no_return, [:only_normal, :raise_with_shell, 2]}}),
     do: {:ok, "not annotated exception", warning}
 
   defp filter_warning(warning = {:warn_return_no_exit, {'lib/mix/release.ex', 227}, {:no_return, [:only_normal, :bad_umbrella!, 0]}}),
