@@ -58,6 +58,7 @@ jobs:
       run: elixir/bin/elixir dialyze.exs
 
     - name: Save the report
+      if: ${{ always() }}
       uses: actions/upload-artifact@v2
       with:
         name: report
