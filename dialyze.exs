@@ -12,7 +12,7 @@ defmodule Dialyzin do
 
   defp filter_warning(
          warning =
-           {:warn_opaque, {'lib/mix/tasks/test.ex', 563},
+           {:warn_opaque, {'lib/mix/tasks/test.ex', 560},
             {:opaque_match,
              [
                'pattern \#{\'__struct__\':=\'Elixir.MapSet\'}',
@@ -31,28 +31,28 @@ defmodule Dialyzin do
   defp filter_warning(warning = {:warn_matching, {'lib/mix/tasks/compile.erlang.ex', 104}, {:pattern_match, ['pattern {\'error\', \'badarg\'}', _]}}),
     do: {:ok, "return type not documented in erlang", warning}
 
-  defp filter_warning(warning = {:warn_return_no_exit, {'lib/mix/tasks/test.ex', 408}, {:no_return, [:only_normal, :raise_with_shell, 2]}}),
+  defp filter_warning(warning = {:warn_return_no_exit, {'lib/mix/tasks/test.ex', _}, {:no_return, [:only_normal, :raise_with_shell, 2]}}),
     do: {:ok, "not annotated exception", warning}
 
-  defp filter_warning(warning = {:warn_return_no_exit, {'lib/mix/release.ex', 227}, {:no_return, [:only_normal, :bad_umbrella!, 0]}}),
+  defp filter_warning(warning = {:warn_return_no_exit, {'lib/mix/release.ex', _}, {:no_return, [:only_normal, :bad_umbrella!, 0]}}),
     do: {:ok, "not annotated exception", warning}
 
-  defp filter_warning(warning = {:warn_return_no_exit, {'lib/mix/dep/loader.ex', 259}, {:no_return, [:only_normal, :invalid_dep_format, 1]}}),
+  defp filter_warning(warning = {:warn_return_no_exit, {'lib/mix/dep/loader.ex', _}, {:no_return, [:only_normal, :invalid_dep_format, 1]}}),
     do: {:ok, "not annotated exception", warning}
 
-  defp filter_warning(warning = {:warn_return_no_exit, {'lib/iex.ex', 652}, {:no_return, [:only_normal, :__break__!, 2]}}),
+  defp filter_warning(warning = {:warn_return_no_exit, {'lib/iex.ex', _}, {:no_return, [:only_normal, :__break__!, 2]}}),
     do: {:ok, "not annotated exception", warning}
 
-  defp filter_warning(warning = {:warn_return_no_exit, {'src/elixir_quote.erl', 420}, {:no_return, [:only_normal, :bad_escape, 1]}}),
+  defp filter_warning(warning = {:warn_return_no_exit, {'src/elixir_quote.erl', _}, {:no_return, [:only_normal, :bad_escape, 1]}}),
     do: {:ok, "not annotated exception", warning}
 
-  defp filter_warning(warning = {:warn_return_no_exit, {'lib/mix/tasks/iex.ex', 9}, {:no_return, [:only_normal, :run, 1]}}),
+  defp filter_warning(warning = {:warn_return_no_exit, {'lib/mix/tasks/iex.ex', _}, {:no_return, [:only_normal, :run, 1]}}),
     do: {:ok, "not annotated exception", warning}
 
-  defp filter_warning(warning = {:warn_return_no_exit, {'lib/iex/cli.ex', 151}, {:no_return, [:only_normal]}}),
+  defp filter_warning(warning = {:warn_return_no_exit, {'lib/iex/cli.ex', _}, {:no_return, [:only_normal]}}),
     do: {:ok, "not annotated exit", warning}
 
-  defp filter_warning(warning = {:warn_return_no_exit, {'lib/gen_event.ex', 460}, {:no_return, [:only_normal, :system_terminate, 4]}}),
+  defp filter_warning(warning = {:warn_return_no_exit, {'lib/gen_event.ex', _}, {:no_return, [:only_normal, :system_terminate, 4]}}),
     do: {:ok, "not annotated exit", warning}
 
   defp filter_warning(warning = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.yrl', _}, {:no_return, [:only_normal, function, _arity]}})
@@ -155,7 +155,7 @@ defmodule Dialyzin do
   defp filter_warning(warning = {:warn_matching, {'lib/iex/helpers.ex', 622}, {:pattern_match, ['pattern <__key@1, \'nil\'>', '<<<_:64,_:_*8>>,<<_:80>> | string() | non_neg_integer()>']}}),
     do: {:ok, "overly_defensive code", warning}
 
-  defp filter_warning(warning = {:warn_matching, {'lib/mix/tasks/deps.compile.ex', 236}, {:guard_fail, ['_@6::\'true\'', '=:=', '\'nil\'']}}),
+  defp filter_warning(warning = {:warn_matching, {'lib/mix/tasks/deps.compile.ex', 237}, {:guard_fail, ['_@6::\'true\'', '=:=', '\'nil\'']}}),
     do: {:ok, "slightly dead code", warning}
 
   defp filter_warning(
