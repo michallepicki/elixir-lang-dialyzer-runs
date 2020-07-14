@@ -22,13 +22,13 @@ defmodule Dialyzin do
        ),
        do: {:ok, "Elixir folks want to be able to pattern match on a struct name while keeping the struct type opaque", warning}
 
-  defp filter_warning(warning = {:warn_matching, {'lib/kernel.ex', line}, {:pattern_match, ['pattern \'false\'', '\'true\'']}}) when line in [1804, 3007, 3331, 3636, 3975, 3979, 4416],
+  defp filter_warning(warning = {:warn_matching, {'lib/kernel.ex', line}, {:pattern_match, ['pattern \'false\'', '\'true\'']}}) when line in [1804, 3091, 3415, 3720, 4059, 4063, 4500],
     do: {:ok, "inlined bootstrap check stuff", warning}
 
   defp filter_warning(warning = {:warn_matching, {'src/elixir_erl_compiler.erl', 59}, {:pattern_match, _lots_of_details}}),
     do: {:ok, "return type not documented in erlang", warning}
 
-  defp filter_warning(warning = {:warn_matching, {'lib/mix/tasks/compile.erlang.ex', 104}, {:pattern_match, ['pattern {\'error\', \'badarg\'}', _]}}),
+  defp filter_warning(warning = {:warn_matching, {'lib/mix/tasks/compile.erlang.ex', 103}, {:pattern_match, ['pattern {\'error\', \'badarg\'}', _]}}),
     do: {:ok, "return type not documented in erlang", warning}
 
   defp filter_warning(warning = {:warn_return_no_exit, {'lib/mix/tasks/test.ex', _}, {:no_return, [:only_normal, :raise_with_shell, 2]}}),
@@ -160,7 +160,7 @@ defmodule Dialyzin do
 
   defp filter_warning(
          warning =
-           {:warn_matching, {'lib/calendar/time.ex', 642},
+           {:warn_matching, {'lib/calendar/time.ex', 652},
             {:pattern_match, ['pattern {\'error\', _reason@1}', '{\'ok\',\#{\'__struct__\':=\'Elixir.Time\', \'calendar\':=atom(), \'hour\':=non_neg_integer(), \'microsecond\':={non_neg_integer(),non_neg_integer()}, \'minute\':=non_neg_integer(), \'second\':=non_neg_integer()}}']}}
        ),
        do: {:ok, "slightly dead code", warning}
