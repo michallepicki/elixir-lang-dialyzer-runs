@@ -155,12 +155,12 @@ defmodule Dialyzin do
   defp filter_warning(warning = {:warn_matching, {'lib/iex/helpers.ex', 622}, {:pattern_match, ['pattern <__key@1, \'nil\'>', '<<<_:64,_:_*8>>,<<_:80>> | string() | non_neg_integer()>']}}),
     do: {:ok, "overly_defensive code", warning}
 
-  defp filter_warning(warning = {:warn_matching, {'lib/mix/tasks/deps.compile.ex', 237}, {:guard_fail, ['_@6::\'true\'', '=:=', '\'nil\'']}}),
+  defp filter_warning(warning = {:warn_matching, {'lib/mix/tasks/deps.compile.ex', 235}, {:guard_fail, ['_@6::\'true\'', '=:=', '\'nil\'']}}),
     do: {:ok, "slightly dead code", warning}
 
   defp filter_warning(
          warning =
-           {:warn_matching, {'lib/calendar/time.ex', 652},
+           {:warn_matching, {'lib/calendar/time.ex', 642},
             {:pattern_match, ['pattern {\'error\', _reason@1}', '{\'ok\',\#{\'__struct__\':=\'Elixir.Time\', \'calendar\':=atom(), \'hour\':=non_neg_integer(), \'microsecond\':={non_neg_integer(),non_neg_integer()}, \'minute\':=non_neg_integer(), \'second\':=non_neg_integer()}}']}}
        ),
        do: {:ok, "slightly dead code", warning}
