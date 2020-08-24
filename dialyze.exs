@@ -7,9 +7,6 @@ defmodule Dialyzin do
     filter(rest, [filter_warning(warning) | acc])
   end
 
-  defp filter_warning(warning = {:warn_failing_call, {'lib/logger.ex', line}, {:call, [:logger, :macro_log, [?(, ?\#, ?{, ?}, ?, | _], [1], :only_contract, _, _, _]}}) when line in [896, 903],
-    do: {:ok, "Elixir deliberately using erlang macro-based logger interface without passing in call location", warning}
-
   defp filter_warning(
          warning =
            {:warn_opaque, {'lib/mix/tasks/test.ex', 560},
