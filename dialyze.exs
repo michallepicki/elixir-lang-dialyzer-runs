@@ -12,7 +12,7 @@ defmodule Dialyzin do
 
   defp filter_warning(
          warning =
-           {:warn_opaque, {'lib/mix/tasks/test.ex', 560},
+           {:warn_opaque, {'lib/mix/tasks/test.ex', 562},
             {:opaque_match,
              [
                'pattern \#{\'__struct__\':=\'Elixir.MapSet\'}',
