@@ -23,21 +23,14 @@ jobs:
         repository: elixir-lang/elixir
         path: elixir
 
-    - name: Install make and deps needed for testing elixir
-      run: apk add --no-cache make git
+    - name: Install make
+      run: apk add --no-cache make
     
     - name: Compile elixir
       run: |
         cd elixir
         make compile
         cd ../
-
-    - name: Test elixir
-      run: |
-        cd elixir
-        make test
-        cd ../
-      continue-on-error: true
 
     - name: Handle dialyzer PLT file caching
       id: cache-plt
