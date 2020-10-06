@@ -7,7 +7,7 @@ defmodule Dialyzin do
     filter(rest, [filter_warning(warning) | acc])
   end
 
-  defp filter_warning(warning = {:warn_failing_call, {'lib/logger.ex', 868}, {:call, [Logger, :__do_log__, _, [3], :only_sig, _, _, {false, :none}]}}),
+  defp filter_warning(warning = {:warn_failing_call, {'lib/logger.ex', 770}, {:call, [Logger, :__do_log__, _, [3], :only_sig, _, _, {false, :none}]}}),
     do: {:ok, "Elixir deliberately using erlang macro-based logger interface without passing in call location", warning}
 
   defp filter_warning(
