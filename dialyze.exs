@@ -12,7 +12,7 @@ defmodule Dialyzin do
 
   defp filter_warning(
          warning =
-           {:warn_opaque, {'lib/mix/tasks/test.ex', 562},
+           {:warn_opaque, {'lib/mix/tasks/test.ex', 571},
             {:opaque_match,
              [
                'pattern \#{\'__struct__\':=\'Elixir.MapSet\'}',
@@ -53,6 +53,9 @@ defmodule Dialyzin do
     do: {:ok, "not annotated exit", warning}
 
   defp filter_warning(warning = {:warn_return_no_exit, {'lib/gen_event.ex', _}, {:no_return, [:only_normal, :system_terminate, 4]}}),
+    do: {:ok, "not annotated exit", warning}
+
+  defp filter_warning(warning = {:warn_return_no_exit, {'lib/ex_unit/signal_handler.ex', 26}, {:no_return, [:only_normal, :handle_event, 2]}}),
     do: {:ok, "not annotated exit", warning}
 
   defp filter_warning(warning = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.yrl', _}, {:no_return, [:only_normal, function, _arity]}})
