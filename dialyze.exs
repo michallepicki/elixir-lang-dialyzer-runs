@@ -1,9 +1,13 @@
 defmodule Dialyze do
-  def filter([], acc) do
+  def filter(warnings) do
+    filter(warnings, [])
+  end
+
+  defp filter([], acc) do
     Enum.reverse(acc)
   end
 
-  def filter([warning | rest], acc) do
+  defp filter([warning | rest], acc) do
     filter(rest, [filter_warning(warning) | acc])
   end
 
@@ -193,7 +197,7 @@ results =
       'elixir/lib/mix/ebin'
     ]
   )
-  |> Dialyze.filter([])
+  |> Dialyze.filter()
   |> Enum.sort_by(fn
     {:warning, _} -> 1
     {:ok, _, _} -> 2
