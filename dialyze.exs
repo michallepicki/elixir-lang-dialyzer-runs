@@ -1,4 +1,4 @@
-defmodule Dialyzin do
+defmodule Dialyze do
   def filter([], acc) do
     Enum.reverse(acc)
   end
@@ -194,16 +194,22 @@ dialyzer_output =
     ]
   )
 
-results = Dialyzin.filter(dialyzer_output, [])
+results =
+  dialyzer_output
+  |> Dialyze.filter(dialyzer_output, [])
+  |> Enum.sort_by(fn
+    {:warning, _} -> 1
+    {:ok, _, _} -> 2
+  end)
 
-has_potential_issues? = Enum.any?(results, fn tup -> elem(tup, 0) == :warning end)
+has_potential_issues? =
+  case results do
+    [{:warning, _} | _] -> true
+    _ -> false
+  end
 
 results
-|> Enum.sort_by(fn
-  {:warning, _} -> 1
-  {:ok, _, _} -> 2
-end)
-|> Enum.map(fn
+|> Stream.map(fn
   {:warning, warning} ->
     formatted_warning =
       warning
