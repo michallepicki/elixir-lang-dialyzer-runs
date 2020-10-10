@@ -177,7 +177,7 @@ defmodule Dialyze do
   defp filter_warning(warning), do: {:warning, warning}
 end
 
-dialyzer_output =
+results =
   :dialyzer.run(
     init_plt: 'plt-dir/.elixir.plt',
     native: true,
@@ -193,10 +193,7 @@ dialyzer_output =
       'elixir/lib/mix/ebin'
     ]
   )
-
-results =
-  dialyzer_output
-  |> Dialyze.filter(dialyzer_output, [])
+  |> Dialyze.filter([])
   |> Enum.sort_by(fn
     {:warning, _} -> 1
     {:ok, _, _} -> 2
