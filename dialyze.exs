@@ -156,7 +156,7 @@ defmodule Dialyze do
 
   defp filter_warning(
          warning =
-           {:warn_matching, {'lib/mix/utils.ex', 675},
+           {:warn_matching, {'lib/mix/utils.ex', 694},
             {:pattern_match,
              [
                'pattern \'nil\'',
