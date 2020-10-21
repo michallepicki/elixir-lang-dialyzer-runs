@@ -16,7 +16,7 @@ defmodule Dialyze do
 
   defp filter_warning(
          warning =
-           {:warn_opaque, {'lib/mix/tasks/test.ex', 571},
+           {:warn_opaque, {'lib/mix/tasks/test.ex', 613},
             {:opaque_match,
              [
                'pattern \#{\'__struct__\':=\'Elixir.MapSet\'}',
