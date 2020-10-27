@@ -26,7 +26,7 @@ defmodule Dialyze do
        ),
        do: {:ok, "Elixir folks want to be able to pattern match on a struct name while keeping the struct type opaque", warning}
 
-  defp filter_warning(warning = {:warn_matching, {'lib/kernel.ex', line}, {:pattern_match, ['pattern \'false\'', '\'true\'']}}) when line in [1842, 3136, 3470, 3779, 4125, 4129, 4566],
+  defp filter_warning(warning = {:warn_matching, {'lib/kernel.ex', line}, {:pattern_match, ['pattern \'false\'', '\'true\'']}}) when line in [1842, 3135, 3469, 3778, 4124, 4128, 4565],
     do: {:ok, "inlined bootstrap check stuff", warning}
 
   defp filter_warning(warning = {:warn_matching, {'src/elixir_erl_compiler.erl', 59}, {:pattern_match, _lots_of_details}}),
