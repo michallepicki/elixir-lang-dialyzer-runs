@@ -165,7 +165,7 @@ defmodule Dialyze do
        ),
        do: {:ok, "overly defensive code", warning}
 
-  defp filter_warning(warning = {:warn_matching, {'lib/iex/helpers.ex', 624}, {:pattern_match, ['pattern <__key@1, \'nil\'>', '<<<_:64,_:_*8>>,<<_:80>> | string() | non_neg_integer()>']}}),
+  defp filter_warning(warning = {:warn_matching, {'lib/iex/helpers.ex', 604}, {:pattern_match, ['pattern <__key@1, \'nil\'>', '<<<_:64,_:_*8>>,<<_:80>> | string() | non_neg_integer()>']}}),
     do: {:ok, "overly_defensive code", warning}
 
   defp filter_warning(warning = {:warn_matching, {'lib/mix/tasks/deps.compile.ex', 245}, {:guard_fail, ['_@6::\'true\'', '=:=', '\'nil\'']}}),
