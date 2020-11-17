@@ -53,6 +53,9 @@ defmodule Dialyze do
   defp filter_warning(warning = {:warn_return_no_exit, {'lib/mix/tasks/iex.ex', _}, {:no_return, [:only_normal, :run, 1]}}),
     do: {:ok, "not annotated exception", warning}
 
+  defp filter_warning(warning = {:warn_return_no_exit, {'lib/mix.ex', _}, {:no_return, [:only_normal, :raise, 1]}}),
+    do: {:ok, "not annotated exception", warning}
+
   defp filter_warning(warning = {:warn_return_no_exit, {'lib/iex/cli.ex', _}, {:no_return, [:only_normal]}}),
     do: {:ok, "not annotated exit", warning}
 
