@@ -297,7 +297,7 @@ results =
 has_potential_issues? =
   case results do
     [{:warning, _} | _] -> true
-    [{:unexpected_count, _} | _] -> true
+    [{:unexpected_count, _, _, _, _, _} | _] -> true
     _ -> false
   end
 
