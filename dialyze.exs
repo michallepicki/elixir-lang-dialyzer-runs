@@ -222,7 +222,7 @@ defmodule Dialyze do
 
   expected = Map.put(expected, 26, 1)
 
-  defp filter_warning(warning = {:warn_matching, {'lib/mix/tasks/deps.compile.ex', 245}, {:guard_fail, ['_@6::\'true\'', '=:=', '\'nil\'']}}),
+  defp filter_warning(warning = {:warn_matching, {'lib/mix/tasks/deps.compile.ex', 252}, {:guard_fail, ['_@6::\'true\'', '=:=', '\'nil\'']}}),
     do: {:ok, "slightly dead code", warning, 27}
 
   expected = Map.put(expected, 27, 1)
@@ -315,7 +315,8 @@ results
 
   {:unexpected_count, _message, _warnings, id, count, expected_count} ->
     "############################################################\n" <>
-      "Expected count of filtered non-issues ##{id} is off! Expected #{expected_count}, found #{count || 0} issues\n\n"
+      "Expected count of filtered non-issues ##{id} is off! Expected #{expected_count}, found #{count || 0} issues\n\n" <>
+      "raw form: #{inspect(warning)}\n\n"
 
   {:ok, message, warning, id} ->
     formatted_warning =
