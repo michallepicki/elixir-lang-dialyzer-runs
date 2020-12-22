@@ -315,8 +315,7 @@ results
 
   {:unexpected_count, _message, _warnings, id, count, expected_count} ->
     "############################################################\n" <>
-      "Expected count of filtered non-issues ##{id} is off! Expected #{expected_count}, found #{count || 0} issues\n\n" <>
-      "raw form: #{inspect(warning)}\n\n"
+      "Expected count of filtered non-issues ##{id} is off! Expected #{expected_count}, found #{count || 0} issues\n\n"
 
   {:ok, message, warning, id} ->
     formatted_warning =
