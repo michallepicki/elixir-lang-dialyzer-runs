@@ -20,17 +20,8 @@ defmodule Dialyze do
   expected_counts = Map.put(expected_counts, 1, 1)
 
   # 2
-  defp filter_warning(
-         warning =
-           {:warn_opaque, {'lib/mix/tasks/test.ex', 613},
-            {:opaque_match,
-             [
-               'pattern \#{\'__struct__\':=\'Elixir.MapSet\'}',
-               '\'Elixir.MapSet\':t(binary() | maybe_improper_list(binary() | maybe_improper_list(any(),binary() | []) | char(),binary() | []))',
-               '\'Elixir.MapSet\':t(binary() | maybe_improper_list(binary() | maybe_improper_list(any(),binary() | []) | char(),binary() | []))'
-             ]}}
-       ),
-       do: filtered(id: 2, comment: "Elixir folks want to be able to pattern match on a struct name while keeping the struct type opaque", data: warning)
+  defp filter_warning(warning = {:warn_opaque, {'lib/mix/tasks/test.ex', 613}, {:opaque_match, ['pattern \#{\'__struct__\':=\'Elixir.MapSet\'}', '\'Elixir.MapSet\':t(binary() | maybe_improper_list(binary() | maybe_improper_list(any(),binary() | []) | char(),binary() | []))', '\'Elixir.MapSet\':t(binary() | maybe_improper_list(binary() | maybe_improper_list(any(),binary() | []) | char(),binary() | []))']}}),
+    do: filtered(id: 2, comment: "Elixir folks want to be able to pattern match on a struct name while keeping the struct type opaque", data: warning)
 
   expected_counts = Map.put(expected_counts, 2, 1)
 
@@ -107,74 +98,20 @@ defmodule Dialyze do
   expected_counts = Map.put(expected_counts, 14, 1)
 
   # 15
-  defp filter_warning(warning = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.yrl', _}, {:no_return, [:only_normal, function, _arity]}})
-       when function in [
-              :error_invalid_kw_identifier,
-              :error_no_parens_container_strict,
-              :error_no_parens_many_strict,
-              :error_no_parens_strict,
-              :error_bad_atom,
-              :error_invalid_stab,
-              :return_error,
-              :yeccpars2_300_,
-              :yeccpars2_289_,
-              :yeccpars2_88_,
-              :yeccpars2_357_,
-              :yeccpars2_356_,
-              :yeccpars2_320_,
-              :yeccpars2_86_
-            ],
-       do: filtered(id: 15, comment: "parser not annotated exception", data: warning)
+  defp filter_warning(warning = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.yrl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in [:error_invalid_kw_identifier, :error_no_parens_container_strict, :error_no_parens_many_strict, :error_no_parens_strict, :error_bad_atom, :error_invalid_stab, :return_error, :yeccpars2_300_, :yeccpars2_289_, :yeccpars2_88_, :yeccpars2_357_, :yeccpars2_356_, :yeccpars2_320_, :yeccpars2_86_],
+    do: filtered(id: 15, comment: "parser not annotated exception", data: warning)
 
   expected_counts = Map.put(expected_counts, 15, 14)
 
   # 16
-  defp filter_warning(warning = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.erl', _}, {:no_return, [:only_normal, function, _arity]}})
-       when function in [
-              :yeccpars2_357,
-              :yeccpars2_356,
-              :yeccpars2_320,
-              :yeccpars2_300,
-              :yeccpars2_88,
-              :yeccpars2_86
-            ],
-       do: filtered(id: 16, comment: "parser not annotated exception", data: warning)
+  defp filter_warning(warning = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.erl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in [:yeccpars2_357, :yeccpars2_356, :yeccpars2_320, :yeccpars2_300, :yeccpars2_88, :yeccpars2_86],
+    do: filtered(id: 16, comment: "parser not annotated exception", data: warning)
 
   expected_counts = Map.put(expected_counts, 16, 6)
 
   # 17
-  defp filter_warning(warning = {:warn_unknown, {[], 0}, {:unknown_function, {module, :__impl__, 1}}})
-       when module in [
-              Collectable.Atom,
-              Collectable.Float,
-              Collectable.Function,
-              Collectable.Integer,
-              Collectable.PID,
-              Collectable.Port,
-              Collectable.Reference,
-              Collectable.Tuple,
-              Enumerable.Atom,
-              Enumerable.BitString,
-              Enumerable.Float,
-              Enumerable.Integer,
-              Enumerable.PID,
-              Enumerable.Port,
-              Enumerable.Reference,
-              Enumerable.Tuple,
-              List.Chars.Function,
-              List.Chars.Map,
-              List.Chars.PID,
-              List.Chars.Port,
-              List.Chars.Reference,
-              List.Chars.Tuple,
-              String.Chars.Function,
-              String.Chars.Map,
-              String.Chars.PID,
-              String.Chars.Port,
-              String.Chars.Reference,
-              String.Chars.Tuple
-            ],
-       do: filtered(id: 17, comment: "some protocol consolidation stuff", data: warning)
+  defp filter_warning(warning = {:warn_unknown, {[], 0}, {:unknown_function, {module, :__impl__, 1}}}) when module in [Collectable.Atom, Collectable.Float, Collectable.Function, Collectable.Integer, Collectable.PID, Collectable.Port, Collectable.Reference, Collectable.Tuple, Enumerable.Atom, Enumerable.BitString, Enumerable.Float, Enumerable.Integer, Enumerable.PID, Enumerable.Port, Enumerable.Reference, Enumerable.Tuple, List.Chars.Function, List.Chars.Map, List.Chars.PID, List.Chars.Port, List.Chars.Reference, List.Chars.Tuple, String.Chars.Function, String.Chars.Map, String.Chars.PID, String.Chars.Port, String.Chars.Reference, String.Chars.Tuple],
+    do: filtered(id: 17, comment: "some protocol consolidation stuff", data: warning)
 
   expected_counts = Map.put(expected_counts, 17, 28)
 
@@ -209,16 +146,8 @@ defmodule Dialyze do
   expected_counts = Map.put(expected_counts, 22, 1)
 
   # 23
-  defp filter_warning(
-         warning =
-           {:warn_matching, {'lib/dynamic_supervisor.ex', 350},
-            {:pattern_match_cov,
-             [
-               'variable _other@1',
-               '{_,_,_,_,_,_} | \#{\'id\':=_, \'start\':={atom(),atom(),[any()]}, \'modules\'=>\'dynamic\' | [atom()], \'restart\'=>\'permanent\' | \'temporary\' | \'transient\', \'shutdown\'=>\'brutal_kill\' | \'infinity\' | non_neg_integer(), \'type\'=>\'supervisor\' | \'worker\'}'
-             ]}}
-       ),
-       do: filtered(id: 23, comment: "overly defensive code", data: warning)
+  defp filter_warning(warning = {:warn_matching, {'lib/dynamic_supervisor.ex', 350}, {:pattern_match_cov, ['variable _other@1', '{_,_,_,_,_,_} | \#{\'id\':=_, \'start\':={atom(),atom(),[any()]}, \'modules\'=>\'dynamic\' | [atom()], \'restart\'=>\'permanent\' | \'temporary\' | \'transient\', \'shutdown\'=>\'brutal_kill\' | \'infinity\' | non_neg_integer(), \'type\'=>\'supervisor\' | \'worker\'}']}}),
+    do: filtered(id: 23, comment: "overly defensive code", data: warning)
 
   expected_counts = Map.put(expected_counts, 23, 1)
 
@@ -229,16 +158,8 @@ defmodule Dialyze do
   expected_counts = Map.put(expected_counts, 24, 1)
 
   # 25
-  defp filter_warning(
-         warning =
-           {:warn_matching, {'lib/mix/utils.ex', 694},
-            {:pattern_match,
-             [
-               'pattern \'nil\'',
-               '\#{\'__struct__\':=\'Elixir.URI\', \'authority\':=\'nil\' | binary(), \'fragment\':=\'nil\' | binary(), \'host\':=\'nil\' | binary(), \'path\':=\'nil\' | binary(), \'port\':=\'nil\' | char(), \'query\':=\'nil\' | binary(), \'scheme\':=\'nil\' | binary(), \'userinfo\':=\'nil\' | binary()}'
-             ]}}
-       ),
-       do: filtered(id: 25, comment: "overly defensive code", data: warning)
+  defp filter_warning(warning = {:warn_matching, {'lib/mix/utils.ex', 694}, {:pattern_match, ['pattern \'nil\'', '\#{\'__struct__\':=\'Elixir.URI\', \'authority\':=\'nil\' | binary(), \'fragment\':=\'nil\' | binary(), \'host\':=\'nil\' | binary(), \'path\':=\'nil\' | binary(), \'port\':=\'nil\' | char(), \'query\':=\'nil\' | binary(), \'scheme\':=\'nil\' | binary(), \'userinfo\':=\'nil\' | binary()}']}}),
+    do: filtered(id: 25, comment: "overly defensive code", data: warning)
 
   expected_counts = Map.put(expected_counts, 25, 1)
 
@@ -255,12 +176,8 @@ defmodule Dialyze do
   expected_counts = Map.put(expected_counts, 27, 1)
 
   # 27
-  defp filter_warning(
-         warning =
-           {:warn_matching, {'lib/calendar/time.ex', 642},
-            {:pattern_match, ['pattern {\'error\', _reason@1}', '{\'ok\',\#{\'__struct__\':=\'Elixir.Time\', \'calendar\':=atom(), \'hour\':=non_neg_integer(), \'microsecond\':={non_neg_integer(),non_neg_integer()}, \'minute\':=non_neg_integer(), \'second\':=non_neg_integer()}}']}}
-       ),
-       do: filtered(id: 28, comment: "slightly dead code", data: warning)
+  defp filter_warning(warning = {:warn_matching, {'lib/calendar/time.ex', 642}, {:pattern_match, ['pattern {\'error\', _reason@1}', '{\'ok\',\#{\'__struct__\':=\'Elixir.Time\', \'calendar\':=atom(), \'hour\':=non_neg_integer(), \'microsecond\':={non_neg_integer(),non_neg_integer()}, \'minute\':=non_neg_integer(), \'second\':=non_neg_integer()}}']}}),
+    do: filtered(id: 28, comment: "slightly dead code", data: warning)
 
   expected_counts = Map.put(expected_counts, 28, 1)
 

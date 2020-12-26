@@ -1,3 +1,3 @@
 [
-  line_length: 300
+  line_length: 900
 ]
