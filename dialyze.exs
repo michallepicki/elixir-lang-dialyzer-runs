@@ -272,7 +272,7 @@ defmodule Dialyze do
   def run() do
     results =
       :dialyzer.run(
-        init_plt: 'plt-dir/.elixir.plt',
+        init_plt: 'plt-dir/otp.plt',
         warnings: [
           :unknown
         ],

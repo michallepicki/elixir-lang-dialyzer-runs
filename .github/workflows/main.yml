@@ -37,15 +37,11 @@ jobs:
       uses: actions/cache@v1
       with:
         path: plt-dir
-        key: erlang:23.2.1-alpine-3.12.1
+        key: v1-erlang:23.2.1-alpine-3.12.1
 
     - name: Create the dialyzer PLT file
       if: steps.cache-plt.outputs.cache-hit != 'true'
-      run: |
-        cd elixir
-        make build_plt
-        mv .elixir.plt ../plt-dir/
-        cd ../
+      run: dialyzer --output_plt plt-dir/otp.plt --build_plt --apps erts kernel stdlib compiler syntax_tools parsetools tools ssl inets crypto runtime_tools ftp tftp mnesia public_key asn1 sasl
 
     - name: Run dialyzer
       run: elixir/bin/elixir dialyze.exs
