@@ -91,12 +91,6 @@ defmodule Dialyze do
 
   expected_counts = Map.put(expected_counts, 13, 1)
 
-  # 14
-  defp filter_warning(warning = {:warn_return_no_exit, {'lib/ex_unit/signal_handler.ex', 26}, {:no_return, [:only_normal, :handle_event, 2]}}),
-    do: filtered(id: 14, comment: "not annotated exit", data: warning)
-
-  expected_counts = Map.put(expected_counts, 14, 1)
-
   # 15
   defp filter_warning(warning = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.yrl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in [:error_invalid_kw_identifier, :error_no_parens_container_strict, :error_no_parens_many_strict, :error_no_parens_strict, :error_bad_atom, :error_invalid_stab, :return_error, :yeccpars2_300_, :yeccpars2_289_, :yeccpars2_88_, :yeccpars2_357_, :yeccpars2_356_, :yeccpars2_320_, :yeccpars2_86_],
     do: filtered(id: 15, comment: "parser not annotated exception", data: warning)
