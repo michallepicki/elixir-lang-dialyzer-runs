@@ -143,7 +143,7 @@ defmodule Dialyze do
 
   expected_counts = Map.put(expected_counts, 27, 1)
 
-  defp filter_warning(warning = {:warn_matching, {'lib/calendar/time.ex', 642}, {:pattern_match, ['pattern {\'error\', _reason@1}', '{\'ok\',\#{\'__struct__\':=\'Elixir.Time\', \'calendar\':=atom(), \'hour\':=non_neg_integer(), \'microsecond\':={non_neg_integer(),non_neg_integer()}, \'minute\':=non_neg_integer(), \'second\':=non_neg_integer()}}']}}),
+  defp filter_warning(warning = {:warn_matching, {'lib/calendar/time.ex', 636}, {:pattern_match, ['pattern {\'error\', _reason@1}', '{\'ok\',\#{\'__struct__\':=\'Elixir.Time\', \'calendar\':=atom(), \'hour\':=non_neg_integer(), \'microsecond\':={non_neg_integer(),non_neg_integer()}, \'minute\':=non_neg_integer(), \'second\':=non_neg_integer()}}']}}),
     do: filtered(id: 28, comment: "slightly dead code", data: warning)
 
   expected_counts = Map.put(expected_counts, 28, 1)
