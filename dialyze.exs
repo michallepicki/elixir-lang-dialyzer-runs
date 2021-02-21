@@ -33,11 +33,6 @@ defmodule Dialyze do
 
   expected_counts = Map.put(expected_counts, 4, 1)
 
-  defp filter_warning(warning = {:warn_matching, {'lib/mix/tasks/compile.erlang.ex', 103}, {:pattern_match, ['pattern {\'error\', \'badarg\'}', _]}}),
-    do: filtered(id: 5, comment: "return type not documented in erlang", data: warning)
-
-  expected_counts = Map.put(expected_counts, 5, 1)
-
   defp filter_warning(warning = {:warn_return_no_exit, {'lib/mix/tasks/test.ex', _}, {:no_return, [:only_normal, :raise_with_shell, 2]}}),
     do: filtered(id: 6, comment: "not annotated exception", data: warning)
 
