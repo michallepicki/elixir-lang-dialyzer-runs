@@ -15,8 +15,8 @@ git clone git@github.com:michallepicki/elixir-lang-dialyzer-runs.git
 cd elixir-lang-dialyzer-runs
 git clone git@github.com:elixir-lang/elixir.git
 cd elixir
-make clean compile build_plt
-mv .elixir.plt ../plt-dir/
+make clean compile
 cd ../
+dialyzer --output_plt plt-dir/otp.plt --build_plt --apps erts kernel stdlib compiler syntax_tools parsetools tools ssl inets crypto runtime_tools ftp tftp mnesia public_key asn1 sasl
 elixir/bin/elixir dialyze.exs
 ```

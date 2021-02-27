@@ -133,6 +133,11 @@ defmodule Dialyze do
 
   expected_counts = Map.put(expected_counts, 24, 1)
 
+  defp filter_warning(warning = {:warn_callgraph, {'lib/system.ex', _}, {:call_to_missing, [:os, :env, 0]}}),
+    do: filtered(id: 25, comment: "OTP 24 function", data: warning)
+
+  expected_counts = Map.put(expected_counts, 25, 1)
+
   defp filter_warning(warning), do: unfiltered(data: warning)
 
   @expected_counts expected_counts
