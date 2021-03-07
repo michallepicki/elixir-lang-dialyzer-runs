@@ -12,11 +12,11 @@ on:
       repository:
         description: 'elixir source repo to check out when running the action manually'
         required: false
-        default: 'elixir-lang/elixir'
+        default: 'michallepicki/elixir'
       ref:
         description: 'elixir source ref to check out when running the action manually'
         required: false
-        default: 'master'
+        default: 'patch-1'
 
 jobs:
   dialyze:
