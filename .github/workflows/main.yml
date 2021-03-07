@@ -10,11 +10,11 @@ on:
   workflow_dispatch:
     inputs:
       repository:
-        description: 'elixir source repo to check out when running the action manually'
+        description: 'elixir source repo to check out'
         required: false
         default: 'michallepicki/elixir'
       ref:
-        description: 'elixir source ref to check out when running the action manually'
+        description: 'elixir source ref to check out'
         required: false
         default: 'patch-1'
 
