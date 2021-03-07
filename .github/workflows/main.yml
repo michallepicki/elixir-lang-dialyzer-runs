@@ -7,6 +7,16 @@ on:
     branches: [ master ]
   schedule:
     - cron: '0 0 * * *'
+  workflow_dispatch:
+    inputs:
+      repository:
+        description: 'elixir source repo to check out when running the action manually'
+        required: false
+        default: 'elixir-lang/elixir'
+      ref:
+        description: 'elixir source ref to check out when running the action manually'
+        required: false
+        default: 'master'
 
 jobs:
   dialyze:
@@ -20,7 +30,8 @@ jobs:
     - name: Get elixir source code
       uses: actions/checkout@v2
       with:
-        repository: elixir-lang/elixir
+        repository: ${{ github.event.inputs.repository || 'elixir-lang/elixir' }}
+        ref:  ${{ github.event.inputs.ref || 'master' }}
         path: elixir
 
     - name: Install make
