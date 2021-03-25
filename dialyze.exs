@@ -26,7 +26,7 @@ defmodule Dialyze do
   defp filter_warning(warning = {:warn_matching, {'lib/kernel.ex', _}, {:pattern_match, ['pattern \'false\'', '\'true\'']}}),
     do: filtered(id: 3, comment: "inlined bootstrap check stuff", data: warning)
 
-  expected_counts = Map.put(expected_counts, 3, 7)
+  expected_counts = Map.put(expected_counts, 3, 8)
 
   defp filter_warning(warning = {:warn_matching, {'src/elixir_erl_compiler.erl', 59}, {:pattern_match, _lots_of_details}}),
     do: filtered(id: 4, comment: "return type not documented in erlang", data: warning)
@@ -73,12 +73,16 @@ defmodule Dialyze do
 
   expected_counts = Map.put(expected_counts, 12, 1)
 
-  defp filter_warning(warning = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.yrl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in [:error_invalid_kw_identifier, :error_no_parens_container_strict, :error_no_parens_many_strict, :error_no_parens_strict, :error_bad_atom, :error_invalid_stab, :return_error, :yeccpars2_300_, :yeccpars2_289_, :yeccpars2_88_, :yeccpars2_357_, :yeccpars2_356_, :yeccpars2_320_, :yeccpars2_86_],
+  @yecc_erl_clauses [:yeccpars2_363, :yeccpars2_362, :yeccpars2_326, :yeccpars2_306, :yeccpars2_295, :yeccpars2_88, :yeccpars2_86]
+  yecc_yrl_clauses = Enum.map(@yecc_erl_clauses, fn atom -> :"#{atom}_" end)
+  @yecc_yrl_clauses yecc_yrl_clauses
+
+  defp filter_warning(warning = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.yrl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in [:error_invalid_kw_identifier, :error_no_parens_container_strict, :error_no_parens_many_strict, :error_no_parens_strict, :error_bad_atom, :error_invalid_stab, :return_error] or function in @yecc_yrl_clauses,
     do: filtered(id: 13, comment: "parser not annotated exception", data: warning)
 
   expected_counts = Map.put(expected_counts, 13, 14)
 
-  defp filter_warning(warning = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.erl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in [:yeccpars2_357, :yeccpars2_356, :yeccpars2_320, :yeccpars2_300, :yeccpars2_88, :yeccpars2_86],
+  defp filter_warning(warning = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.erl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in @yecc_erl_clauses,
     do: filtered(id: 14, comment: "parser not annotated exception", data: warning)
 
   expected_counts = Map.put(expected_counts, 14, 6)
