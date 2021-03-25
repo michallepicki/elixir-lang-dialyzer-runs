@@ -21,7 +21,7 @@ on:
 jobs:
   dialyze:
     runs-on: ubuntu-latest
-    container: docker://hexpm/erlang:23.2.7-alpine-3.13.2
+    container: docker://hexpm/erlang:23.3-alpine-3.13.2
     steps:
 
     - name: Checkout
@@ -48,7 +48,7 @@ jobs:
       uses: actions/cache@v1
       with:
         path: plt-dir
-        key: v1-erlang:23.2.7-alpine-3.13.2
+        key: v1-erlang:23.3-alpine-3.13.2
 
     - name: Create the dialyzer PLT file
       if: steps.cache-plt.outputs.cache-hit != 'true'
