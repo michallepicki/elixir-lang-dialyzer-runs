@@ -13,7 +13,7 @@ defmodule Dialyze do
 
   defp filter([warning | rest], acc), do: filter(rest, [filter_warning(warning) | acc])
 
-  defp filter_warning(warning = {:warn_failing_call, {'lib/logger.ex', 759}, {:call, [Logger, :__do_log__, _, [3], :only_sig, _, _, {false, :none}]}}),
+  defp filter_warning(warning = {:warn_failing_call, {'lib/logger.ex', _}, {:call, [Logger, :__do_log__, _, [3], :only_sig, _, _, {false, :none}]}}),
     do: filtered(id: 1, comment: "Elixir deliberately using erlang macro-based logger interface without passing in call location", data: warning)
 
   expected_counts = Map.put(expected_counts, 1, 1)
