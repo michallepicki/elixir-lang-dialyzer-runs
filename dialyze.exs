@@ -127,7 +127,7 @@ defmodule Dialyze do
 
   expected_counts = Map.put(expected_counts, 22, 1)
 
-  defp filter_warning(warning = {:warn_matching, {'lib/mix/tasks/deps.compile.ex', 259}, {:guard_fail, ['_@6::\'true\'', '=:=', '\'nil\'']}}),
+  defp filter_warning(warning = {:warn_matching, {'lib/mix/tasks/deps.compile.ex', 267}, {:guard_fail, ['_@6::\'true\'', '=:=', '\'nil\'']}}),
     do: filtered(id: 23, comment: "slightly dead code", data: warning)
 
   expected_counts = Map.put(expected_counts, 23, 1)
