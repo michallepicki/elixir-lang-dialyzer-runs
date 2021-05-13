@@ -73,14 +73,15 @@ defmodule Dialyze do
 
   expected_counts = Map.put(expected_counts, 12, 1)
 
-  @yecc_erl_clauses [:yeccpars2_363, :yeccpars2_362, :yeccpars2_326, :yeccpars2_306, :yeccpars2_295, :yeccpars2_88, :yeccpars2_86]
+  @yecc_yrl_functions [:error_bad_keyword_call_follow_up, :error_bad_keyword_data_follow_up, :return_error, :error_invalid_stab, :error_bad_atom, :error_no_parens_strict, :error_no_parens_many_strict, :error_no_parens_container_strict, :error_invalid_kw_identifier]
+  @yecc_erl_clauses [:yeccpars2_86, :yeccpars2_88, :yeccpars2_108, :yeccpars2_199, :yeccpars2_218, :yeccpars2_229, :yeccpars2_310, :yeccpars2_366, :yeccpars2_402, :yeccpars2_403]
   yecc_yrl_clauses = Enum.map(@yecc_erl_clauses, fn atom -> :"#{atom}_" end)
   @yecc_yrl_clauses yecc_yrl_clauses
 
-  defp filter_warning(warning = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.yrl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in [:error_invalid_kw_identifier, :error_no_parens_container_strict, :error_no_parens_many_strict, :error_no_parens_strict, :error_bad_atom, :error_invalid_stab, :return_error] or function in @yecc_yrl_clauses,
+  defp filter_warning(warning = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.yrl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in @yecc_yrl_functions or function in @yecc_yrl_clauses,
     do: filtered(id: 13, comment: "parser not annotated exception", data: warning)
 
-  expected_counts = Map.put(expected_counts, 13, 14)
+  expected_counts = Map.put(expected_counts, 13, 19)
 
   defp filter_warning(warning = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.erl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in @yecc_erl_clauses,
     do: filtered(id: 14, comment: "parser not annotated exception", data: warning)
