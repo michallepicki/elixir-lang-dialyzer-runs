@@ -74,7 +74,7 @@ defmodule Dialyze do
   expected_counts = Map.put(expected_counts, 12, 1)
 
   @yecc_yrl_functions [:error_bad_keyword_call_follow_up, :error_bad_keyword_data_follow_up, :return_error, :error_invalid_stab, :error_bad_atom, :error_no_parens_strict, :error_no_parens_many_strict, :error_no_parens_container_strict, :error_invalid_kw_identifier]
-  @yecc_erl_clauses [:yeccpars2_87, :yeccpars2_89, :yeccpars2_108, :yeccpars2_199, :yeccpars2_218, :yeccpars2_230, :yeccpars2_310, :yeccpars2_367, :yeccpars2_402, :yeccpars2_404]
+  @yecc_erl_clauses [:yeccpars2_87, :yeccpars2_89, :yeccpars2_109, :yeccpars2_200, :yeccpars2_219, :yeccpars2_230, :yeccpars2_311, :yeccpars2_367, :yeccpars2_403, :yeccpars2_404]
   yecc_yrl_clauses = Enum.map(@yecc_erl_clauses, fn atom -> :"#{atom}_" end)
   @yecc_yrl_clauses yecc_yrl_clauses
 
@@ -191,9 +191,11 @@ defmodule Dialyze do
     results =
       (unexpected_counts_warnings ++ results)
       |> Enum.sort_by(fn
-        unfiltered() -> 1
+        filtered() -> 1
         unexpected_count() -> 2
-        filtered() -> 3
+        unfiltered(data: {:warn_unknown, _, _}) -> 3
+        unfiltered(data: {:warn_return_no_exit, _, _}) -> 4
+        unfiltered() -> 5
       end)
 
     has_potential_issues? =
