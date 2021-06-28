@@ -28,7 +28,7 @@ defmodule Dialyze do
 
   expected_counts = Map.put(expected_counts, 3, 8)
 
-  defp filter_warning(warning = {:warn_matching, {'src/elixir_erl_compiler.erl', 59}, {:pattern_match, _lots_of_details}}),
+  defp filter_warning(warning = {:warn_matching, {'src/elixir_erl_compiler.erl', {59, _}}, {:pattern_match, _lots_of_details}}),
     do: filtered(id: 4, comment: "return type not documented in erlang", data: warning)
 
   expected_counts = Map.put(expected_counts, 4, 1)
@@ -88,12 +88,17 @@ defmodule Dialyze do
 
   expected_counts = Map.put(expected_counts, 14, 6)
 
-  defp filter_warning(warning = {:warn_unknown, {[], 0}, {:unknown_function, {module, :__impl__, 1}}}) when module in [Collectable.Atom, Collectable.Float, Collectable.Function, Collectable.Integer, Collectable.PID, Collectable.Port, Collectable.Reference, Collectable.Tuple, Enumerable.Atom, Enumerable.BitString, Enumerable.Float, Enumerable.Integer, Enumerable.PID, Enumerable.Port, Enumerable.Reference, Enumerable.Tuple, List.Chars.Function, List.Chars.Map, List.Chars.PID, List.Chars.Port, List.Chars.Reference, List.Chars.Tuple, String.Chars.Function, String.Chars.Map, String.Chars.PID, String.Chars.Port, String.Chars.Reference, String.Chars.Tuple],
+  defp filter_warning(warning = {:warn_unknown, {file, 1}, {:unknown_function, {module, :__impl__, 1}}}) when module in [Collectable.Atom, Collectable.Float, Collectable.Function, Collectable.Integer, Collectable.PID, Collectable.Port, Collectable.Reference, Collectable.Tuple, Enumerable.Atom, Enumerable.BitString, Enumerable.Float, Enumerable.Integer, Enumerable.PID, Enumerable.Port, Enumerable.Reference, Enumerable.Tuple, List.Chars.Function, List.Chars.Map, List.Chars.PID, List.Chars.Port, List.Chars.Reference, List.Chars.Tuple] and file in ['lib/collectable.ex', 'lib/enum.ex', 'lib/list/chars.ex'],
     do: filtered(id: 15, comment: "some protocol consolidation stuff", data: warning)
 
-  expected_counts = Map.put(expected_counts, 15, 28)
+  expected_counts = Map.put(expected_counts, 15, 22)
 
-  defp filter_warning(warning = {:warn_unknown, {[], 0}, {:unknown_function, {Hex, function, 0}}}) when function in [:start, :version],
+  defp filter_warning(warning = {:warn_unknown, {'lib/string/chars.ex', 3}, {:unknown_function, {module, :__impl__, 1}}}) when module in [String.Chars.Function, String.Chars.Map, String.Chars.PID, String.Chars.Port, String.Chars.Reference, String.Chars.Tuple],
+    do: filtered(id: 25, comment: "some protocol consolidation stuff", data: warning)
+
+  expected_counts = Map.put(expected_counts, 25, 6)
+
+  defp filter_warning(warning = {:warn_unknown, {'lib/mix/hex.ex', lines}, {:unknown_function, {Hex, function, 0}}}) when function in [:start, :version] and lines in [40, 59],
     do: filtered(id: 16, comment: "Hex package loading gets handled by the Mix task", data: warning)
 
   expected_counts = Map.put(expected_counts, 16, 2)
@@ -128,7 +133,7 @@ defmodule Dialyze do
 
   expected_counts = Map.put(expected_counts, 22, 1)
 
-  defp filter_warning(warning = {:warn_matching, {'lib/mix/tasks/deps.compile.ex', 269}, {:guard_fail, ['_@6::\'true\'', '=:=', '\'nil\'']}}),
+  defp filter_warning(warning = {:warn_matching, {'lib/mix/tasks/deps.compile.ex', 267}, {:guard_fail, ['_@6::\'true\'', '=:=', '\'nil\'']}}),
     do: filtered(id: 23, comment: "slightly dead code", data: warning)
 
   expected_counts = Map.put(expected_counts, 23, 1)
@@ -137,11 +142,6 @@ defmodule Dialyze do
     do: filtered(id: 24, comment: "slightly dead code", data: warning)
 
   expected_counts = Map.put(expected_counts, 24, 1)
-
-  defp filter_warning(warning = {:warn_callgraph, {'lib/system.ex', _}, {:call_to_missing, [:os, :env, 0]}}),
-    do: filtered(id: 25, comment: "OTP 24 function", data: warning)
-
-  expected_counts = Map.put(expected_counts, 25, 1)
 
   defp filter_warning(warning), do: unfiltered(data: warning)
 
