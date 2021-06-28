@@ -25,12 +25,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      # - run: sudo apt install curl tar make
-
       - name: Install erlang
         run: |
           echo "`pwd`/erlang/bin" >> $GITHUB_PATH
-          curl -Lo erlang.tar.gz https://repo.hex.pm/builds/otp/ubuntu-20.04/OTP-23.3.4.1.tar.gz
+          curl -Lo erlang.tar.gz https://repo.hex.pm/builds/otp/ubuntu-20.04/OTP-24.0.3.tar.gz
           mkdir erlang
           tar zxf erlang.tar.gz -C erlang --strip-components=1
           erlang/Install -minimal  `pwd`/erlang
@@ -54,7 +52,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: plt-dir
-          key: v1-OTP-23.3.4.1
+          key: v1-OTP-24.0.3
 
       - name: Create the dialyzer PLT file
         if: steps.cache-plt.outputs.cache-hit != 'true'
