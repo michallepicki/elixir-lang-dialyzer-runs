@@ -199,7 +199,7 @@ defmodule Dialyze do
       end)
 
     has_potential_issues? =
-      case results do
+      case Enum.reverse(results) do
         [unfiltered() | _] -> true
         [unexpected_count() | _] -> true
         _ -> false
