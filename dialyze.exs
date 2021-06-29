@@ -13,6 +13,10 @@ defmodule Dialyze do
 
   defp filter([warning | rest], acc), do: filter(rest, [filter_warning(warning) | acc])
 
+  # discussed in https://github.com/elixir-lang/elixir/issues/10279
+  # and https://github.com/elixir-lang/elixir/pull/10280
+  # mostly fixed in https://github.com/elixir-lang/elixir/pull/10287
+  # may be resolved in https://github.com/elixir-lang/elixir/issues/9465
   defp filter_warning(warning = {:warn_failing_call, {'lib/logger.ex', _}, {:call, [Logger, :__do_log__, _, [3], :only_sig, _, _, {false, :none}]}}),
     do: filtered(id: 1, comment: "Elixir deliberately using erlang macro-based logger interface without passing in call location", data: warning)
 
