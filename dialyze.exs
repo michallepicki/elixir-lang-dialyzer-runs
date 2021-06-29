@@ -18,6 +18,9 @@ defmodule Dialyze do
 
   expected_counts = Map.put(expected_counts, 1, 1)
 
+  # discussed in https://github.com/elixir-lang/elixir/pull/9979#discussion_r415730426
+  # and https://github.com/elixir-lang/elixir/pull/9993
+  # and https://github.com/elixir-lang/elixir/pull/9995
   defp filter_warning(warning = {:warn_opaque, {'lib/mix/tasks/test.ex', _}, {:opaque_match, ['pattern \#{\'__struct__\':=\'Elixir.MapSet\'}', '\'Elixir.MapSet\':t(binary() | maybe_improper_list(binary() | maybe_improper_list(any(),binary() | []) | char(),binary() | []))', '\'Elixir.MapSet\':t(binary() | maybe_improper_list(binary() | maybe_improper_list(any(),binary() | []) | char(),binary() | []))']}}),
     do: filtered(id: 2, comment: "Elixir folks want to be able to pattern match on a struct name while keeping the struct type opaque", data: warning)
 
