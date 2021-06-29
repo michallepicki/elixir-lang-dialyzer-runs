@@ -28,6 +28,7 @@ defmodule Dialyze do
 
   expected_counts = Map.put(expected_counts, 3, 8)
 
+  # discussed in https://github.com/elixir-lang/elixir/pull/9979#discussion_r416206411
   defp filter_warning(warning = {:warn_matching, {'src/elixir_erl_compiler.erl', {59, _}}, {:pattern_match, _lots_of_details}}),
     do: filtered(id: 4, comment: "return type not documented in erlang", data: warning)
 
@@ -138,7 +139,7 @@ defmodule Dialyze do
 
   expected_counts = Map.put(expected_counts, 23, 1)
 
-  # https://github.com/elixir-lang/elixir/issues/11092
+  # discussed in https://github.com/elixir-lang/elixir/issues/11092
   defp filter_warning(warning = {:warn_matching, {'lib/calendar/time.ex', 636}, {:pattern_match, ['pattern {\'error\', _reason@1}', '{\'ok\',\#{\'__struct__\':=\'Elixir.Time\', \'calendar\':=atom(), \'hour\':=non_neg_integer(), \'microsecond\':={non_neg_integer(),non_neg_integer()}, \'minute\':=non_neg_integer(), \'second\':=non_neg_integer()}}']}}),
     do: filtered(id: 24, comment: "slightly dead code", data: warning)
 
