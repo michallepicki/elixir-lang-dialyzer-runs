@@ -7,152 +7,225 @@ defmodule Dialyze do
 
   expected_counts = %{}
 
-  defp filter(warnings), do: filter(warnings, [])
-
   defp filter([], acc), do: Enum.reverse(acc)
 
-  defp filter([warning | rest], acc), do: filter(rest, [filter_warning(warning) | acc])
+  defp filter([warning | rest], acc), do: filter(rest, [filter(warning) | acc])
 
   # discussed in https://github.com/elixir-lang/elixir/issues/10279
   # and https://github.com/elixir-lang/elixir/pull/10280
   # mostly fixed in https://github.com/elixir-lang/elixir/pull/10287
   # may be resolved in https://github.com/elixir-lang/elixir/issues/9465
-  defp filter_warning(warning = {:warn_failing_call, {'lib/logger.ex', _}, {:call, [Logger, :__do_log__, _, [3], :only_sig, _, _, {false, :none}]}}),
-    do: filtered(id: 1, comment: "Elixir deliberately using erlang macro-based logger interface without passing in call location", data: warning)
+  id = 1
+  @id id
+  @counts 1
+  expected_counts = Map.put(expected_counts, @id, @counts)
 
-  expected_counts = Map.put(expected_counts, 1, 1)
+  defp filter(expected = {:warn_failing_call, {'lib/logger.ex', _}, {:call, [Logger, :__do_log__, _, [3], :only_sig, _, _, {false, :none}]}}),
+    do: filtered(comment: "Elixir deliberately using erlang macro-based logger interface without passing in call location", id: @id, data: expected)
 
   # discussed in https://github.com/elixir-lang/elixir/pull/9979#discussion_r415730426
   # and https://github.com/elixir-lang/elixir/pull/9993
   # and https://github.com/elixir-lang/elixir/pull/9995
-  defp filter_warning(warning = {:warn_opaque, {'lib/mix/tasks/test.ex', _}, {:opaque_match, ['pattern \#{\'__struct__\':=\'Elixir.MapSet\'}', '\'Elixir.MapSet\':t(binary() | maybe_improper_list(binary() | maybe_improper_list(any(),binary() | []) | char(),binary() | []))', '\'Elixir.MapSet\':t(binary() | maybe_improper_list(binary() | maybe_improper_list(any(),binary() | []) | char(),binary() | []))']}}),
-    do: filtered(id: 2, comment: "Elixir folks want to be able to pattern match on a struct name while keeping the struct type opaque", data: warning)
+  id = id + 1
+  @id id
+  @counts 1
+  expected_counts = Map.put(expected_counts, @id, @counts)
 
-  expected_counts = Map.put(expected_counts, 2, 1)
-
-  defp filter_warning(warning = {:warn_matching, {'lib/kernel.ex', _}, {:pattern_match, ['pattern \'false\'', '\'true\'']}}),
-    do: filtered(id: 3, comment: "inlined bootstrap check stuff", data: warning)
-
-  expected_counts = Map.put(expected_counts, 3, 8)
+  defp filter(expected = {:warn_opaque, {'lib/mix/tasks/test.ex', _}, {:opaque_match, ['pattern \#{\'__struct__\':=\'Elixir.MapSet\'}', '\'Elixir.MapSet\':t(binary() | maybe_improper_list(binary() | maybe_improper_list(any(),binary() | []) | char(),binary() | []))', '\'Elixir.MapSet\':t(binary() | maybe_improper_list(binary() | maybe_improper_list(any(),binary() | []) | char(),binary() | []))']}}),
+    do: filtered(comment: "Elixir folks want to be able to pattern match on a struct name while keeping the struct type opaque", id: @id, data: expected)
 
   # discussed in https://github.com/elixir-lang/elixir/pull/9979#discussion_r416206411
-  defp filter_warning(warning = {:warn_matching, {'src/elixir_erl_compiler.erl', {59, _}}, {:pattern_match, _lots_of_details}}),
-    do: filtered(id: 4, comment: "return type not documented in erlang", data: warning)
+  id = id + 1
+  @id id
+  @counts 1
+  expected_counts = Map.put(expected_counts, @id, @counts)
 
-  expected_counts = Map.put(expected_counts, 4, 1)
+  defp filter(expected = {:warn_matching, {'src/elixir_erl_compiler.erl', {59, _}}, {:pattern_match, _lots_of_details}}),
+    do: filtered(comment: "return type not documented in erlang", id: @id, data: expected)
 
-  defp filter_warning(warning = {:warn_return_no_exit, {'lib/mix/tasks/test.ex', _}, {:no_return, [:only_normal, :raise_with_shell, 2]}}),
-    do: filtered(id: 5, comment: "not annotated exception", data: warning)
+  # discussed in https://github.com/elixir-lang/elixir/issues/11092
+  id = id + 1
+  @id id
+  @counts 1
+  expected_counts = Map.put(expected_counts, @id, @counts)
 
-  expected_counts = Map.put(expected_counts, 5, 1)
+  defp filter(expected = {:warn_matching, {'lib/calendar/time.ex', 636}, {:pattern_match, ['pattern {\'error\', _reason@1}', '{\'ok\',\#{\'__struct__\':=\'Elixir.Time\', \'calendar\':=atom(), \'hour\':=non_neg_integer(), \'microsecond\':={non_neg_integer(),non_neg_integer()}, \'minute\':=non_neg_integer(), \'second\':=non_neg_integer()}}']}}),
+    do: filtered(comment: "slightly dead code", id: @id, data: expected)
 
-  defp filter_warning(warning = {:warn_return_no_exit, {'lib/mix/release.ex', _}, {:no_return, [:only_normal, :bad_umbrella!, 0]}}),
-    do: filtered(id: 6, comment: "not annotated exception", data: warning)
+  id = id + 1
+  @id id
+  @counts 1
+  expected_counts = Map.put(expected_counts, @id, @counts)
 
-  expected_counts = Map.put(expected_counts, 6, 1)
+  defp filter(expected = {:warn_matching, {'lib/mix/tasks/deps.compile.ex', 267}, {:guard_fail, ['_@6::\'true\'', '=:=', '\'nil\'']}}),
+    do: filtered(comment: "slightly dead code", id: @id, data: expected)
 
-  defp filter_warning(warning = {:warn_return_no_exit, {'lib/mix/dep/loader.ex', _}, {:no_return, [:only_normal, :invalid_dep_format, 1]}}),
-    do: filtered(id: 7, comment: "not annotated exception", data: warning)
+  id = id + 1
+  @id id
+  @counts 2
+  expected_counts = Map.put(expected_counts, @id, @counts)
 
-  expected_counts = Map.put(expected_counts, 7, 1)
+  defp filter(expected = {:warn_unknown, {'lib/mix/hex.ex', lines}, {:unknown_function, {Hex, function, 0}}}) when function in [:start, :version] and lines in [40, 59],
+    do: filtered(comment: "Hex package loading gets handled by the Mix task", id: @id, data: expected)
 
-  defp filter_warning(warning = {:warn_return_no_exit, {'lib/iex.ex', _}, {:no_return, [:only_normal, :__break__!, 2]}}),
-    do: filtered(id: 8, comment: "not annotated exception", data: warning)
+  id = id + 1
+  @id id
+  @counts 1
+  expected_counts = Map.put(expected_counts, @id, @counts)
 
-  expected_counts = Map.put(expected_counts, 8, 1)
+  defp filter(expected = {:warn_matching, {'lib/dynamic_supervisor.ex', 350}, {:pattern_match_cov, ['variable _other@1', '{_,_,_,_,_,_} | \#{\'id\':=_, \'start\':={atom(),atom(),[any()]}, \'modules\'=>\'dynamic\' | [atom()], \'restart\'=>\'permanent\' | \'temporary\' | \'transient\', \'shutdown\'=>\'brutal_kill\' | \'infinity\' | non_neg_integer(), \'type\'=>\'supervisor\' | \'worker\'}']}}),
+    do: filtered(comment: "overly defensive code", id: @id, data: expected)
 
-  defp filter_warning(warning = {:warn_return_no_exit, {'src/elixir_quote.erl', _}, {:no_return, [:only_normal, :bad_escape, 1]}}),
-    do: filtered(id: 9, comment: "not annotated exception", data: warning)
+  id = id + 1
+  @id id
+  @counts 1
+  expected_counts = Map.put(expected_counts, @id, @counts)
 
-  expected_counts = Map.put(expected_counts, 9, 1)
+  defp filter(expected = {:warn_matching, {'lib/string_io.ex', 410}, {:guard_fail, [:is_list, '(_data@1::binary())']}}),
+    do: filtered(comment: "overly defensive code", id: @id, data: expected)
 
-  defp filter_warning(warning = {:warn_return_no_exit, {'lib/mix/tasks/iex.ex', _}, {:no_return, [:only_normal, :run, 1]}}),
-    do: filtered(id: 10, comment: "not annotated exception", data: warning)
+  id = id + 1
+  @id id
+  @counts 1
+  expected_counts = Map.put(expected_counts, @id, @counts)
 
-  expected_counts = Map.put(expected_counts, 10, 1)
+  defp filter(expected = {:warn_matching, {'lib/mix/utils.ex', 741}, {:pattern_match, ['pattern \'nil\'', '\#{\'__struct__\':=\'Elixir.URI\', \'authority\':=\'nil\' | binary(), \'fragment\':=\'nil\' | binary(), \'host\':=\'nil\' | binary(), \'path\':=\'nil\' | binary(), \'port\':=\'nil\' | char(), \'query\':=\'nil\' | binary(), \'scheme\':=\'nil\' | binary(), \'userinfo\':=\'nil\' | binary()}']}}),
+    do: filtered(comment: "overly defensive code", id: @id, data: expected)
 
-  defp filter_warning(warning = {:warn_return_no_exit, {'lib/iex/cli.ex', _}, {:no_return, [:only_normal]}}),
-    do: filtered(id: 11, comment: "not annotated exit", data: warning)
+  id = id + 1
+  @id id
+  @counts 1
+  expected_counts = Map.put(expected_counts, @id, @counts)
 
-  expected_counts = Map.put(expected_counts, 11, 1)
+  defp filter(expected = {:warn_matching, {'lib/iex/helpers.ex', 605}, {:pattern_match, ['pattern <__key@1, \'nil\'>', '<<<_:64,_:_*8>>,<<_:80>> | string() | non_neg_integer()>']}}),
+    do: filtered(comment: "overly_defensive code", id: @id, data: expected)
 
-  defp filter_warning(warning = {:warn_return_no_exit, {'lib/gen_event.ex', _}, {:no_return, [:only_normal, :system_terminate, 4]}}),
-    do: filtered(id: 12, comment: "not annotated exit", data: warning)
+  id = id + 1
+  @id id
+  @counts 22
+  expected_counts = Map.put(expected_counts, @id, @counts)
 
-  expected_counts = Map.put(expected_counts, 12, 1)
+  defp filter(expected = {:warn_unknown, {file, 1}, {:unknown_function, {module, :__impl__, 1}}}) when module in [Collectable.Atom, Collectable.Float, Collectable.Function, Collectable.Integer, Collectable.PID, Collectable.Port, Collectable.Reference, Collectable.Tuple, Enumerable.Atom, Enumerable.BitString, Enumerable.Float, Enumerable.Integer, Enumerable.PID, Enumerable.Port, Enumerable.Reference, Enumerable.Tuple, List.Chars.Function, List.Chars.Map, List.Chars.PID, List.Chars.Port, List.Chars.Reference, List.Chars.Tuple] and file in ['lib/collectable.ex', 'lib/enum.ex', 'lib/list/chars.ex'],
+    do: filtered(comment: "some protocol consolidation stuff", id: @id, data: expected)
+
+  id = id + 1
+  @id id
+  @counts 6
+  expected_counts = Map.put(expected_counts, @id, @counts)
+
+  defp filter(expected = {:warn_unknown, {'lib/string/chars.ex', 3}, {:unknown_function, {module, :__impl__, 1}}}) when module in [String.Chars.Function, String.Chars.Map, String.Chars.PID, String.Chars.Port, String.Chars.Reference, String.Chars.Tuple],
+    do: filtered(comment: "some protocol consolidation stuff", id: @id, data: expected)
+
+  id = id + 1
+  @id id
+  @counts 8
+  expected_counts = Map.put(expected_counts, @id, @counts)
+
+  defp filter(expected = {:warn_matching, {'lib/kernel.ex', _}, {:pattern_match, ['pattern \'false\'', '\'true\'']}}),
+    do: filtered(comment: "inlined bootstrap check stuff", id: @id, data: expected)
+
+  id = id + 1
+  @id id
+  @counts 7
+  expected_counts = Map.put(expected_counts, @id, @counts)
+
+  defp filter(expected = {:warn_not_called, {'lib/base.ex', _}, {:unused_fun, [function, _]}}) when function in [:encode_pair_clauses, :shift, :encode_clauses, :decode_char_clauses, :decode_mixed_clauses, :decode_clauses, :bad_digit_clause],
+    do: filtered(comment: "functions inlined or only used to generate other functions at compile time", id: @id, data: expected)
+
+  id = id + 1
+  @id id
+  @counts 2
+  expected_counts = Map.put(expected_counts, @id, @counts)
+
+  defp filter(expected = {:warn_not_called, {'lib/system.ex', _}, {:unused_fun, [function, 1]}}) when function in [:read_stripped, :strip],
+    do: filtered(comment: "functions called only during elixir compilation time", id: @id, data: expected)
+
+  id = id + 1
+  @id id
+  @counts 1
+  expected_counts = Map.put(expected_counts, @id, @counts)
+
+  defp filter(expected = {:warn_return_no_exit, {'lib/mix/tasks/test.ex', _}, {:no_return, [:only_normal, :raise_with_shell, 2]}}),
+    do: filtered(comment: "not annotated exception", id: @id, data: expected)
+
+  id = id + 1
+  @id id
+  @counts 1
+  expected_counts = Map.put(expected_counts, @id, @counts)
+
+  defp filter(expected = {:warn_return_no_exit, {'lib/mix/release.ex', _}, {:no_return, [:only_normal, :bad_umbrella!, 0]}}),
+    do: filtered(comment: "not annotated exception", id: @id, data: expected)
+
+  id = id + 1
+  @id id
+  @counts 1
+  expected_counts = Map.put(expected_counts, @id, @counts)
+
+  defp filter(expected = {:warn_return_no_exit, {'lib/mix/dep/loader.ex', _}, {:no_return, [:only_normal, :invalid_dep_format, 1]}}),
+    do: filtered(comment: "not annotated exception", id: @id, data: expected)
+
+  id = id + 1
+  @id id
+  @counts 1
+  expected_counts = Map.put(expected_counts, @id, @counts)
+
+  defp filter(expected = {:warn_return_no_exit, {'lib/iex.ex', _}, {:no_return, [:only_normal, :__break__!, 2]}}),
+    do: filtered(comment: "not annotated exception", id: @id, data: expected)
+
+  id = id + 1
+  @id id
+  @counts 1
+  expected_counts = Map.put(expected_counts, @id, @counts)
+
+  defp filter(expected = {:warn_return_no_exit, {'src/elixir_quote.erl', _}, {:no_return, [:only_normal, :bad_escape, 1]}}),
+    do: filtered(comment: "not annotated exception", id: @id, data: expected)
+
+  id = id + 1
+  @id id
+  @counts 1
+  expected_counts = Map.put(expected_counts, @id, @counts)
+
+  defp filter(expected = {:warn_return_no_exit, {'lib/mix/tasks/iex.ex', _}, {:no_return, [:only_normal, :run, 1]}}),
+    do: filtered(comment: "not annotated exception", id: @id, data: expected)
+
+  id = id + 1
+  @id id
+  @counts 1
+  expected_counts = Map.put(expected_counts, @id, @counts)
+
+  defp filter(expected = {:warn_return_no_exit, {'lib/iex/cli.ex', _}, {:no_return, [:only_normal]}}),
+    do: filtered(comment: "not annotated exit", id: @id, data: expected)
+
+  id = id + 1
+  @id id
+  @counts 1
+  expected_counts = Map.put(expected_counts, @id, @counts)
+
+  defp filter(expected = {:warn_return_no_exit, {'lib/gen_event.ex', _}, {:no_return, [:only_normal, :system_terminate, 4]}}),
+    do: filtered(comment: "not annotated exit", id: @id, data: expected)
 
   @yecc_yrl_functions [:error_bad_keyword_call_follow_up, :error_bad_keyword_data_follow_up, :return_error, :error_invalid_stab, :error_bad_atom, :error_no_parens_strict, :error_no_parens_many_strict, :error_no_parens_container_strict, :error_invalid_kw_identifier]
   @yecc_erl_clauses [:yeccpars2_87, :yeccpars2_89, :yeccpars2_109, :yeccpars2_200, :yeccpars2_219, :yeccpars2_230, :yeccpars2_311, :yeccpars2_367, :yeccpars2_403, :yeccpars2_404]
   yecc_yrl_clauses = Enum.map(@yecc_erl_clauses, fn atom -> :"#{atom}_" end)
   @yecc_yrl_clauses yecc_yrl_clauses
 
-  defp filter_warning(warning = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.yrl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in @yecc_yrl_functions or function in @yecc_yrl_clauses,
-    do: filtered(id: 13, comment: "parser not annotated exception", data: warning)
+  id = id + 1
+  @id id
+  @counts 19
+  expected_counts = Map.put(expected_counts, @id, @counts)
 
-  expected_counts = Map.put(expected_counts, 13, 19)
+  defp filter(expected = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.yrl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in @yecc_yrl_functions or function in @yecc_yrl_clauses,
+    do: filtered(comment: "parser not annotated exception", id: @id, data: expected)
 
-  defp filter_warning(warning = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.erl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in @yecc_erl_clauses,
-    do: filtered(id: 14, comment: "parser not annotated exception", data: warning)
+  id = id + 1
+  @id id
+  @counts 6
+  expected_counts = Map.put(expected_counts, @id, @counts)
 
-  expected_counts = Map.put(expected_counts, 14, 6)
+  defp filter(expected = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.erl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in @yecc_erl_clauses,
+    do: filtered(comment: "parser not annotated exception", id: @id, data: expected)
 
-  defp filter_warning(warning = {:warn_unknown, {file, 1}, {:unknown_function, {module, :__impl__, 1}}}) when module in [Collectable.Atom, Collectable.Float, Collectable.Function, Collectable.Integer, Collectable.PID, Collectable.Port, Collectable.Reference, Collectable.Tuple, Enumerable.Atom, Enumerable.BitString, Enumerable.Float, Enumerable.Integer, Enumerable.PID, Enumerable.Port, Enumerable.Reference, Enumerable.Tuple, List.Chars.Function, List.Chars.Map, List.Chars.PID, List.Chars.Port, List.Chars.Reference, List.Chars.Tuple] and file in ['lib/collectable.ex', 'lib/enum.ex', 'lib/list/chars.ex'],
-    do: filtered(id: 15, comment: "some protocol consolidation stuff", data: warning)
-
-  expected_counts = Map.put(expected_counts, 15, 22)
-
-  defp filter_warning(warning = {:warn_unknown, {'lib/string/chars.ex', 3}, {:unknown_function, {module, :__impl__, 1}}}) when module in [String.Chars.Function, String.Chars.Map, String.Chars.PID, String.Chars.Port, String.Chars.Reference, String.Chars.Tuple],
-    do: filtered(id: 25, comment: "some protocol consolidation stuff", data: warning)
-
-  expected_counts = Map.put(expected_counts, 25, 6)
-
-  defp filter_warning(warning = {:warn_unknown, {'lib/mix/hex.ex', lines}, {:unknown_function, {Hex, function, 0}}}) when function in [:start, :version] and lines in [40, 59],
-    do: filtered(id: 16, comment: "Hex package loading gets handled by the Mix task", data: warning)
-
-  expected_counts = Map.put(expected_counts, 16, 2)
-
-  defp filter_warning(warning = {:warn_not_called, {'lib/base.ex', _}, {:unused_fun, [function, _]}}) when function in [:encode_pair_clauses, :shift, :encode_clauses, :decode_char_clauses, :decode_mixed_clauses, :decode_clauses, :bad_digit_clause],
-    do: filtered(id: 17, comment: "functions inlined or only used to generate other functions at compile time", data: warning)
-
-  expected_counts = Map.put(expected_counts, 17, 7)
-
-  defp filter_warning(warning = {:warn_not_called, {'lib/system.ex', _}, {:unused_fun, [function, 1]}}) when function in [:read_stripped, :strip],
-    do: filtered(id: 18, comment: "functions called only during elixir compilation time", data: warning)
-
-  expected_counts = Map.put(expected_counts, 18, 2)
-
-  defp filter_warning(warning = {:warn_matching, {'lib/dynamic_supervisor.ex', 350}, {:pattern_match_cov, ['variable _other@1', '{_,_,_,_,_,_} | \#{\'id\':=_, \'start\':={atom(),atom(),[any()]}, \'modules\'=>\'dynamic\' | [atom()], \'restart\'=>\'permanent\' | \'temporary\' | \'transient\', \'shutdown\'=>\'brutal_kill\' | \'infinity\' | non_neg_integer(), \'type\'=>\'supervisor\' | \'worker\'}']}}),
-    do: filtered(id: 19, comment: "overly defensive code", data: warning)
-
-  expected_counts = Map.put(expected_counts, 19, 1)
-
-  defp filter_warning(warning = {:warn_matching, {'lib/string_io.ex', 410}, {:guard_fail, [:is_list, '(_data@1::binary())']}}),
-    do: filtered(id: 20, comment: "overly defensive code", data: warning)
-
-  expected_counts = Map.put(expected_counts, 20, 1)
-
-  defp filter_warning(warning = {:warn_matching, {'lib/mix/utils.ex', 741}, {:pattern_match, ['pattern \'nil\'', '\#{\'__struct__\':=\'Elixir.URI\', \'authority\':=\'nil\' | binary(), \'fragment\':=\'nil\' | binary(), \'host\':=\'nil\' | binary(), \'path\':=\'nil\' | binary(), \'port\':=\'nil\' | char(), \'query\':=\'nil\' | binary(), \'scheme\':=\'nil\' | binary(), \'userinfo\':=\'nil\' | binary()}']}}),
-    do: filtered(id: 21, comment: "overly defensive code", data: warning)
-
-  expected_counts = Map.put(expected_counts, 21, 1)
-
-  defp filter_warning(warning = {:warn_matching, {'lib/iex/helpers.ex', 605}, {:pattern_match, ['pattern <__key@1, \'nil\'>', '<<<_:64,_:_*8>>,<<_:80>> | string() | non_neg_integer()>']}}),
-    do: filtered(id: 22, comment: "overly_defensive code", data: warning)
-
-  expected_counts = Map.put(expected_counts, 22, 1)
-
-  defp filter_warning(warning = {:warn_matching, {'lib/mix/tasks/deps.compile.ex', 267}, {:guard_fail, ['_@6::\'true\'', '=:=', '\'nil\'']}}),
-    do: filtered(id: 23, comment: "slightly dead code", data: warning)
-
-  expected_counts = Map.put(expected_counts, 23, 1)
-
-  # discussed in https://github.com/elixir-lang/elixir/issues/11092
-  defp filter_warning(warning = {:warn_matching, {'lib/calendar/time.ex', 636}, {:pattern_match, ['pattern {\'error\', _reason@1}', '{\'ok\',\#{\'__struct__\':=\'Elixir.Time\', \'calendar\':=atom(), \'hour\':=non_neg_integer(), \'microsecond\':={non_neg_integer(),non_neg_integer()}, \'minute\':=non_neg_integer(), \'second\':=non_neg_integer()}}']}}),
-    do: filtered(id: 24, comment: "slightly dead code", data: warning)
-
-  expected_counts = Map.put(expected_counts, 24, 1)
-
-  defp filter_warning(warning), do: unfiltered(data: warning)
+  defp filter(unexpected), do: unfiltered(data: unexpected)
 
   @expected_counts expected_counts
   defp expected_counts(), do: @expected_counts
@@ -174,27 +247,27 @@ defmodule Dialyze do
           'elixir/lib/mix/ebin'
         ]
       )
-      |> filter()
+      |> filter([])
 
-    actual_counts =
+    counts =
       results
       |> Enum.reduce(%{}, fn
-        filtered(id: id), actual_counts ->
-          Map.update(actual_counts, id, 1, &(&1 + 1))
+        filtered(id: id), counts ->
+          Map.update(counts, id, 1, &(&1 + 1))
 
-        _, actual_counts ->
-          actual_counts
+        _, counts ->
+          counts
       end)
 
     unexpected_counts_warnings =
       expected_counts()
       |> Enum.filter(fn
         {id, expected_count} ->
-          actual_counts[id] != expected_count
+          counts[id] != expected_count
       end)
       |> Enum.map(fn
         {id, expected_count} ->
-          unexpected_count(id: id, actual: actual_counts[id], expected: expected_count)
+          unexpected_count(id: id, actual: counts[id], expected: expected_count)
       end)
 
     results =
