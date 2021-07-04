@@ -11,44 +11,40 @@ defmodule Dialyze do
 
   defp filter([warning | rest], acc), do: filter(rest, [filter(warning) | acc])
 
-  # discussed in https://github.com/elixir-lang/elixir/issues/10279
-  # and https://github.com/elixir-lang/elixir/pull/10280
-  # mostly fixed in https://github.com/elixir-lang/elixir/pull/10287
-  # may be resolved in https://github.com/elixir-lang/elixir/issues/9465
   id = 1
   @id id
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
-
+  # discussed in https://github.com/elixir-lang/elixir/issues/10279
+  # and https://github.com/elixir-lang/elixir/pull/10280
+  # mostly fixed in https://github.com/elixir-lang/elixir/pull/10287
+  # may be resolved in https://github.com/elixir-lang/elixir/issues/9465
   defp filter(expected = {:warn_failing_call, {'lib/logger.ex', _}, {:call, [Logger, :__do_log__, _, [3], :only_sig, _, _, {false, :none}]}}),
     do: filtered(comment: "Elixir deliberately using erlang macro-based logger interface without passing in call location", id: @id, data: expected)
 
+  id = id + 1
+  @id id
+  @counts 1
+  expected_counts = Map.put(expected_counts, @id, @counts)
   # discussed in https://github.com/elixir-lang/elixir/pull/9979#discussion_r415730426
   # and https://github.com/elixir-lang/elixir/pull/9993
   # and https://github.com/elixir-lang/elixir/pull/9995
-  id = id + 1
-  @id id
-  @counts 1
-  expected_counts = Map.put(expected_counts, @id, @counts)
-
   defp filter(expected = {:warn_opaque, {'lib/mix/tasks/test.ex', _}, {:opaque_match, ['pattern \#{\'__struct__\':=\'Elixir.MapSet\'}', '\'Elixir.MapSet\':t(binary() | maybe_improper_list(binary() | maybe_improper_list(any(),binary() | []) | char(),binary() | []))', '\'Elixir.MapSet\':t(binary() | maybe_improper_list(binary() | maybe_improper_list(any(),binary() | []) | char(),binary() | []))']}}),
     do: filtered(comment: "Elixir folks want to be able to pattern match on a struct name while keeping the struct type opaque", id: @id, data: expected)
 
-  # discussed in https://github.com/elixir-lang/elixir/pull/9979#discussion_r416206411
   id = id + 1
   @id id
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
-
+  # discussed in https://github.com/elixir-lang/elixir/pull/9979#discussion_r416206411
   defp filter(expected = {:warn_matching, {'src/elixir_erl_compiler.erl', {59, _}}, {:pattern_match, _lots_of_details}}),
     do: filtered(comment: "return type not documented in erlang", id: @id, data: expected)
 
-  # discussed in https://github.com/elixir-lang/elixir/issues/11092
   id = id + 1
   @id id
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
-
+  # discussed in https://github.com/elixir-lang/elixir/issues/11092
   defp filter(expected = {:warn_matching, {'lib/calendar/time.ex', 636}, {:pattern_match, ['pattern {\'error\', _reason@1}', '{\'ok\',\#{\'__struct__\':=\'Elixir.Time\', \'calendar\':=atom(), \'hour\':=non_neg_integer(), \'microsecond\':={non_neg_integer(),non_neg_integer()}, \'minute\':=non_neg_integer(), \'second\':=non_neg_integer()}}']}}),
     do: filtered(comment: "slightly dead code", id: @id, data: expected)
 
