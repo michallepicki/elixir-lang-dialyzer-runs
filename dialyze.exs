@@ -172,6 +172,14 @@ defmodule Dialyze do
   @id id
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
+  
+  defp filter(expected = {:warn_return_no_exit, {'lib/mix/scm/path.ex', 61}, {:no_return, [:only_normal, :checkout, 1]}}),
+    do: filtered(comment: "not annotated exception", id: @id, data: expected)
+
+  id = id + 1
+  @id id
+  @counts 1
+  expected_counts = Map.put(expected_counts, @id, @counts)
 
   defp filter(expected = {:warn_return_no_exit, {'lib/iex.ex', _}, {:no_return, [:only_normal, :__break__!, 2]}}),
     do: filtered(comment: "not annotated exception", id: @id, data: expected)
