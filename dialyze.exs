@@ -53,7 +53,7 @@ defmodule Dialyze do
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
 
-  defp filter(expected = {:warn_matching, {'lib/mix/tasks/deps.compile.ex', 267}, {:guard_fail, ['_@6::\'true\'', '=:=', '\'nil\'']}}),
+  defp filter(expected = {:warn_matching, {'lib/mix/tasks/deps.compile.ex', 268}, {:guard_fail, ['_@6::\'true\'', '=:=', '\'nil\'']}}),
     do: filtered(comment: "slightly dead code", id: @id, data: expected)
 
   id = id + 1
