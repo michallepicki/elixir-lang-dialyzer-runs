@@ -53,14 +53,6 @@ defmodule Dialyze do
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
 
-  defp filter(expected = {:warn_matching, {'lib/mix/tasks/deps.compile.ex', 268}, {:guard_fail, ['_@6::\'true\'', '=:=', '\'nil\'']}}),
-    do: filtered(comment: "slightly dead code", id: @id, data: expected)
-
-  id = id + 1
-  @id id
-  @counts 1
-  expected_counts = Map.put(expected_counts, @id, @counts)
-
   defp filter(expected = {:warn_matching, {'lib/calendar/date_range.ex', 201}, {:pattern_match_cov, ['pattern _date_range@1 = \#{\'__struct__\':=\'Elixir.Date.Range\', \'first_in_iso_days\':=_first_days@1, \'last_in_iso_days\':=_last_days@1}', '\#{\'__struct__\':=\'Elixir.Date.Range\', \'first\':=\#{\'calendar\':=_, _=>_}, \'first_in_iso_days\':=_, \'last_in_iso_days\':=_, \'step\':=_, _=>_}']}}),
     do: filtered(comment: "code added for backwards compatibility with old date ranges without step field", id: @id, data: expected)
 
