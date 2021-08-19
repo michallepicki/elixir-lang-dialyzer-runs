@@ -114,7 +114,7 @@ defmodule Dialyze do
 
   id = id + 1
   @id id
-  @counts 8
+  @counts 6
   expected_counts = Map.put(expected_counts, @id, @counts)
 
   defp filter(expected = {:warn_matching, {'lib/kernel.ex', _}, {:pattern_match, ['pattern \'false\'', '\'true\'']}}),
