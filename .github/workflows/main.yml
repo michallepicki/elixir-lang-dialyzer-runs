@@ -19,7 +19,7 @@ on:
         default: "patch-1"
 
 jobs:
-  dialyze:
+  dialyzer:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
@@ -47,18 +47,18 @@ jobs:
           make compile
           cd ../
 
-      - name: Handle dialyzer PLT file caching
+      - name: Handle otp PLT file caching
         id: cache-plt
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
-          path: plt-dir
-          key: v1-OTP-24.0.5
+          path: plt-dir/otp.plt
+          key: v2-OTP-24.0.5
 
       - name: Create the dialyzer PLT file
         if: steps.cache-plt.outputs.cache-hit != 'true'
         run: dialyzer --output_plt plt-dir/otp.plt --build_plt --apps erts kernel stdlib compiler syntax_tools parsetools tools ssl inets crypto runtime_tools ftp tftp mnesia public_key asn1 sasl
 
-      - name: Run dialyzer
+      - name: Check Elixir
         run: elixir/bin/elixir dialyze.exs
 
       - name: Save the report
