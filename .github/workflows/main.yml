@@ -28,7 +28,7 @@ jobs:
       - name: Install erlang
         run: |
           echo "`pwd`/erlang/bin" >> $GITHUB_PATH
-          curl -Lo erlang.tar.gz https://repo.hex.pm/builds/otp/ubuntu-20.04/OTP-24.0.5.tar.gz
+          curl -Lo erlang.tar.gz https://repo.hex.pm/builds/otp/ubuntu-20.04/OTP-24.0.6.tar.gz
           mkdir erlang
           tar zxf erlang.tar.gz -C erlang --strip-components=1
           erlang/Install -minimal  `pwd`/erlang
@@ -52,7 +52,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: plt-dir/otp.plt
-          key: v2-OTP-24.0.5
+          key: v1-OTP-24.0.6
 
       - name: Create the dialyzer PLT file
         if: steps.cache-plt.outputs.cache-hit != 'true'
