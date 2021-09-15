@@ -209,7 +209,7 @@ defmodule Dialyze do
     do: filtered(comment: "not annotated exit", id: @id, data: expected)
 
   @yecc_yrl_functions [:error_bad_keyword_call_follow_up, :error_bad_keyword_data_follow_up, :return_error, :error_invalid_stab, :error_bad_atom, :error_no_parens_strict, :error_no_parens_many_strict, :error_no_parens_container_strict, :error_invalid_kw_identifier]
-  @yecc_erl_clauses [:yeccpars2_89, :yeccpars2_91, :yeccpars2_111, :yeccpars2_202, :yeccpars2_221, :yeccpars2_232, :yeccpars2_313, :yeccpars2_369, :yeccpars2_405, :yeccpars2_406]
+  @yecc_erl_clauses [:yeccpars2_89, :yeccpars2_91, :yeccpars2_111, :yeccpars2_205, :yeccpars2_225, :yeccpars2_236, :yeccpars2_321, :yeccpars2_379, :yeccpars2_415, :yeccpars2_416]
   yecc_yrl_clauses = Enum.map(@yecc_erl_clauses, fn atom -> :"#{atom}_" end)
   @yecc_yrl_clauses yecc_yrl_clauses
 
