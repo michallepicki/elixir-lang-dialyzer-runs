@@ -93,7 +93,7 @@ defmodule Dialyze do
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
 
-  defp filter(expected = {:warn_matching, {'lib/iex/helpers.ex', 605}, {:pattern_match, ['pattern <__key@1, \'nil\'>', '<<<_:64,_:_*8>>,<<_:80>> | string() | non_neg_integer()>']}}),
+  defp filter(expected = {:warn_matching, {'lib/iex/helpers.ex', 624}, {:pattern_match, ['pattern <__key@1, \'nil\'>', '<<<_:64,_:_*8>>,<<_:80>> | string() | non_neg_integer()>']}}),
     do: filtered(comment: "overly_defensive code", id: @id, data: expected)
 
   id = id + 1
