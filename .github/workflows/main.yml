@@ -52,7 +52,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: plt-dir/otp.plt
-          key: v1-OTP-24.0.6
+          key: v1-OTP-24.1
 
       - name: Create the dialyzer PLT file
         if: steps.cache-plt.outputs.cache-hit != 'true'
