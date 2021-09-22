@@ -209,27 +209,14 @@ defmodule Dialyze do
     do: filtered(comment: "not annotated exit", id: @id, data: expected)
 
   @yecc_yrl_functions [:error_bad_keyword_call_follow_up, :error_bad_keyword_data_follow_up, :return_error, :error_invalid_stab, :error_bad_atom, :error_no_parens_strict, :error_no_parens_many_strict, :error_no_parens_container_strict, :error_invalid_kw_identifier]
-  @yecc_erl_clauses [:yeccpars2_89, :yeccpars2_91, :yeccpars2_111, :yeccpars2_205, :yeccpars2_225, :yeccpars2_236, :yeccpars2_321, :yeccpars2_379, :yeccpars2_415, :yeccpars2_416]
-  yecc_yrl_clauses = Enum.map(@yecc_erl_clauses, fn atom -> :"#{atom}_" end)
-  @yecc_yrl_clauses yecc_yrl_clauses
 
   id = id + 1
   @id id
-  @counts 19
+  @counts 9
   expected_counts = Map.put(expected_counts, @id, @counts)
 
-  defp filter(expected = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.yrl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in @yecc_yrl_functions or function in @yecc_yrl_clauses,
+  defp filter(expected = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.yrl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in @yecc_yrl_functions,
     do: filtered(comment: "parser not annotated exception", id: @id, data: expected)
-
-  id = id + 1
-  @id id
-  @counts 6
-  expected_counts = Map.put(expected_counts, @id, @counts)
-
-  defp filter(expected = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.erl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in @yecc_erl_clauses,
-    do: filtered(comment: "parser not annotated exception", id: @id, data: expected)
-
-  defp filter(unexpected), do: unfiltered(data: unexpected)
 
   @expected_counts expected_counts
   defp expected_counts(), do: @expected_counts
