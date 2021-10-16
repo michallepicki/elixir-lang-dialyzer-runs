@@ -218,6 +218,9 @@ defmodule Dialyze do
   defp filter(expected = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.yrl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in @yecc_yrl_functions,
     do: filtered(comment: "parser not annotated exception", id: @id, data: expected)
 
+  defp filter(warning),
+    do: unfiltered(data: warning)
+
   @expected_counts expected_counts
   defp expected_counts(), do: @expected_counts
 
