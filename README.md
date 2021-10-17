@@ -31,5 +31,5 @@ cd ../
 dialyzer --output_plt plt-dir/otp.plt --build_plt --apps erts kernel stdlib compiler syntax_tools parsetools tools ssl inets crypto runtime_tools ftp tftp mnesia public_key asn1 sasl
 
 # run analysis on Elixir source code:
-elixir/bin/elixir dialyze.exs
+elixir/bin/elixir dialyzer.exs
 ```
