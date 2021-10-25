@@ -1,4 +1,4 @@
-defmodule Dialyze do
+defmodule Dialyzer do
   require Record
 
   Record.defrecord(:filtered, id: nil, comment: nil, data: nil)
@@ -317,4 +317,4 @@ defmodule Dialyze do
   end
 end
 
-Dialyze.run()
+Dialyzer.run()
