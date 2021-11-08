@@ -38,7 +38,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: ${{ github.event.inputs.repository || 'elixir-lang/elixir' }}
-          ref: ${{ github.event.inputs.ref || 'master' }}
+          ref: ${{ github.event.inputs.ref || 'main' }}
           path: elixir
 
       - name: Compile elixir
