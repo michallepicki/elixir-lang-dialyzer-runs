@@ -85,7 +85,7 @@ defmodule Dialyzer do
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
 
-  defp filter(expected = {:warn_matching, {'lib/mix/utils.ex', 755}, {:pattern_match, ['pattern \'nil\'', '\#{\'__struct__\':=\'Elixir.URI\', \'authority\':=\'Elixir.URI\':authority(), \'fragment\':=\'nil\' | binary(), \'host\':=\'nil\' | binary(), \'path\':=binary(), \'port\':=\'nil\' | char(), \'query\':=\'nil\' | binary(), \'scheme\':=\'nil\' | binary(), \'userinfo\':=\'nil\' | binary()}']}}),
+  defp filter(expected = {:warn_matching, {'lib/mix/utils.ex', 755}, {:pattern_match, ['pattern \'nil\'', '\#{\'__struct__\':=\'Elixir.URI\', \'authority\':=\'Elixir.URI\':authority(), \'fragment\':=\'nil\' | binary(), \'host\':=\'nil\' | binary(), \'path\':=\'nil\' | binary(), \'port\':=\'nil\' | char(), \'query\':=\'nil\' | binary(), \'scheme\':=\'nil\' | binary(), \'userinfo\':=\'nil\' | binary()}']}}),
     do: filtered(comment: "overly defensive code", id: @id, data: expected)
 
   id = id + 1
