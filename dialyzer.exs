@@ -11,8 +11,7 @@ defmodule Dialyzer do
 
   defp filter([warning | rest], acc), do: filter(rest, [filter(warning) | acc])
 
-  id = 1
-  @id id
+  @id 10
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
   # discussed in https://github.com/elixir-lang/elixir/issues/10279
@@ -22,8 +21,7 @@ defmodule Dialyzer do
   defp filter(expected = {:warn_failing_call, {'lib/logger.ex', _}, {:call, [Logger, :__do_log__, _, [3], :only_sig, _, _, {false, :none}]}}),
     do: filtered(comment: "Elixir deliberately using erlang macro-based logger interface without passing in call location", id: @id, data: expected)
 
-  id = id + 1
-  @id id
+  @id 20
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
   # discussed in https://github.com/elixir-lang/elixir/pull/9979#discussion_r415730426
@@ -32,204 +30,213 @@ defmodule Dialyzer do
   defp filter(expected = {:warn_opaque, {'lib/mix/tasks/test.ex', _}, {:opaque_match, ['pattern \#{\'__struct__\':=\'Elixir.MapSet\'}', '\'Elixir.MapSet\':t(binary() | maybe_improper_list(binary() | maybe_improper_list(any(),binary() | []) | char(),binary() | []))', '\'Elixir.MapSet\':t(binary() | maybe_improper_list(binary() | maybe_improper_list(any(),binary() | []) | char(),binary() | []))']}}),
     do: filtered(comment: "Elixir folks want to be able to pattern match on a struct name while keeping the struct type opaque", id: @id, data: expected)
 
-  id = id + 1
-  @id id
+  @id 30
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
+
   @line_file_match (case System.otp_release() >= "24" do
-    true -> quote do {59, _} end
-    false -> quote do 59 end
-  end)
+                      true ->
+                        quote do
+                          {59, _}
+                        end
+
+                      false ->
+                        quote do
+                          59
+                        end
+                    end)
   # discussed in https://github.com/elixir-lang/elixir/pull/9979#discussion_r416206411
   defp filter(expected = {:warn_matching, {'src/elixir_erl_compiler.erl', unquote(@line_file_match)}, {:pattern_match, _lots_of_details}}),
     do: filtered(comment: "return type not documented in erlang", id: @id, data: expected)
 
-  id = id + 1
-  @id id
+  @id 40
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
   # discussed in https://github.com/elixir-lang/elixir/issues/11092
   defp filter(expected = {:warn_matching, {'lib/calendar/time.ex', 636}, {:pattern_match, ['pattern {\'error\', _reason@1}', '{\'ok\',\#{\'__struct__\':=\'Elixir.Time\', \'calendar\':=atom(), \'hour\':=non_neg_integer(), \'microsecond\':={non_neg_integer(),non_neg_integer()}, \'minute\':=non_neg_integer(), \'second\':=non_neg_integer()}}']}}),
     do: filtered(comment: "slightly dead code", id: @id, data: expected)
 
-  id = id + 1
-  @id id
-  @counts 1
-  expected_counts = Map.put(expected_counts, @id, @counts)
+  expected_counts =
+    case System.otp_release() >= "24" do
+      true ->
+        @id 50
+        @counts 1
+        Map.put(expected_counts, @id, @counts)
 
-  defp filter(expected = {:warn_matching, {'lib/calendar/date_range.ex', 201}, {:pattern_match_cov, ['pattern _date_range@1 = \#{\'__struct__\':=\'Elixir.Date.Range\', \'first_in_iso_days\':=_first_days@1, \'last_in_iso_days\':=_last_days@1}', '\#{\'__struct__\':=\'Elixir.Date.Range\', \'first\':=\#{\'calendar\':=_, _=>_}, \'first_in_iso_days\':=_, \'last_in_iso_days\':=_, \'step\':=_, _=>_}']}}),
-    do: filtered(comment: "code added for backwards compatibility with old date ranges without step field", id: @id, data: expected)
+      false ->
+        expected_counts
+    end
 
-  id = id + 1
-  @id id
+  case System.otp_release() >= "24" do
+    true ->
+      defp filter(expected = {:warn_matching, {'lib/calendar/date_range.ex', 201}, {:pattern_match_cov, ['pattern _date_range@1 = \#{\'__struct__\':=\'Elixir.Date.Range\', \'first_in_iso_days\':=_first_days@1, \'last_in_iso_days\':=_last_days@1}', '\#{\'__struct__\':=\'Elixir.Date.Range\', \'first\':=\#{\'calendar\':=_, _=>_}, \'first_in_iso_days\':=_, \'last_in_iso_days\':=_, \'step\':=_, _=>_}']}}),
+        do: filtered(comment: "code added for backwards compatibility with old date ranges without step field", id: @id, data: expected)
+
+    false ->
+      :ok
+  end
+
+  @id 60
   @counts 2
   expected_counts = Map.put(expected_counts, @id, @counts)
 
-  defp filter(expected = {:warn_unknown, {'lib/mix/hex.ex', lines}, {:unknown_function, {Hex, function, 0}}}) when function in [:start, :version] and lines in [40, 59],
+  @file_match (case System.otp_release() >= "24" do
+                 true -> 'lib/mix/hex.ex'
+                 false -> ''
+               end)
+  @line_match (case System.otp_release() >= "24" do
+                 true -> [40, 59]
+                 false -> [0]
+               end)
+
+  defp filter(expected = {:warn_unknown, {@file_match, lines}, {:unknown_function, {Hex, function, 0}}}) when function in [:start, :version] and lines in @line_match,
     do: filtered(comment: "Hex package loading gets handled by the Mix task", id: @id, data: expected)
 
-  id = id + 1
-  @id id
+  @id 70
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
 
   defp filter(expected = {:warn_matching, {'lib/dynamic_supervisor.ex', 425}, {:pattern_match_cov, ['variable _other@1', '{_,_,_,_,_,_} | \#{\'id\':=_, \'start\':={atom(),atom(),[any()]}, \'modules\'=>\'dynamic\' | [atom()], \'restart\'=>\'permanent\' | \'temporary\' | \'transient\', \'shutdown\'=>\'brutal_kill\' | \'infinity\' | non_neg_integer(), \'type\'=>\'supervisor\' | \'worker\'}']}}),
     do: filtered(comment: "overly defensive code", id: @id, data: expected)
 
-  id = id + 1
-  @id id
+  @id 80
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
 
   defp filter(expected = {:warn_matching, {'lib/string_io.ex', 410}, {:guard_fail, [:is_list, '(_data@1::binary())']}}),
     do: filtered(comment: "overly defensive code", id: @id, data: expected)
 
-  id = id + 1
-  @id id
+  @id 90
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
 
   defp filter(expected = {:warn_matching, {'lib/mix/utils.ex', 755}, {:pattern_match, ['pattern \'nil\'', '\#{\'__struct__\':=\'Elixir.URI\', \'authority\':=\'Elixir.URI\':authority(), \'fragment\':=\'nil\' | binary(), \'host\':=\'nil\' | binary(), \'path\':=\'nil\' | binary(), \'port\':=\'nil\' | char(), \'query\':=\'nil\' | binary(), \'scheme\':=\'nil\' | binary(), \'userinfo\':=\'nil\' | binary()}']}}),
     do: filtered(comment: "overly defensive code", id: @id, data: expected)
 
-  id = id + 1
-  @id id
+  @id 100
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
 
   defp filter(expected = {:warn_matching, {'lib/iex/helpers.ex', 624}, {:pattern_match, ['pattern <__key@1, \'nil\'>', '<<<_:64,_:_*8>>,<<_:80>> | string() | non_neg_integer()>']}}),
     do: filtered(comment: "overly_defensive code", id: @id, data: expected)
 
-  id = id + 1
-  @id id
+  @id 110
   @counts 22
   expected_counts = Map.put(expected_counts, @id, @counts)
+
   @file_match (case System.otp_release() >= "24" do
-    true -> ['lib/collectable.ex', 'lib/enum.ex', 'lib/list/chars.ex']
-    false -> ['']
-  end)
+                 true -> ['lib/collectable.ex', 'lib/enum.ex', 'lib/list/chars.ex']
+                 false -> ['']
+               end)
   @line_match (case System.otp_release() >= "24" do
-    true -> 1
-    false -> 0
-  end)
+                 true -> 1
+                 false -> 0
+               end)
 
   defp filter(expected = {:warn_unknown, {file, line}, {:unknown_function, {module, :__impl__, 1}}}) when module in [Collectable.Atom, Collectable.Float, Collectable.Function, Collectable.Integer, Collectable.PID, Collectable.Port, Collectable.Reference, Collectable.Tuple, Enumerable.Atom, Enumerable.BitString, Enumerable.Float, Enumerable.Integer, Enumerable.PID, Enumerable.Port, Enumerable.Reference, Enumerable.Tuple, List.Chars.Function, List.Chars.Map, List.Chars.PID, List.Chars.Port, List.Chars.Reference, List.Chars.Tuple] and file in @file_match and line == @line_match,
     do: filtered(comment: "some protocol consolidation stuff", id: @id, data: expected)
 
-  id = id + 1
-  @id id
+  @id 120
   @counts 6
   expected_counts = Map.put(expected_counts, @id, @counts)
-  @file_match (case System.otp_release() >= "24" do
-    true -> 'lib/string/chars.ex'
-    false -> ''
-  end)
-  @line_match (case System.otp_release() >= "24" do
-    true -> 3
-    false -> 0
-  end)
 
-  defp filter(expected = {:warn_unknown, {file, line}, {:unknown_function, {module, :__impl__, 1}}}) when module in [String.Chars.Function, String.Chars.Map, String.Chars.PID, String.Chars.Port, String.Chars.Reference, String.Chars.Tuple] and file == @file_match and line == @line_match,
+  @file_match (case System.otp_release() >= "24" do
+                 true -> 'lib/string/chars.ex'
+                 false -> ''
+               end)
+  @line_match (case System.otp_release() >= "24" do
+                 true -> 3
+                 false -> 0
+               end)
+
+  defp filter(expected = {:warn_unknown, {@file_match, @line_match}, {:unknown_function, {module, :__impl__, 1}}}) when module in [String.Chars.Function, String.Chars.Map, String.Chars.PID, String.Chars.Port, String.Chars.Reference, String.Chars.Tuple],
     do: filtered(comment: "some protocol consolidation stuff", id: @id, data: expected)
 
-  id = id + 1
-  @id id
+  @id 130
   @counts 6
   expected_counts = Map.put(expected_counts, @id, @counts)
 
   defp filter(expected = {:warn_matching, {'lib/kernel.ex', _}, {:pattern_match, ['pattern \'false\'', '\'true\'']}}),
     do: filtered(comment: "inlined bootstrap check stuff", id: @id, data: expected)
 
-  id = id + 1
-  @id id
+  @id 140
   @counts 7
   expected_counts = Map.put(expected_counts, @id, @counts)
 
   defp filter(expected = {:warn_not_called, {'lib/base.ex', _}, {:unused_fun, [function, _]}}) when function in [:encode_pair_clauses, :shift, :encode_clauses, :decode_char_clauses, :decode_mixed_clauses, :decode_clauses, :bad_digit_clause],
     do: filtered(comment: "functions inlined or only used to generate other functions at compile time", id: @id, data: expected)
 
-  id = id + 1
-  @id id
+  @id 150
   @counts 2
   expected_counts = Map.put(expected_counts, @id, @counts)
 
   defp filter(expected = {:warn_not_called, {'lib/system.ex', _}, {:unused_fun, [function, 1]}}) when function in [:read_stripped, :strip],
     do: filtered(comment: "functions called only during elixir compilation time", id: @id, data: expected)
 
-  id = id + 1
-  @id id
+  @id 160
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
 
   defp filter(expected = {:warn_return_no_exit, {'lib/mix/tasks/test.ex', _}, {:no_return, [:only_normal, :raise_with_shell, 2]}}),
     do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
-  id = id + 1
-  @id id
+  @id 170
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
 
   defp filter(expected = {:warn_return_no_exit, {'lib/mix/release.ex', _}, {:no_return, [:only_normal, :bad_umbrella!, 0]}}),
     do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
-  id = id + 1
-  @id id
+  @id 180
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
 
   defp filter(expected = {:warn_return_no_exit, {'lib/mix/dep/loader.ex', _}, {:no_return, [:only_normal, :invalid_dep_format, 1]}}),
     do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
-  id = id + 1
-  @id id
+  @id 190
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
 
   defp filter(expected = {:warn_return_no_exit, {'lib/mix/scm/path.ex', 61}, {:no_return, [:only_normal, :checkout, 1]}}),
     do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
-  id = id + 1
-  @id id
+  @id 200
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
 
   defp filter(expected = {:warn_return_no_exit, {'lib/iex.ex', _}, {:no_return, [:only_normal, :__break__!, 2]}}),
     do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
-  id = id + 1
-  @id id
+  @id 210
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
 
   defp filter(expected = {:warn_return_no_exit, {'src/elixir_quote.erl', _}, {:no_return, [:only_normal, :bad_escape, 1]}}),
     do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
-  id = id + 1
-  @id id
+  @id 220
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
 
   defp filter(expected = {:warn_return_no_exit, {'lib/mix/tasks/iex.ex', _}, {:no_return, [:only_normal, :run, 1]}}),
     do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
-  id = id + 1
-  @id id
+  @id 230
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
 
   defp filter(expected = {:warn_return_no_exit, {'lib/iex/cli.ex', _}, {:no_return, [:only_normal]}}),
     do: filtered(comment: "not annotated exit", id: @id, data: expected)
 
-  id = id + 1
-  @id id
+  @id 240
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
 
   defp filter(expected = {:warn_return_no_exit, {'lib/kernel/cli.ex', 221}, {:no_return, [:only_normal, :halt_standalone, 1]}}),
     do: filtered(comment: "not annotated exit", id: @id, data: expected)
 
-  id = id + 1
-  @id id
+  @id 250
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
 
@@ -238,8 +245,7 @@ defmodule Dialyzer do
 
   @yecc_yrl_functions [:return_error, :error_invalid_stab, :error_bad_atom, :error_no_parens_strict, :error_no_parens_many_strict, :error_no_parens_container_strict, :error_invalid_kw_identifier, :return_error_with_meta]
 
-  id = id + 1
-  @id id
+  @id 260
   @counts 8
   expected_counts = Map.put(expected_counts, @id, @counts)
 
