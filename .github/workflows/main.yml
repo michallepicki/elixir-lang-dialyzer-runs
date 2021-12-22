@@ -20,6 +20,9 @@ on:
 
 jobs:
   dialyzer:
+    strategy:
+      matrix:
+          otp_release: ['24.2', '23.3.4.9', '22.3.4.9']
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
@@ -28,7 +31,7 @@ jobs:
       - name: Install erlang
         run: |
           echo "`pwd`/erlang/bin" >> $GITHUB_PATH
-          curl -Lo erlang.tar.gz https://repo.hex.pm/builds/otp/ubuntu-20.04/OTP-24.1.7.tar.gz
+          curl -Lo erlang.tar.gz https://repo.hex.pm/builds/otp/ubuntu-20.04/OTP-${{ matrix.otp_release }}.tar.gz
           mkdir erlang
           tar zxf erlang.tar.gz -C erlang --strip-components=1
           erlang/Install -minimal  `pwd`/erlang
@@ -52,7 +55,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: plt-dir/otp.plt
-          key: v1-OTP-24.1.7
+          key: v1-OTP-${{ matrix.otp_release }}
 
       - name: Create the dialyzer PLT file
         if: steps.cache-plt.outputs.cache-hit != 'true'
