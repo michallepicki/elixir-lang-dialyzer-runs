@@ -36,8 +36,12 @@ defmodule Dialyzer do
   @id id
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
+  @line_file_match (case System.otp_release() >= "24" do
+    true -> quote do {59, _} end
+    false -> quote do 59 end
+  end)
   # discussed in https://github.com/elixir-lang/elixir/pull/9979#discussion_r416206411
-  defp filter(expected = {:warn_matching, {'src/elixir_erl_compiler.erl', {59, _}}, {:pattern_match, _lots_of_details}}),
+  defp filter(expected = {:warn_matching, {'src/elixir_erl_compiler.erl', unquote(@line_file_match)}, {:pattern_match, _lots_of_details}}),
     do: filtered(comment: "return type not documented in erlang", id: @id, data: expected)
 
   id = id + 1
@@ -100,16 +104,32 @@ defmodule Dialyzer do
   @id id
   @counts 22
   expected_counts = Map.put(expected_counts, @id, @counts)
+  @file_match (case System.otp_release() >= "24" do
+    true -> ['lib/collectable.ex', 'lib/enum.ex', 'lib/list/chars.ex']
+    false -> ['']
+  end)
+  @line_match (case System.otp_release() >= "24" do
+    true -> 1
+    false -> 0
+  end)
 
-  defp filter(expected = {:warn_unknown, {file, 1}, {:unknown_function, {module, :__impl__, 1}}}) when module in [Collectable.Atom, Collectable.Float, Collectable.Function, Collectable.Integer, Collectable.PID, Collectable.Port, Collectable.Reference, Collectable.Tuple, Enumerable.Atom, Enumerable.BitString, Enumerable.Float, Enumerable.Integer, Enumerable.PID, Enumerable.Port, Enumerable.Reference, Enumerable.Tuple, List.Chars.Function, List.Chars.Map, List.Chars.PID, List.Chars.Port, List.Chars.Reference, List.Chars.Tuple] and file in ['lib/collectable.ex', 'lib/enum.ex', 'lib/list/chars.ex'],
+  defp filter(expected = {:warn_unknown, {file, line}, {:unknown_function, {module, :__impl__, 1}}}) when module in [Collectable.Atom, Collectable.Float, Collectable.Function, Collectable.Integer, Collectable.PID, Collectable.Port, Collectable.Reference, Collectable.Tuple, Enumerable.Atom, Enumerable.BitString, Enumerable.Float, Enumerable.Integer, Enumerable.PID, Enumerable.Port, Enumerable.Reference, Enumerable.Tuple, List.Chars.Function, List.Chars.Map, List.Chars.PID, List.Chars.Port, List.Chars.Reference, List.Chars.Tuple] and file in @file_match and line == @line_match,
     do: filtered(comment: "some protocol consolidation stuff", id: @id, data: expected)
 
   id = id + 1
   @id id
   @counts 6
   expected_counts = Map.put(expected_counts, @id, @counts)
+  @file_match (case System.otp_release() >= "24" do
+    true -> 'lib/string/chars.ex'
+    false -> ''
+  end)
+  @line_match (case System.otp_release() >= "24" do
+    true -> 3
+    false -> 0
+  end)
 
-  defp filter(expected = {:warn_unknown, {'lib/string/chars.ex', 3}, {:unknown_function, {module, :__impl__, 1}}}) when module in [String.Chars.Function, String.Chars.Map, String.Chars.PID, String.Chars.Port, String.Chars.Reference, String.Chars.Tuple],
+  defp filter(expected = {:warn_unknown, {file, line}, {:unknown_function, {module, :__impl__, 1}}}) when module in [String.Chars.Function, String.Chars.Map, String.Chars.PID, String.Chars.Port, String.Chars.Reference, String.Chars.Tuple] and file == @file_match and line == @line_match,
     do: filtered(comment: "some protocol consolidation stuff", id: @id, data: expected)
 
   id = id + 1
