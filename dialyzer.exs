@@ -239,7 +239,7 @@ defmodule Dialyzer do
 
   yecc_erl_clauses = case System.otp_release() >= "24" do
     true -> []
-    false -> [:yeccpars2_89, :yeccpars2_91, :yeccpars2_111, :yeccpars2_205, :yeccpars2_225, :yeccpars2_236, :yeccpars2_321, :yeccpars2_379, :yeccpars2_415, :yeccpars2_416]
+    false -> [:yeccpars2_88, :yeccpars2_90, :yeccpars2_233, :yeccpars2_374, :yeccpars2_410, :yeccpars2_411]
   end
   @yecc_erl_clauses yecc_erl_clauses
 
