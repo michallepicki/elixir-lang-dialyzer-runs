@@ -56,25 +56,25 @@ defmodule Dialyzer do
   defp filter(expected = {:warn_matching, {'lib/calendar/time.ex', 636}, {:pattern_match, ['pattern {\'error\', _reason@1}', '{\'ok\',\#{\'__struct__\':=\'Elixir.Time\', \'calendar\':=atom(), \'hour\':=non_neg_integer(), \'microsecond\':={non_neg_integer(),non_neg_integer()}, \'minute\':=non_neg_integer(), \'second\':=non_neg_integer()}}']}}),
     do: filtered(comment: "slightly dead code", id: @id, data: expected)
 
-  expected_counts =
-    case System.otp_release() >= "24" do
-      true ->
+#  expected_counts =
+#    case System.otp_release() >= "24" do
+#      true ->
         @id 50
         @counts 1
-        Map.put(expected_counts, @id, @counts)
+       expected_counts = Map.put(expected_counts, @id, @counts)
 
-      false ->
-        expected_counts
-    end
+#      false ->
+#        expected_counts
+#    end
 
-  case System.otp_release() >= "24" do
-    true ->
+#  case System.otp_release() >= "24" do
+#    true ->
       defp filter(expected = {:warn_matching, {'lib/calendar/date_range.ex', 201}, {:pattern_match_cov, ['pattern _date_range@1 = \#{\'__struct__\':=\'Elixir.Date.Range\', \'first_in_iso_days\':=_first_days@1, \'last_in_iso_days\':=_last_days@1}', '\#{\'__struct__\':=\'Elixir.Date.Range\', \'first\':=\#{\'calendar\':=_, _=>_}, \'first_in_iso_days\':=_, \'last_in_iso_days\':=_, \'step\':=_, _=>_}']}}),
         do: filtered(comment: "code added for backwards compatibility with old date ranges without step field", id: @id, data: expected)
 
-    false ->
-      :ok
-  end
+#    false ->
+#      :ok
+#  end
 
   @id 60
   @counts 2
@@ -263,10 +263,54 @@ defmodule Dialyzer do
   if System.otp_release() >= "24" do
     :ok
   else
+    defp filter(expected = {:warn_callgraph, {'lib/task.ex', _}, {:call_to_missing, [:erlang, :monitor, 3]}}),
+      do: filtered(comment: "run-time function_exported? check", id: @id, data: expected)
+  end
+
+  @id 280
+  @counts 1
+  expected_counts =
+    if System.otp_release() >= "24" do
+      expected_counts
+    else
+      Map.put(expected_counts, @id, @counts)
+    end
+  if System.otp_release() >= "24" do
+    :ok
+  else
     defp filter(expected = {:warn_callgraph, {'lib/task/supervisor.ex', _}, {:call_to_missing, [:erlang, :monitor, 3]}}),
-      do: filtered(comment: "conditional compilation", id: @id, data: expected)
+      do: filtered(comment: "run-time function_exported? check", id: @id, data: expected)
+  end
 
+  @id 290
+  @counts 1
+  expected_counts =
+    if System.otp_release() >= "24" do
+      expected_counts
+    else
+      Map.put(expected_counts, @id, @counts)
+    end
+  if System.otp_release() >= "24" do
+    :ok
+  else
+    defp filter(expected = {:warn_callgraph, {'lib/system.ex', _}, {:call_to_missing, [:os, :env, 0]}}),
+      do: filtered(comment: "run-time function_exported? check", id: @id, data: expected)
+  end
 
+  @id 300
+  @counts 1
+  expected_counts =
+    if System.otp_release() >= "24" do
+      expected_counts
+    else
+      Map.put(expected_counts, @id, @counts)
+    end
+  if System.otp_release() >= "24" do
+    :ok
+  else
+    defp filter(expected = {:warn_callgraph, {'lib/map.ex', _}, {:call_to_missing, [:maps, :from_keys, 2]}}),
+      do: filtered(comment: "run-time function_exported? check", id: @id, data: expected)
+  end
 
   defp filter(warning),
     do: unfiltered(data: warning)
