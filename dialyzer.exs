@@ -321,6 +321,21 @@ defmodule Dialyzer do
       do: filtered(comment: "run-time otp version check", id: @id, data: expected)
   end
 
+  @id 320
+  @counts 1
+  expected_counts =
+    if System.otp_release() >= "23" do
+      expected_counts
+    else
+      Map.put(expected_counts, @id, @counts)
+    end
+  if System.otp_release() >= "23" do
+    :ok
+  else
+    defp filter(expected = {:warn_matching, {'lib/module/types/of.ex', 290}, {:guard_fail_pat, ['pattern {\'deprecated\', _string@2, _removal@1}', '\'no\' | {\'removed\',[1..255,...]} | {\'deprecated\',{\'calendar\' | \'erlang\' | \'gen_statem\' | \'net_adm\' | \'queue\' | \'rand\' | \'rpc\' | \'slave\',atom(),0 | 1 | 2 | 3 | 4 | 5 | 6},[32 | 97 | 101 | 102 | 108 | 114 | 115 | 116 | 117,...]} | {\'removed\',{\'cerl\' | \'core_lib\' | \'crypto\' | \'erl_anno\' | \'erl_parse\' | \'erlang\' | \'rpc\' | \'unicode\',atom(),0 | 1 | 2 | 3 | 4 | 5},[32 | 46 | 48 | 49 | 50 | 57 | 79 | 80 | 84,...]}']}}),
+      do: filtered(comment: "elixir doesn't print deprecated functions info for otp 22", id: @id, data: expected)
+  end
+ 
   defp filter(warning),
     do: unfiltered(data: warning)
 
