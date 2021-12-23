@@ -239,7 +239,7 @@ defmodule Dialyzer do
 
   yecc_erl_clauses = case System.otp_release() >= "24" do
     true -> []
-    false -> [:yeccpars2_88, :yeccpars2_90, :yeccpars2_233, :yeccpars2_374, :yeccpars2_410, :yeccpars2_411]
+    false -> [:yeccpars2_88, :yeccpars2_90, :yeccpars2_221, :yeccpars2_233, :yeccpars2_374, :yeccpars2_410, :yeccpars2_411]
   end
   @yecc_erl_clauses yecc_erl_clauses
 
@@ -248,7 +248,7 @@ defmodule Dialyzer do
   @id 260
   @counts (case System.otp_release() >= "24" do
     true -> 8
-    false -> 18
+    false -> 15
   end)
   expected_counts = Map.put(expected_counts, @id, @counts)
 
