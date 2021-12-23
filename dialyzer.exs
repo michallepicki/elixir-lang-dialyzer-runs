@@ -306,6 +306,21 @@ defmodule Dialyzer do
       do: filtered(comment: "run-time function_exported? check", id: @id, data: expected)
   end
 
+  @id 310
+  @counts 1
+  expected_counts =
+    if System.otp_release() >= "23" do
+      expected_counts
+    else
+      Map.put(expected_counts, @id, @counts)
+    end
+  if System.otp_release() >= "23" do
+    :ok
+  else
+    defp filter(expected = {:warn_callgraph, {'lib/config/provider.ex', _}, {:call_to_missing, [:init, :restart, 1]}}),
+      do: filtered(comment: "run-time otp version check", id: @id, data: expected)
+  end
+
   defp filter(warning),
     do: unfiltered(data: warning)
 
