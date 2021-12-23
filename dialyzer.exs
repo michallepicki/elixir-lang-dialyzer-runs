@@ -394,7 +394,7 @@ defmodule Dialyzer do
 
         "############################################################\n" <>
           "Potential issue: \n#{formatted_warning}\n\n" <>
-          "data: #{inspect(warning)}\n\n"
+          "data: #{inspect(warning, limit: :infinity, printable_limit: :infinity, width: :infinity)}\n\n"
 
       unexpected_count(id: id, actual: actual_count, expected: expected_count) ->
         "############################################################\n" <>
@@ -408,7 +408,7 @@ defmodule Dialyzer do
 
         "############################################################\n" <>
           "Filtered non-issue ##{id} (#{comment}):\n#{formatted_warning}\n\n" <>
-          "data: #{inspect(warning)}\n\n"
+          "data: #{inspect(warning, limit: :infinity, printable_limit: :infinity, width: :infinity)}\n\n"
     end)
     |> Stream.into(File.stream!("report", [:write, :utf8]))
     |> Stream.into(IO.stream(:stdio, :line))
