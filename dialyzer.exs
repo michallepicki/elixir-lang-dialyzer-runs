@@ -237,14 +237,38 @@ defmodule Dialyzer do
   defp filter(expected = {:warn_return_no_exit, {'lib/gen_event.ex', _}, {:no_return, [:only_normal, :system_terminate, 4]}}),
     do: filtered(comment: "not annotated exit", id: @id, data: expected)
 
-  @yecc_yrl_functions [:return_error, :error_invalid_stab, :error_bad_atom, :error_no_parens_strict, :error_no_parens_many_strict, :error_no_parens_container_strict, :error_invalid_kw_identifier, :return_error_with_meta]
+  yecc_erl_clauses = case System.otp_release() >= "24" do
+    true -> []
+    false -> [:yeccpars2_89, :yeccpars2_91, :yeccpars2_111, :yeccpars2_205, :yeccpars2_225, :yeccpars2_236, :yeccpars2_321, :yeccpars2_379, :yeccpars2_415, :yeccpars2_416]
+  end
+  @yecc_erl_clauses yecc_erl_clauses
+
+  @yecc_yrl_functions [:return_error, :error_invalid_stab, :error_bad_atom, :error_no_parens_strict, :error_no_parens_many_strict, :error_no_parens_container_strict, :error_invalid_kw_identifier, :return_error_with_meta] ++ yecc_erl_clauses
 
   @id 260
-  @counts 8
+  @counts (case System.otp_release() >= "24" do
+    true -> 8
+    false -> 18
+  end)
   expected_counts = Map.put(expected_counts, @id, @counts)
 
   defp filter(expected = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.yrl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in @yecc_yrl_functions,
     do: filtered(comment: "parser not annotated exception", id: @id, data: expected)
+
+  @id 265
+  @counts 6
+  expected_counts =
+    if System.otp_release() >= "24" do
+      expected_counts
+    else
+      Map.put(expected_counts, @id, @counts)
+    end
+  if System.otp_release() >= "24" do
+    :ok
+  else
+    defp filter(expected = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.erl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in @yecc_erl_clauses,
+      do: filtered(comment: "parser not annotated exception", id: @id, data: expected)
+  end
 
   @id 270
   @counts 1
