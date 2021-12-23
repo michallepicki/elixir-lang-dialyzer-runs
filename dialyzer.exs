@@ -252,6 +252,22 @@ defmodule Dialyzer do
   defp filter(expected = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.yrl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in @yecc_yrl_functions,
     do: filtered(comment: "parser not annotated exception", id: @id, data: expected)
 
+  @id 270
+  @counts 1
+  expected_counts =
+    if System.otp_release() >= "24" do
+      expected_counts
+    else
+      Map.put(expected_counts, @id, @counts)
+    end
+  if System.otp_release() >= "24" do
+    :ok
+  else
+    defp filter(expected = {:warn_callgraph, {'lib/task/supervisor.ex', _}, {:call_to_missing, [:erlang, :monitor, 3]}}),
+      do: filtered(comment: "conditional compilation", id: @id, data: expected)
+
+
+
   defp filter(warning),
     do: unfiltered(data: warning)
 
