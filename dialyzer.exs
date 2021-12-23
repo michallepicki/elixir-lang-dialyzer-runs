@@ -243,7 +243,7 @@ defmodule Dialyzer do
   end
   @yecc_erl_clauses yecc_erl_clauses
 
-  @yecc_yrl_functions [:return_error, :error_invalid_stab, :error_bad_atom, :error_no_parens_strict, :error_no_parens_many_strict, :error_no_parens_container_strict, :error_invalid_kw_identifier, :return_error_with_meta] ++ yecc_erl_clauses
+  @yecc_yrl_functions [:return_error, :error_invalid_stab, :error_bad_atom, :error_no_parens_strict, :error_no_parens_many_strict, :error_no_parens_container_strict, :error_invalid_kw_identifier, :return_error_with_meta] ++ Enum.map(yecc_erl_clauses, fn a -> String.to_atom(Atom.to_string(a) <> "_") end)
 
   @id 260
   @counts (case System.otp_release() >= "24" do
