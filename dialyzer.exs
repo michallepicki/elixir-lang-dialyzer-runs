@@ -56,25 +56,19 @@ defmodule Dialyzer do
   defp filter(expected = {:warn_matching, {'lib/calendar/time.ex', 636}, {:pattern_match, ['pattern {\'error\', _reason@1}', '{\'ok\',\#{\'__struct__\':=\'Elixir.Time\', \'calendar\':=atom(), \'hour\':=non_neg_integer(), \'microsecond\':={non_neg_integer(),non_neg_integer()}, \'minute\':=non_neg_integer(), \'second\':=non_neg_integer()}}']}}),
     do: filtered(comment: "slightly dead code", id: @id, data: expected)
 
-#  expected_counts =
-#    case System.otp_release() >= "24" do
-#      true ->
-        @id 50
-        @counts 1
-       expected_counts = Map.put(expected_counts, @id, @counts)
+  @id 50
+  @counts 1
+  expected_counts = Map.put(expected_counts, @id, @counts)
 
-#      false ->
-#        expected_counts
-#    end
+  @pattern_match_cov_value (case System.otp_release() >= "23" do
+    true ->
+      ['pattern _date_range@1 = \#{\'__struct__\':=\'Elixir.Date.Range\', \'first_in_iso_days\':=_first_days@1, \'last_in_iso_days\':=_last_days@1}', '\#{\'__struct__\':=\'Elixir.Date.Range\', \'first\':=\#{\'calendar\':=_, _=>_}, \'first_in_iso_days\':=_, \'last_in_iso_days\':=_, \'step\':=_, _=>_}']
+    false ->
+      ['pattern _date_range@1 = \#{\'last_in_iso_days\':=_last_days@1, \'first_in_iso_days\':=_first_days@1, \'__struct__\':=\'Elixir.Date.Range\'}', '\#{\'__struct__\':=\'Elixir.Date.Range\', \'first\':=\#{\'calendar\':=_, _=>_}, \'first_in_iso_days\':=_, \'last_in_iso_days\':=_, \'step\':=_, _=>_}']
+  end)
 
-#  case System.otp_release() >= "24" do
-#    true ->
-      defp filter(expected = {:warn_matching, {'lib/calendar/date_range.ex', 201}, {:pattern_match_cov, ['pattern _date_range@1 = \#{\'__struct__\':=\'Elixir.Date.Range\', \'first_in_iso_days\':=_first_days@1, \'last_in_iso_days\':=_last_days@1}', '\#{\'__struct__\':=\'Elixir.Date.Range\', \'first\':=\#{\'calendar\':=_, _=>_}, \'first_in_iso_days\':=_, \'last_in_iso_days\':=_, \'step\':=_, _=>_}']}}),
-        do: filtered(comment: "code added for backwards compatibility with old date ranges without step field", id: @id, data: expected)
-
-#    false ->
-#      :ok
-#  end
+  defp filter(expected = {:warn_matching, {'lib/calendar/date_range.ex', 201}, {:pattern_match_cov, @pattern_match_cov_value}}),
+    do: filtered(comment: "code added for backwards compatibility with old date ranges without step field", id: @id, data: expected)
 
   @id 60
   @counts 2
