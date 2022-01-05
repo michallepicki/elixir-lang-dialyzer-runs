@@ -60,14 +60,7 @@ defmodule Dialyzer do
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
 
-  @pattern_match_cov_value (case System.otp_release() >= "23" do
-    true ->
-      ['pattern _date_range@1 = \#{\'__struct__\':=\'Elixir.Date.Range\', \'first_in_iso_days\':=_first_days@1, \'last_in_iso_days\':=_last_days@1}', '\#{\'__struct__\':=\'Elixir.Date.Range\', \'first\':=\#{\'calendar\':=_, _=>_}, \'first_in_iso_days\':=_, \'last_in_iso_days\':=_, \'step\':=_, _=>_}']
-    false ->
-      ['pattern _date_range@1 = \#{\'last_in_iso_days\':=_last_days@1, \'first_in_iso_days\':=_first_days@1, \'__struct__\':=\'Elixir.Date.Range\'}', '\#{\'__struct__\':=\'Elixir.Date.Range\', \'first\':=\#{\'calendar\':=_, _=>_}, \'first_in_iso_days\':=_, \'last_in_iso_days\':=_, \'step\':=_, _=>_}']
-  end)
-
-  defp filter(expected = {:warn_matching, {'lib/calendar/date_range.ex', 201}, {:pattern_match_cov, @pattern_match_cov_value}}),
+  defp filter(expected = {:warn_matching, {'lib/calendar/date_range.ex', 201}, {:pattern_match_cov, ['pattern _date_range@1 = \#{\'__struct__\':=\'Elixir.Date.Range\', \'first_in_iso_days\':=_first_days@1, \'last_in_iso_days\':=_last_days@1}', '\#{\'__struct__\':=\'Elixir.Date.Range\', \'first\':=\#{\'calendar\':=_, _=>_}, \'first_in_iso_days\':=_, \'last_in_iso_days\':=_, \'step\':=_, _=>_}']}}),
     do: filtered(comment: "code added for backwards compatibility with old date ranges without step field", id: @id, data: expected)
 
   @id 60
@@ -330,36 +323,6 @@ defmodule Dialyzer do
       do: filtered(comment: "run-time function_exported? check", id: @id, data: expected)
   end
 
-  @id 310
-  @counts 1
-  expected_counts =
-    if System.otp_release() >= "23" do
-      expected_counts
-    else
-      Map.put(expected_counts, @id, @counts)
-    end
-  if System.otp_release() >= "23" do
-    :ok
-  else
-    defp filter(expected = {:warn_callgraph, {'lib/config/provider.ex', _}, {:call_to_missing, [:init, :restart, 1]}}),
-      do: filtered(comment: "run-time otp version check", id: @id, data: expected)
-  end
-
-  @id 320
-  @counts 1
-  expected_counts =
-    if System.otp_release() >= "23" do
-      expected_counts
-    else
-      Map.put(expected_counts, @id, @counts)
-    end
-  if System.otp_release() >= "23" do
-    :ok
-  else
-    defp filter(expected = {:warn_matching, {'lib/module/types/of.ex', 290}, {:guard_fail_pat, ['pattern {\'deprecated\', _string@2, _removal@1}', '\'no\' | {\'removed\',[1..255,...]} | {\'deprecated\',{\'calendar\' | \'erlang\' | \'gen_statem\' | \'net_adm\' | \'queue\' | \'rand\' | \'rpc\' | \'slave\',atom(),0 | 1 | 2 | 3 | 4 | 5 | 6},[32 | 97 | 101 | 102 | 108 | 114 | 115 | 116 | 117,...]} | {\'removed\',{\'cerl\' | \'core_lib\' | \'crypto\' | \'erl_anno\' | \'erl_parse\' | \'erlang\' | \'rpc\' | \'unicode\',atom(),0 | 1 | 2 | 3 | 4 | 5},[32 | 46 | 48 | 49 | 50 | 57 | 79 | 80 | 84,...]}']}}),
-      do: filtered(comment: "elixir doesn't print deprecated functions info for otp 22", id: @id, data: expected)
-  end
- 
   defp filter(warning),
     do: unfiltered(data: warning)
 
