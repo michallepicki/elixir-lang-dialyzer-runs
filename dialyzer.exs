@@ -53,7 +53,7 @@ defmodule Dialyzer do
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
   # discussed in https://github.com/elixir-lang/elixir/issues/11092
-  defp filter(expected = {:warn_matching, {'lib/calendar/time.ex', 636}, {:pattern_match, ['pattern {\'error\', _reason@1}', '{\'ok\',\#{\'__struct__\':=\'Elixir.Time\', \'calendar\':=atom(), \'hour\':=non_neg_integer(), \'microsecond\':={non_neg_integer(),non_neg_integer()}, \'minute\':=non_neg_integer(), \'second\':=non_neg_integer()}}']}}),
+  defp filter(expected = {:warn_matching, {'lib/calendar/time.ex', 641}, {:pattern_match, ['pattern {\'error\', _reason@1}', '{\'ok\',\#{\'__struct__\':=\'Elixir.Time\', \'calendar\':=atom(), \'hour\':=non_neg_integer(), \'microsecond\':={non_neg_integer(),non_neg_integer()}, \'minute\':=non_neg_integer(), \'second\':=non_neg_integer()}}']}}),
     do: filtered(comment: "slightly dead code", id: @id, data: expected)
 
   @id 50
