@@ -69,5 +69,5 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v2
         with:
-          name: report
+          name: ${{ matrix.otp_release }}-report
           path: report

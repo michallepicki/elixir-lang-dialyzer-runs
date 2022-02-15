@@ -90,7 +90,7 @@ defmodule Dialyzer do
   @counts 1
   expected_counts = Map.put(expected_counts, @id, @counts)
 
-  defp filter(expected = {:warn_matching, {'lib/string_io.ex', 410}, {:guard_fail, [:is_list, '(_data@1::binary())']}}),
+  defp filter(expected = {:warn_matching, {'lib/string_io.ex', 413}, {:guard_fail, [:is_list, '(_data@1::binary())']}}),
     do: filtered(comment: "overly defensive code", id: @id, data: expected)
 
   @id 90
@@ -232,7 +232,7 @@ defmodule Dialyzer do
 
   yecc_erl_clauses = case System.otp_release() >= "24" do
     true -> []
-    false -> [:yeccpars2_88, :yeccpars2_90, :yeccpars2_221, :yeccpars2_233, :yeccpars2_374, :yeccpars2_410, :yeccpars2_411]
+    false -> [:yeccpars2_89, :yeccpars2_91, :yeccpars2_226, :yeccpars2_238, :yeccpars2_385, :yeccpars2_421, :yeccpars2_422]
   end
   @yecc_erl_clauses yecc_erl_clauses
 

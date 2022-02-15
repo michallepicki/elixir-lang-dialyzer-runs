@@ -1,4 +1,4 @@
 elixir/
-plt-dir/otp.plt
+plt-dir/
 report
 erl_crash.dump
