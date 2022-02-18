@@ -268,14 +268,14 @@ defmodule Dialyzer do
   @count if System.otp_release() >= "24", do: 8, else: 15
   expected_counts = Map.put(expected_counts, @id, @count)
 
-  defp filter(expected = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.yrl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in @yecc_yrl_functions,
+  defp filter(expected = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.yrl', _}, {:no_return, [:only_normal, fun_name, _arity]}}) when fun_name in @yecc_yrl_functions,
     do: filtered(comment: "parser not annotated exception", id: @id, data: expected)
 
   @id 265
   @count 6
   expected_counts = if System.otp_release() >= "24", do: Map.put(expected_counts, @id, 0), else: Map.put(expected_counts, @id, @count)
 
-  defp filter(expected = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.erl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in @yecc_erl_clauses,
+  defp filter(expected = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.erl', _}, {:no_return, [:only_normal, fun_name, _arity]}}) when fun_name in @yecc_erl_clauses,
     do: filtered(comment: "parser not annotated exception", id: @id, data: expected)
 
   @id 270
