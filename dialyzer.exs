@@ -28,11 +28,7 @@ defmodule Dialyzer do
   # and https://github.com/elixir-lang/elixir/pull/9993
   # and https://github.com/elixir-lang/elixir/pull/9995
 
-  @pattern (case System.otp_release() >= "25" do
-              true -> '\'Elixir.MapSet\':t(_)'
-              false -> '\'Elixir.MapSet\':t(binary() | maybe_improper_list(binary() | maybe_improper_list(any(),binary() | []) | char(),binary() | []))'
-            end)
-
+  @pattern if System.otp_release() >= "25", do: '\'Elixir.MapSet\':t(_)', else: '\'Elixir.MapSet\':t(binary() | maybe_improper_list(binary() | maybe_improper_list(any(),binary() | []) | char(),binary() | []))'
   defp filter(expected = {:warn_opaque, {'lib/mix/tasks/test.ex', _}, {:opaque_match, ['pattern \#{\'__struct__\':=\'Elixir.MapSet\'}', @pattern, @pattern]}}),
     do: filtered(comment: "Elixir folks want to be able to pattern match on a struct name while keeping the struct type opaque", id: @id, data: expected)
 
@@ -40,17 +36,7 @@ defmodule Dialyzer do
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
 
-  @line_file_match (case System.otp_release() >= "24" do
-                      true ->
-                        quote do
-                          {59, _}
-                        end
-
-                      false ->
-                        quote do
-                          59
-                        end
-                    end)
+  @line_file_match if System.otp_release() >= "24", do: quote(do: {59, _}), else: quote(do: 59)
   # discussed in https://github.com/elixir-lang/elixir/pull/9979#discussion_r416206411
   defp filter(expected = {:warn_matching, {'src/elixir_erl_compiler.erl', unquote(@line_file_match)}, {:pattern_match, _lots_of_details}}),
     do: filtered(comment: "return type not documented in erlang", id: @id, data: expected)
@@ -73,14 +59,8 @@ defmodule Dialyzer do
   @count 2
   expected_counts = Map.put(expected_counts, @id, @count)
 
-  @file_match (case System.otp_release() >= "24" do
-                 true -> 'lib/mix/hex.ex'
-                 false -> ''
-               end)
-  @line_match (case System.otp_release() >= "24" do
-                 true -> [40, 59]
-                 false -> [0]
-               end)
+  @file_match if System.otp_release() >= "24", do: 'lib/mix/hex.ex', else: ''
+  @line_match if System.otp_release() >= "24", do: [40, 59], else: [0]
 
   defp filter(expected = {:warn_unknown, {@file_match, lines}, {:unknown_function, {Hex, function, 0}}}) when function in [:start, :version] and lines in @line_match,
     do: filtered(comment: "Hex package loading gets handled by the Mix task", id: @id, data: expected)
@@ -117,14 +97,8 @@ defmodule Dialyzer do
   @count 22
   expected_counts = Map.put(expected_counts, @id, @count)
 
-  @file_match (case System.otp_release() >= "24" do
-                 true -> ['lib/collectable.ex', 'lib/enum.ex', 'lib/list/chars.ex']
-                 false -> ['']
-               end)
-  @line_match (case System.otp_release() >= "24" do
-                 true -> 1
-                 false -> 0
-               end)
+  @file_match if System.otp_release() >= "24", do: ['lib/collectable.ex', 'lib/enum.ex', 'lib/list/chars.ex'], else: ['']
+  @line_match if System.otp_release() >= "24", do: 1, else: 0
 
   defp filter(expected = {:warn_unknown, {file, line}, {:unknown_function, {module, :__impl__, 1}}}) when module in [Collectable.Atom, Collectable.Float, Collectable.Function, Collectable.Integer, Collectable.PID, Collectable.Port, Collectable.Reference, Collectable.Tuple, Enumerable.Atom, Enumerable.BitString, Enumerable.Float, Enumerable.Integer, Enumerable.PID, Enumerable.Port, Enumerable.Reference, Enumerable.Tuple, List.Chars.Function, List.Chars.Map, List.Chars.PID, List.Chars.Port, List.Chars.Reference, List.Chars.Tuple] and file in @file_match and line == @line_match,
     do: filtered(comment: "some protocol consolidation stuff", id: @id, data: expected)
@@ -133,14 +107,8 @@ defmodule Dialyzer do
   @count 6
   expected_counts = Map.put(expected_counts, @id, @count)
 
-  @file_match (case System.otp_release() >= "24" do
-                 true -> 'lib/string/chars.ex'
-                 false -> ''
-               end)
-  @line_match (case System.otp_release() >= "24" do
-                 true -> 3
-                 false -> 0
-               end)
+  @file_match if System.otp_release() >= "24", do: 'lib/string/chars.ex', else: ''
+  @line_match if System.otp_release() >= "24", do: 3, else: 0
 
   defp filter(expected = {:warn_unknown, {@file_match, @line_match}, {:unknown_function, {module, :__impl__, 1}}}) when module in [String.Chars.Function, String.Chars.Map, String.Chars.PID, String.Chars.Port, String.Chars.Reference, String.Chars.Tuple],
     do: filtered(comment: "some protocol consolidation stuff", id: @id, data: expected)
@@ -217,96 +185,56 @@ defmodule Dialyzer do
 
   @id 221
   @count 1
-  expected_counts =
-    if System.otp_release() >= "25" do
-      Map.put(expected_counts, @id, @count)
-    else
-      expected_counts
-    end
+  expected_counts = if System.otp_release() >= "25", do: Map.put(expected_counts, @id, @count), else: Map.put(expected_counts, @id, 0)
 
   defp filter(expected = {:warn_return_no_exit, {'lib/config/provider.ex', 403}, {:no_return, [:only_normal, :bad_path_abort, 2]}}),
     do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id 222
   @count 4
-  expected_counts =
-    if System.otp_release() >= "25" do
-      Map.put(expected_counts, @id, @count)
-    else
-      expected_counts
-    end
+  expected_counts = if System.otp_release() >= "25", do: Map.put(expected_counts, @id, @count), else: Map.put(expected_counts, @id, 0)
 
   defp filter(expected = {:warn_return_no_exit, {'src/elixir_clauses.erl', location}, {:no_return, [:only_normal]}}) when location in [{95, 43}, {114, 43}, {133, 16}, {227, 16}],
     do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id 223
   @count 1
-  expected_counts =
-    if System.otp_release() >= "25" do
-      Map.put(expected_counts, @id, @count)
-    else
-      expected_counts
-    end
+  expected_counts = if System.otp_release() >= "25", do: Map.put(expected_counts, @id, @count), else: Map.put(expected_counts, @id, 0)
 
   defp filter(expected = {:warn_return_no_exit, {'src/elixir_erl.erl', {584, 1}}, {:no_return, [:only_normal, :form_error, 2]}}),
     do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id 224
   @count 2
-  expected_counts =
-    if System.otp_release() >= "25" do
-      Map.put(expected_counts, @id, @count)
-    else
-      expected_counts
-    end
+  expected_counts = if System.otp_release() >= "25", do: Map.put(expected_counts, @id, @count), else: Map.put(expected_counts, @id, 0)
 
   defp filter(expected = {:warn_return_no_exit, {'src/elixir_erl_compiler.erl', location}, {:no_return, [:only_normal]}}) when location in [{78, 21}, {80, 21}],
     do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id 225
   @count 1
-  expected_counts =
-    if System.otp_release() >= "25" do
-      Map.put(expected_counts, @id, @count)
-    else
-      expected_counts
-    end
+  expected_counts = if System.otp_release() >= "25", do: Map.put(expected_counts, @id, @count), else: Map.put(expected_counts, @id, 0)
 
   defp filter(expected = {:warn_return_no_exit, {'src/elixir_erl_compiler.erl', {113, 1}}, {:no_return, [:only_normal, :handle_file_error, 2]}}),
     do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id 226
   @count 1
-  expected_counts =
-    if System.otp_release() >= "25" do
-      Map.put(expected_counts, @id, @count)
-    else
-      expected_counts
-    end
+  expected_counts = if System.otp_release() >= "25", do: Map.put(expected_counts, @id, @count), else: Map.put(expected_counts, @id, 0)
 
   defp filter(expected = {:warn_return_no_exit, {'src/elixir_errors.erl', {182, 1}}, {:no_return, [:only_normal, :raise_reserved, 3]}}),
     do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id 227
   @count 2
-  expected_counts =
-    if System.otp_release() >= "25" do
-      Map.put(expected_counts, @id, @count)
-    else
-      expected_counts
-    end
+  expected_counts = if System.otp_release() >= "25", do: Map.put(expected_counts, @id, @count), else: Map.put(expected_counts, @id, 0)
 
   defp filter(expected = {:warn_return_no_exit, {'src/elixir_errors.erl', location}, {:no_return, [:only_normal, :raise, arity]}}) when location in [{216, 1}, {219, 1}] and arity in [5, 4],
     do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id 228
   @count 1
-  expected_counts =
-    if System.otp_release() >= "25" do
-      Map.put(expected_counts, @id, @count)
-    else
-      expected_counts
-    end
+  expected_counts = if System.otp_release() >= "25", do: Map.put(expected_counts, @id, @count), else: Map.put(expected_counts, @id, 0)
 
   defp filter(expected = {:warn_return_no_exit, {'src/elixir_fn.erl', {121, 1}}, {:no_return, [:only_normal, :invalid_capture, 3]}}),
     do: filtered(comment: "not annotated exception", id: @id, data: expected)
@@ -332,21 +260,12 @@ defmodule Dialyzer do
   defp filter(expected = {:warn_return_no_exit, {'lib/gen_event.ex', _}, {:no_return, [:only_normal, :system_terminate, 4]}}),
     do: filtered(comment: "not annotated exit", id: @id, data: expected)
 
-  yecc_erl_clauses =
-    case System.otp_release() >= "24" do
-      true -> []
-      false -> [:yeccpars2_89, :yeccpars2_91, :yeccpars2_226, :yeccpars2_238, :yeccpars2_385, :yeccpars2_421, :yeccpars2_422]
-    end
+  yecc_erl_clauses = if System.otp_release() >= "24", do: [], else: [:yeccpars2_89, :yeccpars2_91, :yeccpars2_226, :yeccpars2_238, :yeccpars2_385, :yeccpars2_421, :yeccpars2_422]
 
   @yecc_erl_clauses yecc_erl_clauses
-
   @yecc_yrl_functions [:return_error, :error_invalid_stab, :error_bad_atom, :error_no_parens_strict, :error_no_parens_many_strict, :error_no_parens_container_strict, :error_invalid_kw_identifier, :return_error_with_meta] ++ Enum.map(yecc_erl_clauses, fn a -> String.to_atom(Atom.to_string(a) <> "_") end)
-
   @id 260
-  @count (case System.otp_release() >= "24" do
-             true -> 8
-             false -> 15
-           end)
+  @count if System.otp_release() >= "24", do: 8, else: 15
   expected_counts = Map.put(expected_counts, @id, @count)
 
   defp filter(expected = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.yrl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in @yecc_yrl_functions,
@@ -354,83 +273,38 @@ defmodule Dialyzer do
 
   @id 265
   @count 6
-  expected_counts =
-    if System.otp_release() >= "24" do
-      expected_counts
-    else
-      Map.put(expected_counts, @id, @count)
-    end
+  expected_counts = if System.otp_release() >= "24", do: Map.put(expected_counts, @id, 0), else: Map.put(expected_counts, @id, @count)
 
-  if System.otp_release() >= "24" do
-    :ok
-  else
-    defp filter(expected = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.erl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in @yecc_erl_clauses,
-      do: filtered(comment: "parser not annotated exception", id: @id, data: expected)
-  end
+  defp filter(expected = {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.erl', _}, {:no_return, [:only_normal, function, _arity]}}) when function in @yecc_erl_clauses,
+    do: filtered(comment: "parser not annotated exception", id: @id, data: expected)
 
   @id 270
   @count 1
-  expected_counts =
-    if System.otp_release() >= "24" do
-      expected_counts
-    else
-      Map.put(expected_counts, @id, @count)
-    end
+  expected_counts = if System.otp_release() >= "24", do: Map.put(expected_counts, @id, 0), else: Map.put(expected_counts, @id, @count)
 
-  if System.otp_release() >= "24" do
-    :ok
-  else
-    defp filter(expected = {:warn_callgraph, {'lib/task.ex', _}, {:call_to_missing, [:erlang, :monitor, 3]}}),
-      do: filtered(comment: "run-time function_exported? check", id: @id, data: expected)
-  end
+  defp filter(expected = {:warn_callgraph, {'lib/task.ex', _}, {:call_to_missing, [:erlang, :monitor, 3]}}),
+    do: filtered(comment: "run-time function_exported? check", id: @id, data: expected)
 
   @id 280
   @count 1
-  expected_counts =
-    if System.otp_release() >= "24" do
-      expected_counts
-    else
-      Map.put(expected_counts, @id, @count)
-    end
+  expected_counts = if System.otp_release() >= "24", do: Map.put(expected_counts, @id, 0), else: Map.put(expected_counts, @id, @count)
 
-  if System.otp_release() >= "24" do
-    :ok
-  else
-    defp filter(expected = {:warn_callgraph, {'lib/task/supervisor.ex', _}, {:call_to_missing, [:erlang, :monitor, 3]}}),
-      do: filtered(comment: "run-time function_exported? check", id: @id, data: expected)
-  end
+  defp filter(expected = {:warn_callgraph, {'lib/task/supervisor.ex', _}, {:call_to_missing, [:erlang, :monitor, 3]}}),
+    do: filtered(comment: "run-time function_exported? check", id: @id, data: expected)
 
   @id 290
   @count 1
-  expected_counts =
-    if System.otp_release() >= "24" do
-      expected_counts
-    else
-      Map.put(expected_counts, @id, @count)
-    end
+  expected_counts = if System.otp_release() >= "24", do: Map.put(expected_counts, @id, 0), else: Map.put(expected_counts, @id, @count)
 
-  if System.otp_release() >= "24" do
-    :ok
-  else
-    defp filter(expected = {:warn_callgraph, {'lib/system.ex', _}, {:call_to_missing, [:os, :env, 0]}}),
-      do: filtered(comment: "run-time function_exported? check", id: @id, data: expected)
-  end
+  defp filter(expected = {:warn_callgraph, {'lib/system.ex', _}, {:call_to_missing, [:os, :env, 0]}}),
+    do: filtered(comment: "run-time function_exported? check", id: @id, data: expected)
 
   @id 300
   @count 1
-  expected_counts =
-    if System.otp_release() >= "24" do
-      expected_counts
-    else
-      Map.put(expected_counts, @id, @count)
-    end
+  expected_counts = if System.otp_release() >= "24", do: Map.put(expected_counts, @id, 0), else: Map.put(expected_counts, @id, @count)
 
-  if System.otp_release() >= "24" do
-    :ok
-  else
-    defp filter(expected = {:warn_callgraph, {'lib/map.ex', _}, {:call_to_missing, [:maps, :from_keys, 2]}}),
-      do: filtered(comment: "run-time function_exported? check", id: @id, data: expected)
-  end
+  defp filter(expected = {:warn_callgraph, {'lib/map.ex', _}, {:call_to_missing, [:maps, :from_keys, 2]}}),
+    do: filtered(comment: "run-time function_exported? check", id: @id, data: expected)
 
   defp filter(warning),
     do: unfiltered(data: warning)
