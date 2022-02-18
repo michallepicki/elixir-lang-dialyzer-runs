@@ -345,7 +345,7 @@ defmodule Dialyzer do
       expected_counts()
       |> Enum.filter(fn
         {id, expected_count} ->
-          counts[id] != expected_count
+          (counts[id] || 0) != expected_count
       end)
       |> Enum.map(fn
         {id, expected_count} ->
