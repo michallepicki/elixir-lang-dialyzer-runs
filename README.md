@@ -6,7 +6,7 @@ This repository runs a [Dialyzer](http://erlang.org/doc/man/dialyzer.html) check
 
 > identify software discrepancies, such as definite type errors, code that has become dead or unreachable because of programming error
 
-in the Elixir source code itself. The elixir team only runs `dialyzer` on the `elixir.beam` and `Elixir.Kernel.beam` files on their CI, and they maintain a small [Dialyzer test suite](https://github.com/elixir-lang/elixir/tree/main/lib/elixir/test/elixir/fixtures/dialyzer) to ensure core macros don't cause Dialyzer issues.
+in the Elixir source code itself. The elixir team only runs `dialyzer` on the `elixir.beam` and `Elixir.Kernel.beam` files on their CI without actually performing Dialyzer analysis (only to check that types and specs that the compiler generates are valid), and they maintain a small [Dialyzer test suite](https://github.com/elixir-lang/elixir/tree/main/lib/elixir/test/elixir/fixtures/dialyzer) to ensure core macros don't cause Dialyzer issues.
 
 This project _may_ find some dialyzer issues that propagate and show up in Elixir stdlib or tooling code _usage_ (e.g. warnings in your correct Elixir code caused by wrong specs in the Elixir stdlib), but only coincidentally and only for the usages present in Elixir source code itself (this project doesn't analyze tests where most of stdlib usage lives - Elixir tests are interpreted and don't produce `.beam` files that can be analyzed with Dialyzer easily). 
 
