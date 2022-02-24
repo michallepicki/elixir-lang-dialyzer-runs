@@ -69,7 +69,7 @@ defmodule Dialyzer do
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
 
-  defp filter(expected = {:warn_matching, {'lib/dynamic_supervisor.ex', 425}, {:pattern_match_cov, ['variable _other@1', '{_,_,_,_,_,_} | \#{\'id\':=_, \'start\':={atom(),atom(),[any()]}, \'modules\'=>\'dynamic\' | [atom()], \'restart\'=>\'permanent\' | \'temporary\' | \'transient\', \'shutdown\'=>\'brutal_kill\' | \'infinity\' | non_neg_integer(), \'type\'=>\'supervisor\' | \'worker\'}']}}),
+  defp filter(expected = {:warn_matching, {'lib/dynamic_supervisor.ex', 427}, {:pattern_match_cov, ['variable _other@1', '{_,_,_,_,_,_} | \#{\'id\':=_, \'start\':={atom(),atom(),[any()]}, \'modules\'=>\'dynamic\' | [atom()], \'restart\'=>\'permanent\' | \'temporary\' | \'transient\', \'shutdown\'=>\'brutal_kill\' | \'infinity\' | non_neg_integer(), \'type\'=>\'supervisor\' | \'worker\'}']}}),
     do: filtered(comment: "overly defensive code", id: @id, data: expected)
 
   @id 80
