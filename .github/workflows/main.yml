@@ -52,15 +52,10 @@ jobs:
           cd ../
 
       - name: Handle otp PLT file caching
-        id: cache-plt
         uses: actions/cache@v2
         with:
-          path: plt-dir/otp.plt
-          key: v1-OTP-${{ matrix.otp_release }}
-
-      - name: Create the dialyzer PLT file
-        if: steps.cache-plt.outputs.cache-hit != 'true'
-        run: dialyzer --output_plt plt-dir/otp.plt --build_plt --apps erts kernel stdlib compiler syntax_tools parsetools tools ssl inets crypto runtime_tools ftp tftp mnesia public_key asn1 sasl
+          path: plt-dir/${{ matrix.otp_release }}.plt
+          key: v2-OTP-${{ matrix.otp_release }}
 
       - name: Check Elixir
         run: elixir/bin/elixir dialyzer.exs

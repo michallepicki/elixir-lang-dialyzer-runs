@@ -27,9 +27,6 @@ cd elixir
 make clean compile
 cd ../
 
-# prepare the base Erlang PLT:
-dialyzer --output_plt plt-dir/otp.plt --build_plt --apps erts kernel stdlib compiler syntax_tools parsetools tools ssl inets crypto runtime_tools ftp tftp mnesia public_key asn1 sasl
-
-# run analysis on Elixir source code:
+# prepare the base Erlang PLT and run analysis on Elixir source code:
 elixir/bin/elixir dialyzer.exs
 ```

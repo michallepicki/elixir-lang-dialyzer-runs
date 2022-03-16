@@ -313,9 +313,21 @@ defmodule Dialyzer do
   defp expected_counts(), do: @expected_counts
 
   def run() do
+    otp_version = File.read!(:filename.join([:code.root_dir(), 'releases', :erlang.system_info(:otp_release), 'OTP_VERSION'])) |> String.trim() |> String.to_charlist()
+    plt_filename = 'plt-dir/' ++ otp_version ++ '.plt'
+    dirs = :dialyzer_cl_parse.get_lib_dir(['erts', 'kernel', 'stdlib', 'compiler', 'syntax_tools', 'parsetools', 'tools', 'ssl', 'inets', 'crypto', 'runtime_tools', 'ftp', 'tftp', 'mnesia', 'public_key', 'asn1', 'sasl'])
+
+    if !File.exists?(plt_filename) do
+      :dialyzer.run(
+        analysis_type: :plt_build,
+        output_plt: plt_filename,
+        files_rec: dirs
+      )
+    end
+
     results =
       :dialyzer.run(
-        init_plt: 'plt-dir/otp.plt',
+        init_plt: plt_filename,
         warnings: [
           :unknown,
           :no_improper_lists
@@ -399,7 +411,7 @@ defmodule Dialyzer do
     |> Stream.into(IO.stream(:stdio, :line))
     |> Stream.run()
 
-    if(has_potential_issues?) do
+    if has_potential_issues? do
       System.halt(1)
     end
   end
