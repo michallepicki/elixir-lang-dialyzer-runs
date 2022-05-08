@@ -114,7 +114,7 @@ defmodule Dialyzer do
     do: filtered(comment: "some protocol consolidation stuff", id: @id, data: expected)
 
   @id 130
-  @count 6
+  @count 5
   expected_counts = Map.put(expected_counts, @id, @count)
 
   defp filter(expected = {:warn_matching, {'lib/kernel.ex', _}, {:pattern_match, ['pattern \'false\'', '\'true\'']}}),
