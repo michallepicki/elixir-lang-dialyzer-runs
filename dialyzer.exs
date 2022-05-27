@@ -176,6 +176,13 @@ defmodule Dialyzer do
   defp filter(expected = {:warn_return_no_exit, {'src/elixir_quote.erl', _}, {:no_return, [:only_normal, :bad_escape, 1]}}),
     do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
+  @id 211
+  @count 1
+  expected_counts = Map.put(expected_counts, @id, @count)
+
+  defp filter(expected = {:warn_return_no_exit, {'lib/mix/dep/converger.ex', _}, {:no_return, [:only_normal, :cycle_found, 1]}}),
+    do: filtered(comment: "not annotated exception", id: @id, data: expected)
+
   @id 220
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
