@@ -208,7 +208,7 @@ defmodule Dialyzer do
   @count 1
   expected_counts = if System.otp_release() >= "25", do: Map.put(expected_counts, @id, @count), else: Map.put(expected_counts, @id, 0)
 
-  defp filter(expected = {:warn_return_no_exit, {'src/elixir_erl.erl', {584, 1}}, {:no_return, [:only_normal, :form_error, 2]}}),
+  defp filter(expected = {:warn_return_no_exit, {'src/elixir_erl.erl', {594, 1}}, {:no_return, [:only_normal, :form_error, 2]}}),
     do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id 224
