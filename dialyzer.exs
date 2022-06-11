@@ -21,17 +21,6 @@ defmodule Dialyzer do
   defp filter(expected = {:warn_failing_call, {'lib/logger.ex', _}, {:call, [Logger, :__do_log__, _, [3], :only_sig, _, _, {false, :none}]}}),
     do: filtered(comment: "Elixir deliberately using erlang macro-based logger interface without passing in call location", id: @id, data: expected)
 
-  @id 20
-  @count 1
-  expected_counts = Map.put(expected_counts, @id, @count)
-  # discussed in https://github.com/elixir-lang/elixir/pull/9979#discussion_r415730426
-  # and https://github.com/elixir-lang/elixir/pull/9993
-  # and https://github.com/elixir-lang/elixir/pull/9995
-
-  @pattern if System.otp_release() >= "25", do: '\'Elixir.MapSet\':t(_)', else: '\'Elixir.MapSet\':t(binary() | maybe_improper_list(binary() | maybe_improper_list(any(),binary() | []) | char(),binary() | []))'
-  defp filter(expected = {:warn_opaque, {'lib/mix/tasks/test.ex', _}, {:opaque_match, ['pattern \#{\'__struct__\':=\'Elixir.MapSet\'}', @pattern, @pattern]}}),
-    do: filtered(comment: "Elixir folks want to be able to pattern match on a struct name while keeping the struct type opaque", id: @id, data: expected)
-
   @id 30
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
