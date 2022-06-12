@@ -5,11 +5,146 @@ defmodule Dialyzer do
   Record.defrecord(:unfiltered, data: nil)
   Record.defrecord(:unexpected_count, id: nil, actual: nil, expected: nil)
 
+  def run() do
+    otp_version =
+      File.read!(
+        :filename.join([
+          :code.root_dir(),
+          'releases',
+          :erlang.system_info(:otp_release),
+          'OTP_VERSION'
+        ])
+      )
+      |> String.trim()
+      |> String.to_charlist()
+
+    plt_filename = 'plt-dir/' ++ otp_version ++ '.plt'
+
+    dirs =
+      :dialyzer_cl_parse.get_lib_dir([
+        'erts',
+        'kernel',
+        'stdlib',
+        'compiler',
+        'syntax_tools',
+        'parsetools',
+        'tools',
+        'ssl',
+        'inets',
+        'crypto',
+        'runtime_tools',
+        'ftp',
+        'tftp',
+        'mnesia',
+        'public_key',
+        'asn1',
+        'sasl'
+      ])
+
+    if !File.exists?(plt_filename) do
+      :dialyzer.run(
+        analysis_type: :plt_build,
+        output_plt: plt_filename,
+        files_rec: dirs
+      )
+    end
+
+    results =
+      :dialyzer.run(
+        init_plt: plt_filename,
+        warnings: [
+          :unknown,
+          :no_improper_lists
+        ],
+        files_rec: [
+          'elixir/lib/eex/ebin',
+          'elixir/lib/elixir/ebin',
+          'elixir/lib/ex_unit/ebin',
+          'elixir/lib/iex/ebin',
+          'elixir/lib/logger/ebin',
+          'elixir/lib/mix/ebin'
+        ]
+      )
+      |> filter_results([])
+
+    counts =
+      results
+      |> Enum.reduce(%{}, fn
+        filtered(id: id), counts ->
+          Map.update(counts, id, 1, &(&1 + 1))
+
+        _, counts ->
+          counts
+      end)
+
+    unexpected_counts_warnings =
+      expected_counts()
+      |> Enum.filter(fn
+        {id, expected_count} ->
+          (counts[id] || 0) != expected_count
+      end)
+      |> Enum.map(fn
+        {id, expected_count} ->
+          unexpected_count(id: id, actual: counts[id], expected: expected_count)
+      end)
+
+    results =
+      (unexpected_counts_warnings ++ results)
+      |> Enum.sort_by(fn
+        filtered() -> 1
+        unexpected_count() -> 2
+        unfiltered(data: {:warn_unknown, _, _}) -> 3
+        unfiltered(data: {:warn_return_no_exit, _, _}) -> 4
+        unfiltered() -> 5
+      end)
+
+    has_potential_issues? =
+      case List.last(results) do
+        unfiltered() -> true
+        unexpected_count() -> true
+        _ -> false
+      end
+
+    results
+    |> Stream.map(fn
+      unfiltered(data: warning) ->
+        formatted_warning =
+          warning
+          |> :dialyzer.format_warning(indent_opt: true, filename_opt: :fullpath)
+          |> to_string()
+
+        "############################################################\n" <>
+          "Potential issue: \n#{formatted_warning}\n\n" <>
+          "data: #{inspect(warning, limit: :infinity, printable_limit: :infinity, width: :infinity)}\n\n"
+
+      unexpected_count(id: id, actual: actual_count, expected: expected_count) ->
+        "############################################################\n" <>
+          "Expected count of filtered non-issues ##{id} is off! Expected #{expected_count}, found #{actual_count || 0} issues\n\n"
+
+      filtered(id: id, comment: comment, data: warning) ->
+        formatted_warning =
+          warning
+          |> :dialyzer.format_warning(indent_opt: true, filename_opt: :fullpath)
+          |> to_string()
+
+        "############################################################\n" <>
+          "Filtered non-issue ##{id} (#{comment}):\n#{formatted_warning}\n\n" <>
+          "data: #{inspect(warning, limit: :infinity, printable_limit: :infinity, width: :infinity)}\n\n"
+    end)
+    |> Stream.into(File.stream!("report", [:write, :utf8]))
+    |> Stream.into(IO.stream(:stdio, :line))
+    |> Stream.run()
+
+    if has_potential_issues? do
+      System.halt(1)
+    end
+  end
+
   expected_counts = %{}
 
-  defp filter([], acc), do: Enum.reverse(acc)
+  defp filter_results([], acc), do: acc
 
-  defp filter([warning | rest], acc), do: filter(rest, [filter(warning) | acc])
+  defp filter_results([warning | rest], acc), do: filter_results(rest, [filter(warning) | acc])
 
   @id 10
   @count 1
@@ -604,141 +739,6 @@ defmodule Dialyzer do
 
   @expected_counts expected_counts
   defp expected_counts(), do: @expected_counts
-
-  def run() do
-    otp_version =
-      File.read!(
-        :filename.join([
-          :code.root_dir(),
-          'releases',
-          :erlang.system_info(:otp_release),
-          'OTP_VERSION'
-        ])
-      )
-      |> String.trim()
-      |> String.to_charlist()
-
-    plt_filename = 'plt-dir/' ++ otp_version ++ '.plt'
-
-    dirs =
-      :dialyzer_cl_parse.get_lib_dir([
-        'erts',
-        'kernel',
-        'stdlib',
-        'compiler',
-        'syntax_tools',
-        'parsetools',
-        'tools',
-        'ssl',
-        'inets',
-        'crypto',
-        'runtime_tools',
-        'ftp',
-        'tftp',
-        'mnesia',
-        'public_key',
-        'asn1',
-        'sasl'
-      ])
-
-    if !File.exists?(plt_filename) do
-      :dialyzer.run(
-        analysis_type: :plt_build,
-        output_plt: plt_filename,
-        files_rec: dirs
-      )
-    end
-
-    results =
-      :dialyzer.run(
-        init_plt: plt_filename,
-        warnings: [
-          :unknown,
-          :no_improper_lists
-        ],
-        files_rec: [
-          'elixir/lib/eex/ebin',
-          'elixir/lib/elixir/ebin',
-          'elixir/lib/ex_unit/ebin',
-          'elixir/lib/iex/ebin',
-          'elixir/lib/logger/ebin',
-          'elixir/lib/mix/ebin'
-        ]
-      )
-      |> filter([])
-
-    counts =
-      results
-      |> Enum.reduce(%{}, fn
-        filtered(id: id), counts ->
-          Map.update(counts, id, 1, &(&1 + 1))
-
-        _, counts ->
-          counts
-      end)
-
-    unexpected_counts_warnings =
-      expected_counts()
-      |> Enum.filter(fn
-        {id, expected_count} ->
-          (counts[id] || 0) != expected_count
-      end)
-      |> Enum.map(fn
-        {id, expected_count} ->
-          unexpected_count(id: id, actual: counts[id], expected: expected_count)
-      end)
-
-    results =
-      (unexpected_counts_warnings ++ results)
-      |> Enum.sort_by(fn
-        filtered() -> 1
-        unexpected_count() -> 2
-        unfiltered(data: {:warn_unknown, _, _}) -> 3
-        unfiltered(data: {:warn_return_no_exit, _, _}) -> 4
-        unfiltered() -> 5
-      end)
-
-    has_potential_issues? =
-      case Enum.reverse(results) do
-        [unfiltered() | _] -> true
-        [unexpected_count() | _] -> true
-        _ -> false
-      end
-
-    results
-    |> Stream.map(fn
-      unfiltered(data: warning) ->
-        formatted_warning =
-          warning
-          |> :dialyzer.format_warning(indent_opt: true, filename_opt: :fullpath)
-          |> to_string()
-
-        "############################################################\n" <>
-          "Potential issue: \n#{formatted_warning}\n\n" <>
-          "data: #{inspect(warning, limit: :infinity, printable_limit: :infinity, width: :infinity)}\n\n"
-
-      unexpected_count(id: id, actual: actual_count, expected: expected_count) ->
-        "############################################################\n" <>
-          "Expected count of filtered non-issues ##{id} is off! Expected #{expected_count}, found #{actual_count || 0} issues\n\n"
-
-      filtered(id: id, comment: comment, data: warning) ->
-        formatted_warning =
-          warning
-          |> :dialyzer.format_warning(indent_opt: true, filename_opt: :fullpath)
-          |> to_string()
-
-        "############################################################\n" <>
-          "Filtered non-issue ##{id} (#{comment}):\n#{formatted_warning}\n\n" <>
-          "data: #{inspect(warning, limit: :infinity, printable_limit: :infinity, width: :infinity)}\n\n"
-    end)
-    |> Stream.into(File.stream!("report", [:write, :utf8]))
-    |> Stream.into(IO.stream(:stdio, :line))
-    |> Stream.run()
-
-    if has_potential_issues? do
-      System.halt(1)
-    end
-  end
 end
 
 Dialyzer.run()
