@@ -18,7 +18,7 @@ defmodule Dialyzer do
   # and https://github.com/elixir-lang/elixir/pull/10280
   # mostly fixed in https://github.com/elixir-lang/elixir/pull/10287
   # may be resolved in https://github.com/elixir-lang/elixir/issues/9465
-  defp filter(expected = {:warn_failing_call, {'lib/logger.ex', _}, {:call, [Logger, :__do_log__, _, [3], :only_sig, _, _, {false, :none}]}}),
+  defp filter(expected = {:warn_failing_call, {'lib/logger.ex', 866}, {:call, [Logger, :__do_log__, _, [3], :only_sig, _, _, {false, :none}]}}),
     do: filtered(comment: "Elixir deliberately using erlang macro-based logger interface without passing in call location", id: @id, data: expected)
 
   @id 30
@@ -106,7 +106,7 @@ defmodule Dialyzer do
   @count 5
   expected_counts = Map.put(expected_counts, @id, @count)
 
-  defp filter(expected = {:warn_matching, {'lib/kernel.ex', _}, {:pattern_match, ['pattern \'false\'', '\'true\'']}}),
+  defp filter(expected = {:warn_matching, {'lib/kernel.ex', line}, {:pattern_match, ['pattern \'false\'', '\'true\'']}}) when line in [1950, 3435, 3809, 3869, 4255],
     do: filtered(comment: "inlined bootstrap check stuff", id: @id, data: expected)
 
   @id 140
@@ -127,7 +127,7 @@ defmodule Dialyzer do
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
 
-  defp filter(expected = {:warn_return_no_exit, {'lib/mix/tasks/test.ex', _}, {:no_return, [:only_normal, :raise_with_shell, 2]}}),
+  defp filter(expected = {:warn_return_no_exit, {'lib/mix/tasks/test.ex', 582}, {:no_return, [:only_normal, :raise_with_shell, 2]}}),
     do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id 170
@@ -141,7 +141,7 @@ defmodule Dialyzer do
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
 
-  defp filter(expected = {:warn_return_no_exit, {'lib/mix/dep/loader.ex', _}, {:no_return, [:only_normal, :invalid_dep_format, 1]}}),
+  defp filter(expected = {:warn_return_no_exit, {'lib/mix/dep/loader.ex', 258}, {:no_return, [:only_normal, :invalid_dep_format, 1]}}),
     do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id 190
@@ -169,14 +169,14 @@ defmodule Dialyzer do
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
 
-  defp filter(expected = {:warn_return_no_exit, {'lib/mix/dep/converger.ex', _}, {:no_return, [:only_normal, :cycle_found, 1]}}),
+  defp filter(expected = {:warn_return_no_exit, {'lib/mix/dep/converger.ex', 55}, {:no_return, [:only_normal, :cycle_found, 1]}}),
     do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id 220
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
 
-  defp filter(expected = {:warn_return_no_exit, {'lib/mix/tasks/iex.ex', _}, {:no_return, [:only_normal, :run, 1]}}),
+  defp filter(expected = {:warn_return_no_exit, {'lib/mix/tasks/iex.ex', 9}, {:no_return, [:only_normal, :run, 1]}}),
     do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id 221
@@ -239,7 +239,7 @@ defmodule Dialyzer do
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
 
-  defp filter(expected = {:warn_return_no_exit, {'lib/iex/cli.ex', _}, {:no_return, [:only_normal]}}),
+  defp filter(expected = {:warn_return_no_exit, {'lib/iex/cli.ex', 151}, {:no_return, [:only_normal]}}),
     do: filtered(comment: "not annotated exit", id: @id, data: expected)
 
   @id 240
@@ -253,7 +253,7 @@ defmodule Dialyzer do
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
 
-  defp filter(expected = {:warn_return_no_exit, {'lib/gen_event.ex', _}, {:no_return, [:only_normal, :system_terminate, 4]}}),
+  defp filter(expected = {:warn_return_no_exit, {'lib/gen_event.ex', 460}, {:no_return, [:only_normal, :system_terminate, 4]}}),
     do: filtered(comment: "not annotated exit", id: @id, data: expected)
 
   yecc_erl_clauses = if System.otp_release() >= "24", do: [], else: [:yeccpars2_89, :yeccpars2_91, :yeccpars2_226, :yeccpars2_238, :yeccpars2_385, :yeccpars2_421, :yeccpars2_422]
