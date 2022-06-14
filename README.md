@@ -18,9 +18,9 @@ Occasionally, filtering code will have to be updated when line numbers change.
 
 ```
 # clone the repositories:
-git clone git@github.com:michallepicki/elixir-lang-dialyzer-runs.git
+git clone https://github.com/michallepicki/elixir-lang-dialyzer-runs.git
 cd elixir-lang-dialyzer-runs
-git clone git@github.com:elixir-lang/elixir.git --depth=1
+git clone https://github.com/elixir-lang/elixir.git --depth=1
 
 # build elixir:
 cd elixir
