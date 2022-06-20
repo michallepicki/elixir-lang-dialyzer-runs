@@ -280,7 +280,7 @@ defmodule Dialyzer do
 
   defp filter(
          expected =
-           {:warn_matching, {'lib/iex/helpers.ex', 632},
+           {:warn_matching, {'lib/iex/helpers.ex', 633},
             {:pattern_match,
              [
                'pattern <__key@1, \'nil\'>',
@@ -360,27 +360,6 @@ defmodule Dialyzer do
        )
        when line in [1950, 3435, 3809, 3869, 4255],
        do: filtered(comment: "inlined bootstrap check stuff", id: @id, data: expected)
-
-  @id 140
-  @count 7
-  expected_counts = Map.put(expected_counts, @id, @count)
-
-  defp filter(expected = {:warn_not_called, {'lib/base.ex', _}, {:unused_fun, [function, _]}})
-       when function in [
-              :encode_pair_clauses,
-              :shift,
-              :encode_clauses,
-              :decode_char_clauses,
-              :decode_mixed_clauses,
-              :decode_clauses,
-              :bad_digit_clause
-            ],
-       do:
-         filtered(
-           comment: "functions inlined or only used to generate other functions at compile time",
-           id: @id,
-           data: expected
-         )
 
   @id 150
   @count 2
