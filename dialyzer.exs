@@ -248,17 +248,6 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "overly defensive code", id: @id, data: expected)
 
-  @id 80
-  @count 1
-  expected_counts = Map.put(expected_counts, @id, @count)
-
-  defp filter(
-         expected =
-           {:warn_matching, {'lib/string_io.ex', 413},
-            {:guard_fail, [:is_list, '(_data@1::binary())']}}
-       ),
-       do: filtered(comment: "overly defensive code", id: @id, data: expected)
-
   @id 90
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
