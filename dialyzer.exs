@@ -347,7 +347,7 @@ defmodule Dialyzer do
            {:warn_matching, {'lib/kernel.ex', line},
             {:pattern_match, ['pattern \'false\'', '\'true\'']}}
        )
-       when line in [1950, 3444, 3818, 3878, 4264],
+       when line in [1950, 3455, 3829, 3889, 4275],
        do: filtered(comment: "inlined bootstrap check stuff", id: @id, data: expected)
 
   @id 150
