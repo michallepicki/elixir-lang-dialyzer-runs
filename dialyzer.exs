@@ -239,7 +239,7 @@ defmodule Dialyzer do
 
   defp filter(
          expected =
-           {:warn_matching, {'lib/dynamic_supervisor.ex', 427},
+           {:warn_matching, {'lib/dynamic_supervisor.ex', 428},
             {:pattern_match_cov,
              [
                'variable _other@1',
