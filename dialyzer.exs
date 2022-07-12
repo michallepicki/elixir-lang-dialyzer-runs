@@ -347,7 +347,7 @@ defmodule Dialyzer do
            {:warn_matching, {'lib/kernel.ex', line},
             {:pattern_match, ['pattern \'false\'', '\'true\'']}}
        )
-       when line in [1950, 3455, 3829, 3889, 4269],
+       when line in [1950, 3455, 3818, 3878, 4258],
        do: filtered(comment: "inlined bootstrap check stuff", id: @id, data: expected)
 
   @id 150
@@ -488,7 +488,7 @@ defmodule Dialyzer do
 
   defp filter(
          expected =
-           {:warn_return_no_exit, {'src/elixir_erl.erl', {594, 1}},
+           {:warn_return_no_exit, {'src/elixir_erl.erl', {583, 1}},
             {:no_return, [:only_normal, :form_error, 2]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
