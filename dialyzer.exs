@@ -580,7 +580,7 @@ defmodule Dialyzer do
 
   defp filter(
          expected =
-           {:warn_return_no_exit, {'lib/kernel/cli.ex', 221},
+           {:warn_return_no_exit, {'lib/kernel/cli.ex', 226},
             {:no_return, [:only_normal, :halt_standalone, 1]}}
        ),
        do: filtered(comment: "not annotated exit", id: @id, data: expected)
