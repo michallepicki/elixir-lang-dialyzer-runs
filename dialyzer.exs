@@ -402,7 +402,7 @@ defmodule Dialyzer do
 
   defp filter(
          expected =
-           {:warn_return_no_exit, {'lib/mix/scm/path.ex', 61},
+           {:warn_return_no_exit, {'lib/mix/scm/path.ex', 60},
             {:no_return, [:only_normal, :checkout, 1]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
