@@ -254,7 +254,7 @@ defmodule Dialyzer do
 
   defp filter(
          expected =
-           {:warn_matching, {'lib/mix/utils.ex', 756},
+           {:warn_matching, {'lib/mix/utils.ex', 761},
             {:pattern_match,
              [
                'pattern \'nil\'',
