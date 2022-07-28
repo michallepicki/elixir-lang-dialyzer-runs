@@ -170,11 +170,10 @@ defmodule Dialyzer do
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
 
-  @line_file_match if System.otp_release() >= "24", do: quote(do: {59, _}), else: quote(do: 59)
   # discussed in https://github.com/elixir-lang/elixir/pull/9979#discussion_r416206411
   defp filter(
          expected =
-           {:warn_matching, {'src/elixir_erl_compiler.erl', unquote(@line_file_match)},
+           {:warn_matching, {'src/elixir_erl_compiler.erl', {59, _}},
             {:pattern_match, _lots_of_details}}
        ),
        do: filtered(comment: "return type not documented in erlang", id: @id, data: expected)
@@ -219,13 +218,11 @@ defmodule Dialyzer do
   @count 2
   expected_counts = Map.put(expected_counts, @id, @count)
 
-  @file_match if System.otp_release() >= "24", do: 'lib/mix/hex.ex', else: ''
-  @line_match if System.otp_release() >= "24", do: [40, 59], else: [0]
-
   defp filter(
-         expected = {:warn_unknown, {@file_match, lines}, {:unknown_function, {Hex, function, 0}}}
+         expected =
+           {:warn_unknown, {'lib/mix/hex.ex', lines}, {:unknown_function, {Hex, function, 0}}}
        )
-       when function in [:start, :version] and lines in @line_match,
+       when function in [:start, :version] and lines in [40, 59],
        do:
          filtered(
            comment: "Hex package loading gets handled by the Mix task",
@@ -282,14 +279,7 @@ defmodule Dialyzer do
   @count 22
   expected_counts = Map.put(expected_counts, @id, @count)
 
-  @file_match if System.otp_release() >= "24",
-                do: ['lib/collectable.ex', 'lib/enum.ex', 'lib/list/chars.ex'],
-                else: ['']
-  @line_match if System.otp_release() >= "24", do: 1, else: 0
-
-  defp filter(
-         expected = {:warn_unknown, {file, line}, {:unknown_function, {module, :__impl__, 1}}}
-       )
+  defp filter(expected = {:warn_unknown, {file, 1}, {:unknown_function, {module, :__impl__, 1}}})
        when module in [
               Collectable.Atom,
               Collectable.Float,
@@ -313,20 +303,16 @@ defmodule Dialyzer do
               List.Chars.Port,
               List.Chars.Reference,
               List.Chars.Tuple
-            ] and file in @file_match and line == @line_match,
+            ] and file in ['lib/collectable.ex', 'lib/enum.ex', 'lib/list/chars.ex'],
        do: filtered(comment: "some protocol consolidation stuff", id: @id, data: expected)
 
   @id 120
   @count 6
   expected_counts = Map.put(expected_counts, @id, @count)
 
-  @file_match if System.otp_release() >= "24", do: 'lib/string/chars.ex', else: ''
-  @line_match if System.otp_release() >= "24", do: 3, else: 0
-
   defp filter(
-         expected =
-           {:warn_unknown, {@file_match, @line_match},
-            {:unknown_function, {module, :__impl__, 1}}}
+         expected = {:warn_unknown, 'lib/string/chars.ex', 3},
+         {:unknown_function, {module, :__impl__, 1}}
        )
        when module in [
               String.Chars.Function,
@@ -596,35 +582,18 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "not annotated exit", id: @id, data: expected)
 
-  yecc_erl_clauses =
-    if System.otp_release() >= "24",
-      do: [],
-      else: [
-        :yeccpars2_89,
-        :yeccpars2_91,
-        :yeccpars2_226,
-        :yeccpars2_238,
-        :yeccpars2_385,
-        :yeccpars2_421,
-        :yeccpars2_422
-      ]
-
-  @yecc_erl_clauses yecc_erl_clauses
   @yecc_yrl_functions [
-                        :return_error,
-                        :error_invalid_stab,
-                        :error_bad_atom,
-                        :error_no_parens_strict,
-                        :error_no_parens_many_strict,
-                        :error_no_parens_container_strict,
-                        :error_invalid_kw_identifier,
-                        :return_error_with_meta
-                      ] ++
-                        Enum.map(yecc_erl_clauses, fn a ->
-                          String.to_atom(Atom.to_string(a) <> "_")
-                        end)
+    :return_error,
+    :error_invalid_stab,
+    :error_bad_atom,
+    :error_no_parens_strict,
+    :error_no_parens_many_strict,
+    :error_no_parens_container_strict,
+    :error_invalid_kw_identifier,
+    :return_error_with_meta
+  ]
   @id 260
-  @count if System.otp_release() >= "24", do: 8, else: 15
+  @count 8
   expected_counts = Map.put(expected_counts, @id, @count)
 
   defp filter(
@@ -634,73 +603,6 @@ defmodule Dialyzer do
        )
        when fun_name in @yecc_yrl_functions,
        do: filtered(comment: "parser not annotated exception", id: @id, data: expected)
-
-  @id 265
-  @count 6
-  expected_counts =
-    if System.otp_release() >= "24",
-      do: Map.put(expected_counts, @id, 0),
-      else: Map.put(expected_counts, @id, @count)
-
-  defp filter(
-         expected =
-           {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.erl', _},
-            {:no_return, [:only_normal, fun_name, _arity]}}
-       )
-       when fun_name in @yecc_erl_clauses,
-       do: filtered(comment: "parser not annotated exception", id: @id, data: expected)
-
-  @id 270
-  @count 1
-  expected_counts =
-    if System.otp_release() >= "24",
-      do: Map.put(expected_counts, @id, 0),
-      else: Map.put(expected_counts, @id, @count)
-
-  defp filter(
-         expected =
-           {:warn_callgraph, {'lib/task.ex', _}, {:call_to_missing, [:erlang, :monitor, 3]}}
-       ),
-       do: filtered(comment: "run-time function_exported? check", id: @id, data: expected)
-
-  @id 280
-  @count 1
-  expected_counts =
-    if System.otp_release() >= "24",
-      do: Map.put(expected_counts, @id, 0),
-      else: Map.put(expected_counts, @id, @count)
-
-  defp filter(
-         expected =
-           {:warn_callgraph, {'lib/task/supervisor.ex', _},
-            {:call_to_missing, [:erlang, :monitor, 3]}}
-       ),
-       do: filtered(comment: "run-time function_exported? check", id: @id, data: expected)
-
-  @id 290
-  @count 1
-  expected_counts =
-    if System.otp_release() >= "24",
-      do: Map.put(expected_counts, @id, 0),
-      else: Map.put(expected_counts, @id, @count)
-
-  defp filter(
-         expected = {:warn_callgraph, {'lib/system.ex', _}, {:call_to_missing, [:os, :env, 0]}}
-       ),
-       do: filtered(comment: "run-time function_exported? check", id: @id, data: expected)
-
-  @id 300
-  @count 1
-  expected_counts =
-    if System.otp_release() >= "24",
-      do: Map.put(expected_counts, @id, 0),
-      else: Map.put(expected_counts, @id, @count)
-
-  defp filter(
-         expected =
-           {:warn_callgraph, {'lib/map.ex', _}, {:call_to_missing, [:maps, :from_keys, 2]}}
-       ),
-       do: filtered(comment: "run-time function_exported? check", id: @id, data: expected)
 
   defp filter(warning),
     do: unfiltered(data: warning)
