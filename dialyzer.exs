@@ -243,7 +243,7 @@ defmodule Dialyzer do
             {:pattern_match_cov,
              [
                'variable _other@1',
-               '{_,_,_,_,_,_} | \#{\'id\':=_, \'start\':={atom(),atom(),[any()]}, \'modules\'=>\'dynamic\' | [atom()], \'restart\'=>\'permanent\' | \'temporary\' | \'transient\', \'shutdown\'=>\'brutal_kill\' | \'infinity\' | pos_integer(), \'type\'=>\'supervisor\' | \'worker\'}'
+               '{_,_,_,_,_,_} | \#{\'id\':=_, \'start\':={atom(),atom(),[any()]}, \'modules\'=>\'dynamic\' | [atom()], \'restart\'=>\'permanent\' | \'temporary\' | \'transient\', \'shutdown\'=>\'brutal_kill\' | \'infinity\' | non_neg_integer(), \'type\'=>\'supervisor\' | \'worker\'}'
              ]}}
        ),
        do: filtered(comment: "overly defensive code", id: @id, data: expected)
@@ -517,7 +517,7 @@ defmodule Dialyzer do
 
   defp filter(
          expected =
-           {:warn_return_no_exit, {'src/elixir_erl_compiler.erl', {113, 1}},
+           {:warn_return_no_exit, {'src/elixir_erl_compiler.erl', {107, 1}},
             {:no_return, [:only_normal, :handle_file_error, 2]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
