@@ -311,7 +311,7 @@ defmodule Dialyzer do
   expected_counts = Map.put(expected_counts, @id, @count)
 
   defp filter(
-         expected = {:warn_unknown, 'lib/string/chars.ex', 3},
+         expected = {:warn_unknown, {'lib/string/chars.ex', 3}},
          {:unknown_function, {module, :__impl__, 1}}
        )
        when module in [
