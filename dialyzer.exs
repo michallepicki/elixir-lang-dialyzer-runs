@@ -155,7 +155,7 @@ defmodule Dialyzer do
   # may be resolved in https://github.com/elixir-lang/elixir/issues/9465
   defp filter(
          expected =
-           {:warn_failing_call, {'lib/logger.ex', 866},
+           {:warn_failing_call, {'lib/logger.ex', 858},
             {:call, [Logger, :__do_log__, _, [3], :only_sig, _, _, {false, :none}]}}
        ),
        do:
@@ -557,7 +557,7 @@ defmodule Dialyzer do
   expected_counts = Map.put(expected_counts, @id, @count)
 
   defp filter(
-         expected = {:warn_return_no_exit, {'lib/iex/cli.ex', 151}, {:no_return, [:only_normal]}}
+         expected = {:warn_return_no_exit, {'lib/iex/cli.ex', 152}, {:no_return, [:only_normal]}}
        ),
        do: filtered(comment: "not annotated exit", id: @id, data: expected)
 
