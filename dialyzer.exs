@@ -378,7 +378,7 @@ defmodule Dialyzer do
 
   defp filter(
          expected =
-           {:warn_return_no_exit, {'lib/mix/dep/loader.ex', 258},
+           {:warn_return_no_exit, {'lib/mix/dep/loader.ex', 253},
             {:no_return, [:only_normal, :invalid_dep_format, 1]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
