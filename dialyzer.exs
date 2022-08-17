@@ -240,7 +240,7 @@ defmodule Dialyzer do
             {:pattern_match_cov,
              [
                'variable _other@1',
-               '{_,_,_,_,_,_} | \#{\'id\':=_, \'start\':={atom(),atom(),[any()]}, \'modules\'=>\'dynamic\' | [atom()], \'restart\'=>\'permanent\' | \'temporary\' | \'transient\', \'shutdown\'=>\'brutal_kill\' | \'infinity\' | non_neg_integer(), 'significant'=>boolean(), \'type\'=>\'supervisor\' | \'worker\'}'
+               '{_,_,_,_,_,_} | \#{\'id\':=_, \'start\':={atom(),atom(),[any()]}, \'modules\'=>\'dynamic\' | [atom()], \'restart\'=>\'permanent\' | \'temporary\' | \'transient\', \'shutdown\'=>\'brutal_kill\' | \'infinity\' | non_neg_integer(), \'significant\'=>boolean(), \'type\'=>\'supervisor\' | \'worker\'}'
              ]}}
        ),
        do: filtered(comment: "overly defensive code", id: @id, data: expected)
