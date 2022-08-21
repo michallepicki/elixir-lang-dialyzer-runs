@@ -222,7 +222,7 @@ defmodule Dialyzer do
          expected =
            {:warn_unknown, {'lib/mix/hex.ex', lines}, {:unknown_function, {Hex, function, 0}}}
        )
-       when function in [:start, :version] and lines in [40, 59],
+       when function in [:start, :version] and lines in [41, 60],
        do:
          filtered(
            comment: "Hex package loading gets handled by the Mix task",
@@ -378,7 +378,7 @@ defmodule Dialyzer do
 
   defp filter(
          expected =
-           {:warn_return_no_exit, {'lib/mix/dep/loader.ex', 253},
+           {:warn_return_no_exit, {'lib/mix/dep/loader.ex', 254},
             {:no_return, [:only_normal, :invalid_dep_format, 1]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
