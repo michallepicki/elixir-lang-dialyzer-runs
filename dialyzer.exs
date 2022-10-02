@@ -584,17 +584,18 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exit", id: @id, data: expected)
 
   @yecc_yrl_functions [
-    :return_error,
     :error_invalid_stab,
     :error_bad_atom,
     :error_no_parens_strict,
     :error_no_parens_many_strict,
     :error_no_parens_container_strict,
     :error_invalid_kw_identifier,
+    :error_too_many_access_syntax,
+    :return_error,
     :return_error_with_meta
   ]
   @id 260
-  @count 8
+  @count 9
   expected_counts = Map.put(expected_counts, @id, @count)
 
   defp filter(
