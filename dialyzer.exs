@@ -518,13 +518,13 @@ defmodule Dialyzer do
 
   defp filter(
          expected =
-           {:warn_return_no_exit, {'src/elixir_errors.erl', {182, 1}},
-            {:no_return, [:only_normal, :raise_reserved, 3]}}
+           {:warn_return_no_exit, {'src/elixir_errors.erl', {179, 1}},
+            {:no_return, [:only_normal, :raise_reserved, 4]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id 227
-  @count 2
+  @count 1
   expected_counts =
     if System.otp_release() >= "25",
       do: Map.put(expected_counts, @id, @count),
@@ -532,10 +532,9 @@ defmodule Dialyzer do
 
   defp filter(
          expected =
-           {:warn_return_no_exit, {'src/elixir_errors.erl', location},
-            {:no_return, [:only_normal, :raise, arity]}}
-       )
-       when location in [{216, 1}, {219, 1}] and arity in [5, 4],
+           {:warn_return_no_exit, {'src/elixir_errors.erl', {185, 1}},
+            {:no_return, [:only_normal, :raise_snippet, 5]}}
+       ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id 228
