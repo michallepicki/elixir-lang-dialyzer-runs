@@ -184,7 +184,7 @@ defmodule Dialyzer do
   # discussed in https://github.com/elixir-lang/elixir/issues/11092
   defp filter(
          expected =
-           {:warn_matching, {'lib/calendar/time.ex', 672},
+           {:warn_matching, {'lib/calendar/time.ex', 690},
             {:pattern_match,
              [
                'pattern {\'error\', _reason@1}',
@@ -356,7 +356,7 @@ defmodule Dialyzer do
 
   defp filter(
          expected =
-           {:warn_return_no_exit, {'lib/mix/tasks/test.ex', 586},
+           {:warn_return_no_exit, {'lib/mix/tasks/test.ex', 588},
             {:no_return, [:only_normal, :raise_with_shell, 2]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
