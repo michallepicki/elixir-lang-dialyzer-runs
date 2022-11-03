@@ -184,7 +184,7 @@ defmodule Dialyzer do
   # discussed in https://github.com/elixir-lang/elixir/issues/11092
   defp filter(
          expected =
-           {:warn_matching, {'lib/calendar/time.ex', 690},
+           {:warn_matching, {'lib/calendar/time.ex', 710},
             {:pattern_match,
              [
                'pattern {\'error\', _reason@1}',
@@ -463,7 +463,7 @@ defmodule Dialyzer do
            {:warn_return_no_exit, {'src/elixir_clauses.erl', location},
             {:no_return, [:only_normal]}}
        )
-       when location in [{95, 43}, {114, 43}, {133, 16}, {227, 16}],
+       when location in [{95, 43}, {114, 43}, {133, 16}, {220, 16}],
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id 223
