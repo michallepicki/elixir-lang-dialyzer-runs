@@ -146,7 +146,7 @@ defmodule Dialyzer do
 
   defp filter_results([warning | rest], acc), do: filter_results(rest, [filter(warning) | acc])
 
-  @id __LINE__
+  @id __ENV__.line
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
   # discussed in https://github.com/elixir-lang/elixir/issues/10279
@@ -166,7 +166,7 @@ defmodule Dialyzer do
            data: expected
          )
 
-  @id __LINE__
+  @id __ENV__.line
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
 
@@ -178,7 +178,7 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "return type not documented in erlang", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
   # discussed in https://github.com/elixir-lang/elixir/issues/11092
@@ -193,7 +193,7 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "slightly dead code", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
 
@@ -214,7 +214,7 @@ defmodule Dialyzer do
            data: expected
          )
 
-  @id __LINE__
+  @id __ENV__.line
   @count 2
   expected_counts = Map.put(expected_counts, @id, @count)
 
@@ -230,7 +230,7 @@ defmodule Dialyzer do
            data: expected
          )
 
-  @id __LINE__
+  @id __ENV__.line
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
 
@@ -245,7 +245,7 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "overly defensive code", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
 
@@ -260,7 +260,7 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "overly defensive code", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
 
@@ -275,7 +275,7 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "overly_defensive code", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 22
   expected_counts = Map.put(expected_counts, @id, @count)
 
@@ -306,7 +306,7 @@ defmodule Dialyzer do
             ] and file in ['lib/collectable.ex', 'lib/enum.ex', 'lib/list/chars.ex'],
        do: filtered(comment: "some protocol consolidation stuff", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 6
   expected_counts = Map.put(expected_counts, @id, @count)
 
@@ -325,7 +325,7 @@ defmodule Dialyzer do
             ],
        do: filtered(comment: "some protocol consolidation stuff", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 5
   expected_counts = Map.put(expected_counts, @id, @count)
 
@@ -337,7 +337,7 @@ defmodule Dialyzer do
        when line in [1992, 3497, 3890, 3960, 4345],
        do: filtered(comment: "inlined bootstrap check stuff", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 2
   expected_counts = Map.put(expected_counts, @id, @count)
 
@@ -350,7 +350,7 @@ defmodule Dialyzer do
            data: expected
          )
 
-  @id __LINE__
+  @id __ENV__.line
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
 
@@ -361,7 +361,7 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
 
@@ -372,7 +372,7 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
 
@@ -383,7 +383,7 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
 
@@ -394,7 +394,7 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
 
@@ -404,7 +404,7 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
 
@@ -415,7 +415,7 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
 
@@ -426,7 +426,7 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
 
@@ -437,7 +437,7 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 1
   expected_counts =
     if System.otp_release() >= "25",
@@ -451,7 +451,7 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 4
   expected_counts =
     if System.otp_release() >= "25",
@@ -466,7 +466,7 @@ defmodule Dialyzer do
        when location in [{95, 43}, {114, 43}, {133, 16}, {220, 16}],
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 2
   expected_counts =
     if System.otp_release() >= "25",
@@ -481,7 +481,7 @@ defmodule Dialyzer do
        when location in [{78, 21}, {87, 21}],
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 1
   expected_counts =
     if System.otp_release() >= "25",
@@ -495,7 +495,7 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 1
   expected_counts =
     if System.otp_release() >= "25",
@@ -509,7 +509,7 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 1
   expected_counts =
     if System.otp_release() >= "25",
@@ -523,7 +523,7 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 1
   expected_counts =
     if System.otp_release() >= "25",
@@ -537,7 +537,7 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 1
   expected_counts =
     if System.otp_release() >= "25",
@@ -551,7 +551,7 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 1
   expected_counts =
     if System.otp_release() >= "25",
@@ -565,7 +565,7 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
 
@@ -574,7 +574,7 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "not annotated exit", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
 
@@ -585,7 +585,7 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "not annotated exit", id: @id, data: expected)
 
-  @id __LINE__
+  @id __ENV__.line
   @count 1
   expected_counts = Map.put(expected_counts, @id, @count)
 
@@ -607,7 +607,7 @@ defmodule Dialyzer do
     :return_error,
     :return_error_with_meta
   ]
-  @id __LINE__
+  @id __ENV__.line
   @count 9
   expected_counts = Map.put(expected_counts, @id, @count)
 
