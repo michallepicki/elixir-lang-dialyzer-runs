@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install erlang
         run: |
@@ -39,7 +39,7 @@ jobs:
           rm erlang.tar.gz
 
       - name: Get elixir source code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: ${{ github.event.inputs.repository || 'elixir-lang/elixir' }}
           ref: ${{ github.event.inputs.ref || 'main' }}
@@ -52,7 +52,7 @@ jobs:
           cd ../
 
       - name: Handle otp PLT file caching
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: plt-dir/${{ matrix.otp_release }}.plt
           key: v2-OTP-${{ matrix.otp_release }}
@@ -62,7 +62,7 @@ jobs:
 
       - name: Save the report
         if: ${{ always() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.otp_release }}-report
           path: report
