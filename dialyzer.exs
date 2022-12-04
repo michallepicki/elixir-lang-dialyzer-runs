@@ -478,7 +478,7 @@ defmodule Dialyzer do
            {:warn_return_no_exit, {'src/elixir_erl_compiler.erl', location},
             {:no_return, [:only_normal]}}
        )
-       when location in [{78, 21}, {87, 21}],
+       when location in [{85, 21}, {87, 21}],
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id __ENV__.line
@@ -492,20 +492,6 @@ defmodule Dialyzer do
          expected =
            {:warn_return_no_exit, {'src/elixir_erl_compiler.erl', {114, 1}},
             {:no_return, [:only_normal, :handle_file_error, 2]}}
-       ),
-       do: filtered(comment: "not annotated exception", id: @id, data: expected)
-
-  @id __ENV__.line
-  @count 1
-  expected_counts =
-    if System.otp_release() >= "25",
-      do: Map.put(expected_counts, @id, @count),
-      else: Map.put(expected_counts, @id, 0)
-
-  defp filter(
-         expected =
-           {:warn_return_no_exit, {~c"src/elixir_erl_compiler.erl", {85, 21}},
-           {:no_return, [:only_normal]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
