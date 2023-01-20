@@ -566,7 +566,7 @@ defmodule Dialyzer do
 
   defp filter(
          expected =
-           {:warn_return_no_exit, {'lib/kernel/cli.ex', 226},
+           {:warn_return_no_exit, {'lib/kernel/cli.ex', 222},
             {:no_return, [:only_normal, :halt_standalone, 1]}}
        ),
        do: filtered(comment: "not annotated exit", id: @id, data: expected)
@@ -591,10 +591,11 @@ defmodule Dialyzer do
     :error_invalid_kw_identifier,
     :error_too_many_access_syntax,
     :return_error,
-    :return_error_with_meta
+    :return_error_with_meta,
+    :bad_keyword
   ]
   @id __ENV__.line
-  @count 9
+  @count 10
   expected_counts = Map.put(expected_counts, @id, @count)
 
   defp filter(
