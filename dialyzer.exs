@@ -266,7 +266,7 @@ defmodule Dialyzer do
 
   defp filter(
          expected =
-           {:warn_matching, {'lib/iex/helpers.ex', 633},
+           {:warn_matching, {'lib/iex/helpers.ex', 611},
             {:pattern_match,
              [
                'pattern <__key@1, \'nil\'>',
