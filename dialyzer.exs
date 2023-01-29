@@ -236,7 +236,7 @@ defmodule Dialyzer do
 
   defp filter(
          expected =
-           {:warn_matching, {'lib/dynamic_supervisor.ex', 429},
+           {:warn_matching, {'lib/dynamic_supervisor.ex', 431},
             {:pattern_match_cov,
              [
                'variable _other@1',
@@ -446,7 +446,7 @@ defmodule Dialyzer do
 
   defp filter(
          expected =
-           {:warn_return_no_exit, {'lib/config/provider.ex', 403},
+           {:warn_return_no_exit, {'lib/config/provider.ex', 411},
             {:no_return, [:only_normal, :bad_path_abort, 2]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
