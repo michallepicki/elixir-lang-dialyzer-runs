@@ -556,7 +556,7 @@ defmodule Dialyzer do
   expected_counts = Map.put(expected_counts, @id, @count)
 
   defp filter(
-         expected = {:warn_return_no_exit, {'lib/iex/cli.ex', 171}, {:no_return, [:only_normal]}}
+         expected = {:warn_return_no_exit, {'lib/iex/cli.ex', 161}, {:no_return, [:only_normal]}}
        ),
        do: filtered(comment: "not annotated exit", id: @id, data: expected)
 
@@ -566,7 +566,7 @@ defmodule Dialyzer do
 
   defp filter(
          expected =
-           {:warn_return_no_exit, {'lib/kernel/cli.ex', 222},
+           {:warn_return_no_exit, {'lib/kernel/cli.ex', 369},
             {:no_return, [:only_normal, :halt_standalone, 1]}}
        ),
        do: filtered(comment: "not annotated exit", id: @id, data: expected)
