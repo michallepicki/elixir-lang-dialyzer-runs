@@ -266,7 +266,7 @@ defmodule Dialyzer do
 
   defp filter(
          expected =
-           {:warn_matching, {'lib/iex/helpers.ex', 611},
+           {:warn_matching, {'lib/iex/helpers.ex', 614},
             {:pattern_match,
              [
                'pattern <__key@1, \'nil\'>',
@@ -334,7 +334,7 @@ defmodule Dialyzer do
            {:warn_matching, {'lib/kernel.ex', line},
             {:pattern_match, ['pattern \'false\'', '\'true\'']}}
        )
-       when line in [1992, 3501, 3894, 3964, 4351],
+       when line in [2063, 3572, 3965, 4035, 4422],
        do: filtered(comment: "inlined bootstrap check stuff", id: @id, data: expected)
 
   @id __ENV__.line
@@ -356,7 +356,7 @@ defmodule Dialyzer do
 
   defp filter(
          expected =
-           {:warn_return_no_exit, {'lib/mix/tasks/test.ex', 590},
+           {:warn_return_no_exit, {'lib/mix/tasks/test.ex', 608},
             {:no_return, [:only_normal, :raise_with_shell, 2]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
