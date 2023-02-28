@@ -155,7 +155,7 @@ defmodule Dialyzer do
   # may be resolved in https://github.com/elixir-lang/elixir/issues/9465
   defp filter(
          expected =
-           {:warn_failing_call, {'lib/logger.ex', 824},
+           {:warn_failing_call, {'lib/logger.ex', 825},
             {:call, [Logger, :__do_log__, _, [3], :only_sig, _, _, {false, :none}]}}
        ),
        do:
@@ -266,7 +266,7 @@ defmodule Dialyzer do
 
   defp filter(
          expected =
-           {:warn_matching, {'lib/iex/helpers.ex', 614},
+           {:warn_matching, {'lib/iex/helpers.ex', 646},
             {:pattern_match,
              [
                'pattern <__key@1, \'nil\'>',
