@@ -147,8 +147,7 @@ defmodule Dialyzer do
   defp filter_results([warning | rest], acc), do: filter_results(rest, [filter(warning) | acc])
 
   @id __ENV__.line
-  @count 1
-  expected_counts = Map.put(expected_counts, @id, @count)
+  expected_counts = Map.put(expected_counts, @id, 1)
   # discussed in https://github.com/elixir-lang/elixir/issues/10279
   # and https://github.com/elixir-lang/elixir/pull/10280
   # mostly fixed in https://github.com/elixir-lang/elixir/pull/10287
@@ -167,8 +166,7 @@ defmodule Dialyzer do
          )
 
   @id __ENV__.line
-  @count 1
-  expected_counts = Map.put(expected_counts, @id, @count)
+  expected_counts = Map.put(expected_counts, @id, 1)
 
   # discussed in https://github.com/elixir-lang/elixir/pull/9979#discussion_r416206411
   defp filter(
@@ -179,8 +177,7 @@ defmodule Dialyzer do
        do: filtered(comment: "return type not documented in erlang", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 1
-  expected_counts = Map.put(expected_counts, @id, @count)
+  expected_counts = Map.put(expected_counts, @id, 1)
   # discussed in https://github.com/elixir-lang/elixir/issues/11092
   defp filter(
          expected =
@@ -194,8 +191,7 @@ defmodule Dialyzer do
        do: filtered(comment: "slightly dead code", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 1
-  expected_counts = Map.put(expected_counts, @id, @count)
+  expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
          expected =
@@ -214,9 +210,22 @@ defmodule Dialyzer do
            data: expected
          )
 
+
   @id __ENV__.line
-  @count 2
-  expected_counts = Map.put(expected_counts, @id, @count)
+  expected_counts =
+    if System.otp_release() < "26",
+      do: Map.put(expected_counts, @id, 1),
+      else: Map.put(expected_counts, @id, 0)
+
+  defp filter(
+         expected =
+           {:warn_unknown, {~c"src/elixir.erl", _}, {:unknown_function, {:prim_tty, :isatty, 1}}}
+       ),
+       do: filtered(comment: "function used only conditionally on otp 26+", id: @id, data: expected)
+
+
+  @id __ENV__.line
+  expected_counts = Map.put(expected_counts, @id, 2)
 
   defp filter(
          expected =
@@ -231,8 +240,7 @@ defmodule Dialyzer do
          )
 
   @id __ENV__.line
-  @count 1
-  expected_counts = Map.put(expected_counts, @id, @count)
+  expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
          expected =
@@ -246,12 +254,11 @@ defmodule Dialyzer do
        do: filtered(comment: "overly defensive code", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 1
-  expected_counts = Map.put(expected_counts, @id, @count)
+  expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
          expected =
-           {:warn_matching, {'lib/mix/utils.ex', 771},
+           {:warn_matching, {'lib/mix/utils.ex', 790},
             {:pattern_match,
              [
                'pattern \'nil\'',
@@ -261,8 +268,7 @@ defmodule Dialyzer do
        do: filtered(comment: "overly defensive code", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 1
-  expected_counts = Map.put(expected_counts, @id, @count)
+  expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
          expected =
@@ -276,8 +282,7 @@ defmodule Dialyzer do
        do: filtered(comment: "overly_defensive code", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 22
-  expected_counts = Map.put(expected_counts, @id, @count)
+  expected_counts = Map.put(expected_counts, @id, 22)
 
   defp filter(expected = {:warn_unknown, {file, 1}, {:unknown_function, {module, :__impl__, 1}}})
        when module in [
@@ -307,8 +312,7 @@ defmodule Dialyzer do
        do: filtered(comment: "some protocol consolidation stuff", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 6
-  expected_counts = Map.put(expected_counts, @id, @count)
+  expected_counts = Map.put(expected_counts, @id, 6)
 
   defp filter(
          expected =
@@ -326,8 +330,7 @@ defmodule Dialyzer do
        do: filtered(comment: "some protocol consolidation stuff", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 5
-  expected_counts = Map.put(expected_counts, @id, @count)
+  expected_counts = Map.put(expected_counts, @id, 5)
 
   defp filter(
          expected =
@@ -338,8 +341,7 @@ defmodule Dialyzer do
        do: filtered(comment: "inlined bootstrap check stuff", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 2
-  expected_counts = Map.put(expected_counts, @id, @count)
+  expected_counts = Map.put(expected_counts, @id, 2)
 
   defp filter(expected = {:warn_not_called, {'lib/system.ex', _}, {:unused_fun, [function, 1]}})
        when function in [:read_stripped, :strip],
@@ -351,8 +353,7 @@ defmodule Dialyzer do
          )
 
   @id __ENV__.line
-  @count 1
-  expected_counts = Map.put(expected_counts, @id, @count)
+  expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
          expected =
@@ -362,8 +363,7 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 1
-  expected_counts = Map.put(expected_counts, @id, @count)
+  expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
          expected =
@@ -373,8 +373,7 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 1
-  expected_counts = Map.put(expected_counts, @id, @count)
+  expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
          expected =
@@ -384,8 +383,7 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 1
-  expected_counts = Map.put(expected_counts, @id, @count)
+  expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
          expected =
@@ -395,8 +393,7 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 1
-  expected_counts = Map.put(expected_counts, @id, @count)
+  expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
          expected =
@@ -405,8 +402,7 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 1
-  expected_counts = Map.put(expected_counts, @id, @count)
+  expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
          expected =
@@ -416,8 +412,7 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 1
-  expected_counts = Map.put(expected_counts, @id, @count)
+  expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
          expected =
@@ -427,8 +422,7 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 1
-  expected_counts = Map.put(expected_counts, @id, @count)
+  expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
          expected =
@@ -438,10 +432,9 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 1
   expected_counts =
     if System.otp_release() >= "25",
-      do: Map.put(expected_counts, @id, @count),
+      do: Map.put(expected_counts, @id, 1),
       else: Map.put(expected_counts, @id, 0)
 
   defp filter(
@@ -452,10 +445,9 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 4
   expected_counts =
     if System.otp_release() >= "25",
-      do: Map.put(expected_counts, @id, @count),
+      do: Map.put(expected_counts, @id, 4),
       else: Map.put(expected_counts, @id, 0)
 
   defp filter(
@@ -467,10 +459,9 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 2
   expected_counts =
     if System.otp_release() >= "25",
-      do: Map.put(expected_counts, @id, @count),
+      do: Map.put(expected_counts, @id, 2),
       else: Map.put(expected_counts, @id, 0)
 
   defp filter(
@@ -482,10 +473,9 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 1
   expected_counts =
     if System.otp_release() >= "25",
-      do: Map.put(expected_counts, @id, @count),
+      do: Map.put(expected_counts, @id, 1),
       else: Map.put(expected_counts, @id, 0)
 
   defp filter(
@@ -496,10 +486,9 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 1
   expected_counts =
     if System.otp_release() >= "25",
-      do: Map.put(expected_counts, @id, @count),
+      do: Map.put(expected_counts, @id, 1),
       else: Map.put(expected_counts, @id, 0)
 
   defp filter(
@@ -510,10 +499,9 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 1
   expected_counts =
     if System.otp_release() >= "25",
-      do: Map.put(expected_counts, @id, @count),
+      do: Map.put(expected_counts, @id, 1),
       else: Map.put(expected_counts, @id, 0)
 
   defp filter(
@@ -524,10 +512,9 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 1
   expected_counts =
     if System.otp_release() >= "25",
-      do: Map.put(expected_counts, @id, @count),
+      do: Map.put(expected_counts, @id, 1),
       else: Map.put(expected_counts, @id, 0)
 
   defp filter(
@@ -538,10 +525,9 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 1
   expected_counts =
     if System.otp_release() >= "25",
-      do: Map.put(expected_counts, @id, @count),
+      do: Map.put(expected_counts, @id, 1),
       else: Map.put(expected_counts, @id, 0)
 
   defp filter(
@@ -552,8 +538,7 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exception", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 1
-  expected_counts = Map.put(expected_counts, @id, @count)
+  expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
          expected = {:warn_return_no_exit, {'lib/iex/cli.ex', 161}, {:no_return, [:only_normal]}}
@@ -561,8 +546,7 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exit", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 1
-  expected_counts = Map.put(expected_counts, @id, @count)
+  expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
          expected =
@@ -572,8 +556,7 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exit", id: @id, data: expected)
 
   @id __ENV__.line
-  @count 1
-  expected_counts = Map.put(expected_counts, @id, @count)
+  expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
          expected =
@@ -595,8 +578,7 @@ defmodule Dialyzer do
     :bad_keyword
   ]
   @id __ENV__.line
-  @count 10
-  expected_counts = Map.put(expected_counts, @id, @count)
+  expected_counts = Map.put(expected_counts, @id, 10)
 
   defp filter(
          expected =
