@@ -24,7 +24,7 @@ jobs:
       matrix:
           otp_release: ['24.3.4.10', '25.3']
       fail-fast: false
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -32,7 +32,7 @@ jobs:
       - name: Install erlang
         run: |
           echo "`pwd`/erlang/bin" >> $GITHUB_PATH
-          curl -Lo erlang.tar.gz https://repo.hex.pm/builds/otp/ubuntu-20.04/OTP-${{ matrix.otp_release }}.tar.gz
+          curl -Lo erlang.tar.gz https://repo.hex.pm/builds/otp/ubuntu-22.04/OTP-${{ matrix.otp_release }}.tar.gz
           mkdir erlang
           tar zxf erlang.tar.gz -C erlang --strip-components=1
           erlang/Install -minimal  `pwd`/erlang
@@ -55,7 +55,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: plt-dir/${{ matrix.otp_release }}.plt
-          key: v2-OTP-${{ matrix.otp_release }}
+          key: v3-OTP-${{ matrix.otp_release }}
 
       - name: Check Elixir
         run: elixir/bin/elixir dialyzer.exs
