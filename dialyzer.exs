@@ -226,7 +226,7 @@ defmodule Dialyzer do
 
   @id __ENV__.line
   expected_counts =
-    if System.otp_release() > "26",
+    if System.otp_release() >= "26",
       do: Map.put(expected_counts, @id, 1),
       else: Map.put(expected_counts, @id, 0)
 
