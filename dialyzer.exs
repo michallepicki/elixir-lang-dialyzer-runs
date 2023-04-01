@@ -271,7 +271,7 @@ defmodule Dialyzer do
 
   defp filter(
          expected =
-           {:warn_matching, {'lib/mix/utils.ex', 790},
+           {:warn_matching, {'lib/mix/utils.ex', 795},
             {:pattern_match,
              [
                'pattern \'nil\'',
@@ -356,7 +356,7 @@ defmodule Dialyzer do
            {:warn_matching, {'lib/kernel.ex', line},
             {:pattern_match, ['pattern \'false\'', '\'true\'']}}
        )
-       when line in [2063, 3574, 3967, 4037, 4424],
+       when line in [2062, 3573, 3966, 4036, 4423],
        do: filtered(comment: "inlined bootstrap check stuff", id: @id, data: expected)
 
   @id __ENV__.line
