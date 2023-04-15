@@ -227,7 +227,7 @@ defmodule Dialyzer do
   expected_counts =
     if System.otp_release() < "26",
       do: Map.put(expected_counts, @id, 1),
-      else: Map.put(expected_cocunts, @id, 0)
+      else: Map.put(expected_counts, @id, 0)
 
   defp filter(
          dialyzer_warning =
