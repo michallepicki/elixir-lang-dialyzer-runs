@@ -469,7 +469,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {'lib/config/provider.ex', 411},
+           {:warn_return_no_exit, {'lib/config/provider.ex', 422},
             {:no_return, [:only_normal, :bad_path_abort, 2]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
