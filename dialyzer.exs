@@ -268,7 +268,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {'lib/dynamic_supervisor.ex', 431},
+           {:warn_matching, {'lib/dynamic_supervisor.ex', 453},
             {:pattern_match_cov,
              [
                'variable _other@1',
