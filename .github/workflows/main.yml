@@ -32,7 +32,7 @@ jobs:
       - name: Install erlang
         run: |
           echo "`pwd`/erlang/bin" >> $GITHUB_PATH
-          curl -Lo erlang.tar.gz https://repo.hex.pm/builds/otp/ubuntu-22.04/OTP-${{ matrix.otp_release }}.tar.gz
+          curl -Lo erlang.tar.gz https://builds.hex.pm/builds/otp/ubuntu-22.04/OTP-${{ matrix.otp_release }}.tar.gz
           mkdir erlang
           tar zxf erlang.tar.gz -C erlang --strip-components=1
           erlang/Install -minimal  `pwd`/erlang
