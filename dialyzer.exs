@@ -21,7 +21,7 @@ defmodule Dialyzer do
     plt_filename = 'plt-dir/' ++ otp_version ++ '.plt'
 
     dirs =
-      :dialyzer_cl_parse.get_lib_dir([
+      [
         'erts',
         'kernel',
         'stdlib',
@@ -39,7 +39,9 @@ defmodule Dialyzer do
         'public_key',
         'asn1',
         'sasl'
-      ])
+      ] |> Enum.map(fn app ->
+        :filename.join(:code.lib_dir(app), 'ebin')
+      end)
 
     if !File.exists?(plt_filename) do
       :dialyzer.run(
@@ -222,6 +224,20 @@ defmodule Dialyzer do
            {:warn_unknown, {~c"src/elixir.erl", _}, {:unknown_function, {:prim_tty, :isatty, 1}}}
        ),
        do: filtered(comment: "function used only conditionally on otp 26+", id: @id, data: dialyzer_warning)
+
+
+  @id __ENV__.line
+  expected_counts =
+    if System.otp_release() < "26",
+      do: Map.put(expected_counts, @id, 1),
+      else: Map.put(expected_counts, @id, 0)
+
+  defp filter(
+         dialyzer_warning =
+           {:warn_callgraph, {~c"src/elixir.erl", _}, {:call_to_missing, [:code, :add_pathsa, 2]}}
+       ),
+       do: filtered(comment: "function used only conditionally on otp 26+", id: @id, data: dialyzer_warning)
+
 
   @id __ENV__.line
   expected_counts =
@@ -523,7 +539,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {~c"src/elixir_erl.erl", {583, 1}},
+           {:warn_return_no_exit, {~c"src/elixir_erl.erl", {584, 1}},
            {:no_return, [:only_normal, :file_error, 2]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
