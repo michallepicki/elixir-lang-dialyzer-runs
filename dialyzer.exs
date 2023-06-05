@@ -284,7 +284,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {'lib/dynamic_supervisor.ex', 453},
+           {:warn_matching, {'lib/dynamic_supervisor.ex', 459},
             {:pattern_match_cov,
              [
                'variable _other@1',
@@ -587,7 +587,7 @@ defmodule Dialyzer do
   expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
-         dialyzer_warning = {:warn_return_no_exit, {'lib/iex/cli.ex', 161}, {:no_return, [:only_normal]}}
+         dialyzer_warning = {:warn_return_no_exit, {'lib/iex/cli.ex', 110}, {:no_return, [:only_normal]}}
        ),
        do: filtered(comment: "not annotated exit", id: @id, data: dialyzer_warning)
 
