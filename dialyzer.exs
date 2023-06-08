@@ -322,7 +322,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {'lib/mix/utils.ex', 795},
+           {:warn_matching, {'lib/mix/utils.ex', 782},
             {:pattern_match,
              [
                'pattern \'nil\'',
@@ -563,7 +563,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {~c"src/elixir_erl.erl", {584, 1}},
+           {:warn_return_no_exit, {~c"src/elixir_erl.erl", _},
            {:no_return, [:only_normal, :file_error, 2]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
