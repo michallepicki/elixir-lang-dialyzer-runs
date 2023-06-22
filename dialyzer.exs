@@ -150,6 +150,21 @@ defmodule Dialyzer do
 
   @id __ENV__.line
   expected_counts = Map.put(expected_counts, @id, 1)
+  defp filter(
+         dialyzer_warning =
+           {:warn_matching, {~c"src/elixir_errors.erl", {128, 5}},
+             {:pattern_match, [~c"pattern 'warning'", ~c"'error'"]}}
+       ),
+       do:
+         filtered(
+           comment:
+             "code temporarily dead until https://github.com/elixir-lang/elixir/pull/12683 gets merged",
+           id: @id,
+           data: dialyzer_warning
+         )
+
+  @id __ENV__.line
+  expected_counts = Map.put(expected_counts, @id, 1)
   # discussed in https://github.com/elixir-lang/elixir/issues/10279
   # and https://github.com/elixir-lang/elixir/pull/10280
   # mostly fixed in https://github.com/elixir-lang/elixir/pull/10287
