@@ -150,21 +150,6 @@ defmodule Dialyzer do
 
   @id __ENV__.line
   expected_counts = Map.put(expected_counts, @id, 1)
-  defp filter(
-         dialyzer_warning =
-           {:warn_matching, {~c"src/elixir_errors.erl", {128, 5}},
-             {:pattern_match, [~c"pattern 'warning'", ~c"'error'"]}}
-       ),
-       do:
-         filtered(
-           comment:
-             "code temporarily dead until https://github.com/elixir-lang/elixir/pull/12683 gets merged",
-           id: @id,
-           data: dialyzer_warning
-         )
-
-  @id __ENV__.line
-  expected_counts = Map.put(expected_counts, @id, 1)
   # discussed in https://github.com/elixir-lang/elixir/issues/10279
   # and https://github.com/elixir-lang/elixir/pull/10280
   # mostly fixed in https://github.com/elixir-lang/elixir/pull/10287
@@ -274,7 +259,7 @@ defmodule Dialyzer do
 
   defp filter(
           dialyzer_warning =
-            {:warn_callgraph, {~c"src/elixir.erl", {212, 10}}, {:call_to_missing, [:shell, :whereis, 0]}}
+            {:warn_callgraph, {~c"src/elixir.erl", _}, {:call_to_missing, [:shell, :whereis, 0]}}
         ),
         do: filtered(comment: "function used only conditionally on otp 26+", id: @id, data: dialyzer_warning)
 
@@ -286,7 +271,7 @@ defmodule Dialyzer do
 
   defp filter(
             dialyzer_warning =
-              {:warn_callgraph, {~c"lib/iex.ex", 923}, {:call_to_missing, [:shell, :start_interactive, 1]}}
+              {:warn_callgraph, {~c"lib/iex.ex", _}, {:call_to_missing, [:shell, :start_interactive, 1]}}
         ),
         do: filtered(comment: "function used only conditionally on otp 26+", id: @id, data: dialyzer_warning)
 
@@ -626,7 +611,7 @@ defmodule Dialyzer do
   expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
-         dialyzer_warning = {:warn_return_no_exit, {'lib/iex/cli.ex', 110}, {:no_return, [:only_normal]}}
+         dialyzer_warning = {:warn_return_no_exit, {'lib/iex/cli.ex', 106}, {:no_return, [:only_normal]}}
        ),
        do: filtered(comment: "not annotated exit", id: @id, data: dialyzer_warning)
 
