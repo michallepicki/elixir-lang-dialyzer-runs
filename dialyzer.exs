@@ -173,7 +173,7 @@ defmodule Dialyzer do
   # discussed in https://github.com/elixir-lang/elixir/pull/9979#discussion_r416206411
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {'src/elixir_erl_compiler.erl', {59, _}},
+           {:warn_matching, {'src/elixir_erl_compiler.erl', {76, _}},
             {:pattern_match, _lots_of_details}}
        ),
        do: filtered(comment: "return type not documented in erlang", id: @id, data: dialyzer_warning)
