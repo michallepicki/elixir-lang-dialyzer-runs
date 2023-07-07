@@ -539,7 +539,7 @@ defmodule Dialyzer do
            {:warn_return_no_exit, {'src/elixir_erl_compiler.erl', location},
             {:no_return, [:only_normal]}}
        )
-       when location in [{85, 21}, {87, 21}],
+       when location in [{102, 21}, {104, 21}],
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
@@ -550,7 +550,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {'src/elixir_erl_compiler.erl', {114, 1}},
+           {:warn_return_no_exit, {'src/elixir_erl_compiler.erl', {131, 1}},
             {:no_return, [:only_normal, :handle_file_error, 2]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
