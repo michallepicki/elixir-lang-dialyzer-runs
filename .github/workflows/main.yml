@@ -22,7 +22,7 @@ jobs:
   dialyzer:
     strategy:
       matrix:
-          otp_release: ['OTP-24.3.4.13', 'OTP-25.3.2.3', 'maint']
+          otp_release: ['OTP-24.3.4.13', 'OTP-25.3.2.3']
       fail-fast: false
     runs-on: ubuntu-22.04
     steps:
@@ -52,7 +52,6 @@ jobs:
           cd ../
 
       - name: Handle otp PLT file caching
-        if: ${{ matrix.otp_release != 'maint' }}
         uses: actions/cache@v3
         with:
           path: plt-dir/${{ matrix.otp_release }}.plt
