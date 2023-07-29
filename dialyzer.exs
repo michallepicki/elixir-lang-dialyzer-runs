@@ -259,7 +259,7 @@ defmodule Dialyzer do
 
   defp filter(
           dialyzer_warning =
-            {:warn_callgraph, {~c"src/elixir.erl", _}, {:call_to_missing, [:shell, :whereis, 0]}}
+            {:warn_callgraph, {~c"src/iex.erl", _}, {:call_to_missing, [:shell, :whereis, 0]}}
         ),
         do: filtered(comment: "function used only conditionally on otp 26+", id: @id, data: dialyzer_warning)
 
@@ -407,7 +407,7 @@ defmodule Dialyzer do
            {:warn_matching, {'lib/kernel.ex', line},
             {:pattern_match, ['pattern \'false\'', '\'true\'']}}
        )
-       when line in [2062, 3575, 3968, 4038, 4425],
+       when line in [2061, 3574, 3967, 4037, 4425],
        do: filtered(comment: "inlined bootstrap check stuff", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
