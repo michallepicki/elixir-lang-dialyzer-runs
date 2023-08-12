@@ -427,7 +427,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {'lib/mix/tasks/test.ex', 614},
+           {:warn_return_no_exit, {'lib/mix/tasks/test.ex', 615},
             {:no_return, [:only_normal, :raise_with_shell, 2]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
