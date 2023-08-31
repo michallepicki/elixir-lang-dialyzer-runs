@@ -346,60 +346,6 @@ defmodule Dialyzer do
        do: filtered(comment: "overly_defensive code", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
-  expected_counts =
-    if System.otp_release() < "26",
-      do: Map.put(expected_counts, @id, 22),
-      else: Map.put(expected_counts, @id, 0)
-
-  defp filter(dialyzer_warning = {:warn_unknown, {file, 1}, {:unknown_function, {module, :__impl__, 1}}})
-       when module in [
-              Collectable.Atom,
-              Collectable.Float,
-              Collectable.Function,
-              Collectable.Integer,
-              Collectable.PID,
-              Collectable.Port,
-              Collectable.Reference,
-              Collectable.Tuple,
-              Enumerable.Atom,
-              Enumerable.BitString,
-              Enumerable.Float,
-              Enumerable.Integer,
-              Enumerable.PID,
-              Enumerable.Port,
-              Enumerable.Reference,
-              Enumerable.Tuple,
-              List.Chars.Function,
-              List.Chars.Map,
-              List.Chars.PID,
-              List.Chars.Port,
-              List.Chars.Reference,
-              List.Chars.Tuple
-            ] and file in ['lib/collectable.ex', 'lib/enum.ex', 'lib/list/chars.ex'],
-       do: filtered(comment: "some protocol consolidation stuff", id: @id, data: dialyzer_warning)
-
-  @id __ENV__.line
-  expected_counts =
-    if System.otp_release() < "26",
-      do: Map.put(expected_counts, @id, 6),
-      else: Map.put(expected_counts, @id, 0)
-
-  defp filter(
-         dialyzer_warning =
-           {:warn_unknown, {'lib/string/chars.ex', 3},
-            {:unknown_function, {module, :__impl__, 1}}}
-       )
-       when module in [
-              String.Chars.Function,
-              String.Chars.Map,
-              String.Chars.PID,
-              String.Chars.Port,
-              String.Chars.Reference,
-              String.Chars.Tuple
-            ],
-       do: filtered(comment: "some protocol consolidation stuff", id: @id, data: dialyzer_warning)
-
-  @id __ENV__.line
   expected_counts = Map.put(expected_counts, @id, 5)
 
   defp filter(
