@@ -44,6 +44,7 @@ defmodule Dialyzer do
       end)
 
     if !File.exists?(plt_filename) do
+      IO.puts("Preparing #{plt_filename}")
       :dialyzer.run(
         analysis_type: :plt_build,
         output_plt: plt_filename,
