@@ -549,7 +549,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {~c"src/elixir_errors.erl", _}
+           {:warn_return_no_exit, {~c"src/elixir_errors.erl", _},
             {:no_return, [:only_normal, :raise_mismatched_delimiter, 4]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
