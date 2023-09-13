@@ -549,6 +549,19 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
+           {:warn_return_no_exit, {~c"src/elixir_errors.erl", _}
+            {:no_return, [:only_normal, :raise_mismatched_delimiter, 4]}}
+       ),
+       do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
+
+  @id __ENV__.line
+  expected_counts =
+    if System.otp_release() >= "25",
+      do: Map.put(expected_counts, @id, 1),
+      else: Map.put(expected_counts, @id, 0)
+
+  defp filter(
+         dialyzer_warning =
            {:warn_return_no_exit, {'src/elixir_fn.erl', {121, 1}},
             {:no_return, [:only_normal, :invalid_capture, 3]}}
        ),
