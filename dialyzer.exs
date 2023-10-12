@@ -213,6 +213,31 @@ defmodule Dialyzer do
            data: dialyzer_warning
          )
 
+  @id __ENV__.line
+  expected_counts =
+    if System.otp_release() < "25",
+      do: Map.put(expected_counts, @id, 1),
+      else: Map.put(expected_counts, @id, 0)
+
+  defp filter(
+         dialyzer_warning =
+           {:warn_not_called, {~c"src/elixir.erl", _}, {:unused_fun, [:drop_common, 3]}}
+       ),
+       do: filtered(comment: "function used only conditionally on otp 25+", id: @id, data: dialyzer_warning)
+
+
+  @id __ENV__.line
+  expected_counts =
+    if System.otp_release() < "25",
+      do: Map.put(expected_counts, @id, 1),
+      else: Map.put(expected_counts, @id, 0)
+
+  defp filter(
+         dialyzer_warning =
+           {:warn_not_called, {~c"src/elixir.erl", _}, {:unused_fun, [:eval_external_handler, 3]}}
+       ),
+       do: filtered(comment: "function used only conditionally on otp 25+", id: @id, data: dialyzer_warning)
+
 
   @id __ENV__.line
   expected_counts =
