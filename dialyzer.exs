@@ -449,10 +449,7 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
-  expected_counts =
-    if System.otp_release() >= "25",
-      do: Map.put(expected_counts, @id, 1),
-      else: Map.put(expected_counts, @id, 0)
+  expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
          dialyzer_warning =
@@ -462,10 +459,7 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
-  expected_counts =
-    if System.otp_release() >= "25",
-      do: Map.put(expected_counts, @id, 4),
-      else: Map.put(expected_counts, @id, 0)
+  expected_counts = Map.put(expected_counts, @id, 4)
 
   defp filter(
          dialyzer_warning =
@@ -476,10 +470,7 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
-  expected_counts =
-    if System.otp_release() >= "25",
-      do: Map.put(expected_counts, @id, 2),
-      else: Map.put(expected_counts, @id, 0)
+  expected_counts = Map.put(expected_counts, @id, 2)
 
   defp filter(
          dialyzer_warning =
@@ -490,10 +481,7 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
-  expected_counts =
-    if System.otp_release() >= "25",
-      do: Map.put(expected_counts, @id, 1),
-      else: Map.put(expected_counts, @id, 0)
+  expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
          dialyzer_warning =
@@ -503,10 +491,7 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
-  expected_counts =
-    if System.otp_release() >= "25",
-      do: Map.put(expected_counts, @id, 1),
-      else: Map.put(expected_counts, @id, 0)
+  expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
          dialyzer_warning =
@@ -516,10 +501,7 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
-  expected_counts =
-    if System.otp_release() >= "25",
-      do: Map.put(expected_counts, @id, 1),
-      else: Map.put(expected_counts, @id, 0)
+  expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
          dialyzer_warning =
@@ -529,10 +511,7 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
-  expected_counts =
-    if System.otp_release() >= "25",
-      do: Map.put(expected_counts, @id, 1),
-      else: Map.put(expected_counts, @id, 0)
+  expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
          dialyzer_warning =
@@ -542,10 +521,7 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
-  expected_counts =
-    if System.otp_release() >= "25",
-      do: Map.put(expected_counts, @id, 1),
-      else: Map.put(expected_counts, @id, 0)
+  expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
          dialyzer_warning =
@@ -555,10 +531,7 @@ defmodule Dialyzer do
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
-  expected_counts =
-    if System.otp_release() >= "25",
-      do: Map.put(expected_counts, @id, 1),
-      else: Map.put(expected_counts, @id, 0)
+  expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
          dialyzer_warning =
