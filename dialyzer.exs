@@ -10,37 +10,37 @@ defmodule Dialyzer do
       File.read!(
         :filename.join([
           :code.root_dir(),
-          'releases',
+          ~c"releases",
           :erlang.system_info(:otp_release),
-          'OTP_VERSION'
+          ~c"OTP_VERSION"
         ])
       )
       |> String.trim()
       |> String.to_charlist()
 
-    plt_filename = 'plt-dir/' ++ otp_version ++ '.plt'
+    plt_filename = ~c"plt-dir/" ++ otp_version ++ ~c".plt"
 
     dirs =
       [
-        'erts',
-        'kernel',
-        'stdlib',
-        'compiler',
-        'syntax_tools',
-        'parsetools',
-        'tools',
-        'ssl',
-        'inets',
-        'crypto',
-        'runtime_tools',
-        'ftp',
-        'tftp',
-        'mnesia',
-        'public_key',
-        'asn1',
-        'sasl'
+        ~c"erts",
+        ~c"kernel",
+        ~c"stdlib",
+        ~c"compiler",
+        ~c"syntax_tools",
+        ~c"parsetools",
+        ~c"tools",
+        ~c"ssl",
+        ~c"inets",
+        ~c"crypto",
+        ~c"runtime_tools",
+        ~c"ftp",
+        ~c"tftp",
+        ~c"mnesia",
+        ~c"public_key",
+        ~c"asn1",
+        ~c"sasl"
       ] |> Enum.map(fn app ->
-        :filename.join(:code.lib_dir(app), 'ebin')
+        :filename.join(:code.lib_dir(app), ~c"ebin")
       end)
 
     if !File.exists?(plt_filename) do
@@ -60,12 +60,12 @@ defmodule Dialyzer do
           :no_improper_lists
         ],
         files_rec: [
-          'elixir/lib/eex/ebin',
-          'elixir/lib/elixir/ebin',
-          'elixir/lib/ex_unit/ebin',
-          'elixir/lib/iex/ebin',
-          'elixir/lib/logger/ebin',
-          'elixir/lib/mix/ebin'
+          ~c"elixir/lib/eex/ebin",
+          ~c"elixir/lib/elixir/ebin",
+          ~c"elixir/lib/ex_unit/ebin",
+          ~c"elixir/lib/iex/ebin",
+          ~c"elixir/lib/logger/ebin",
+          ~c"elixir/lib/mix/ebin"
         ]
       )
       |> filter_results([])
@@ -157,7 +157,7 @@ defmodule Dialyzer do
   # may be resolved in https://github.com/elixir-lang/elixir/issues/9465
   defp filter(
          dialyzer_warning =
-           {:warn_failing_call, {'lib/logger.ex', 882},
+           {:warn_failing_call, {~c"lib/logger.ex", 882},
             {:call, [Logger, :__do_log__, _, [3], :only_sig, _, _, {false, :none}]}}
        ),
        do:
@@ -174,7 +174,7 @@ defmodule Dialyzer do
   # discussed in https://github.com/elixir-lang/elixir/pull/9979#discussion_r416206411
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {'src/elixir_erl_compiler.erl', {76, _}},
+           {:warn_matching, {~c"src/elixir_erl_compiler.erl", {76, _}},
             {:pattern_match, _lots_of_details}}
        ),
        do: filtered(comment: "return type not documented in erlang", id: @id, data: dialyzer_warning)
@@ -184,7 +184,7 @@ defmodule Dialyzer do
   # discussed in https://github.com/elixir-lang/elixir/issues/11092
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {'lib/calendar/time.ex', 718},
+           {:warn_matching, {~c"lib/calendar/time.ex", 718},
             {:pattern_match,
              [
                'pattern {\'error\', _reason@1}',
@@ -198,7 +198,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {'lib/calendar/date_range.ex', 201},
+           {:warn_matching, {~c"lib/calendar/date_range.ex", 201},
             {:pattern_match_cov,
              [
                'pattern _date_range@1 = \#{\'__struct__\':=\'Elixir.Date.Range\', \'first_in_iso_days\':=_first_days@1, \'last_in_iso_days\':=_last_days@1}',
@@ -294,7 +294,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_unknown, {'lib/mix/hex.ex', lines}, {:unknown_function, {Hex, function, 0}}}
+           {:warn_unknown, {~c"lib/mix/hex.ex", lines}, {:unknown_function, {Hex, function, 0}}}
        )
        when function in [:start, :version] and lines in [41, 60],
        do:
@@ -309,7 +309,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {'lib/dynamic_supervisor.ex', 459},
+           {:warn_matching, {~c"lib/dynamic_supervisor.ex", 459},
             {:pattern_match_cov,
              [
                'variable _other@1',
@@ -323,7 +323,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {'lib/mix/utils.ex', 772},
+           {:warn_matching, {~c"lib/mix/utils.ex", 772},
             {:pattern_match,
              [
                'pattern \'nil\'',
@@ -337,7 +337,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {'lib/iex/helpers.ex', 646},
+           {:warn_matching, {~c"lib/iex/helpers.ex", 646},
             {:pattern_match,
              [
                'pattern <__key@1, \'nil\'>',
@@ -351,8 +351,8 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {'lib/kernel.ex', line},
-            {:pattern_match, ['pattern \'false\'', '\'true\'']}}
+           {:warn_matching, {~c"lib/kernel.ex", line},
+            {:pattern_match, [~c"pattern \'false\'", ~c"\'true\'"]}}
        )
        when line in [2060, 3560, 3953, 4050, 4437],
        do: filtered(comment: "inlined bootstrap check stuff", id: @id, data: dialyzer_warning)
@@ -360,7 +360,7 @@ defmodule Dialyzer do
   @id __ENV__.line
   expected_counts = Map.put(expected_counts, @id, 2)
 
-  defp filter(dialyzer_warning = {:warn_not_called, {'lib/system.ex', _}, {:unused_fun, [function, 1]}})
+  defp filter(dialyzer_warning = {:warn_not_called, {~c"lib/system.ex", _}, {:unused_fun, [function, 1]}})
        when function in [:read_stripped, :strip],
        do:
          filtered(
@@ -374,7 +374,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {'lib/mix/tasks/test.ex', 615},
+           {:warn_return_no_exit, {~c"lib/mix/tasks/test.ex", 615},
             {:no_return, [:only_normal, :raise_with_shell, 2]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
@@ -384,7 +384,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {'lib/mix/release.ex', _},
+           {:warn_return_no_exit, {~c"lib/mix/release.ex", _},
             {:no_return, [:only_normal, :bad_umbrella!, 0]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
@@ -394,7 +394,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {'lib/mix/dep/loader.ex', 254},
+           {:warn_return_no_exit, {~c"lib/mix/dep/loader.ex", 254},
             {:no_return, [:only_normal, :invalid_dep_format, 1]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
@@ -404,7 +404,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {'lib/mix/scm/path.ex', 67},
+           {:warn_return_no_exit, {~c"lib/mix/scm/path.ex", 67},
             {:no_return, [:only_normal, :checkout, 1]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
@@ -414,7 +414,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {'lib/iex.ex', _}, {:no_return, [:only_normal, :__break__!, 2]}}
+           {:warn_return_no_exit, {~c"lib/iex.ex", _}, {:no_return, [:only_normal, :__break__!, 2]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
 
@@ -423,7 +423,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {'src/elixir_quote.erl', _},
+           {:warn_return_no_exit, {~c"src/elixir_quote.erl", _},
             {:no_return, [:only_normal, :bad_escape, 1]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
@@ -433,7 +433,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {'lib/mix/dep/converger.ex', 55},
+           {:warn_return_no_exit, {~c"lib/mix/dep/converger.ex", 55},
             {:no_return, [:only_normal, :cycle_found, 1]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
@@ -443,7 +443,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {'lib/mix/tasks/iex.ex', 9},
+           {:warn_return_no_exit, {~c"lib/mix/tasks/iex.ex", 9},
             {:no_return, [:only_normal, :run, 1]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
@@ -453,7 +453,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {'lib/config/provider.ex', 422},
+           {:warn_return_no_exit, {~c"lib/config/provider.ex", 422},
             {:no_return, [:only_normal, :bad_path_abort, 2]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
@@ -463,7 +463,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {'src/elixir_clauses.erl', location},
+           {:warn_return_no_exit, {~c"src/elixir_clauses.erl", location},
             {:no_return, [:only_normal]}}
        )
        when location in [{95, 43}, {114, 43}, {133, 16}, {220, 16}],
@@ -474,7 +474,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {'src/elixir_erl_compiler.erl', location},
+           {:warn_return_no_exit, {~c"src/elixir_erl_compiler.erl", location},
             {:no_return, [:only_normal]}}
        )
        when location in [{102, 21}, {104, 21}],
@@ -485,7 +485,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {'src/elixir_erl_compiler.erl', {131, 1}},
+           {:warn_return_no_exit, {~c"src/elixir_erl_compiler.erl", {131, 1}},
             {:no_return, [:only_normal, :handle_file_error, 2]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
@@ -505,7 +505,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {'src/elixir_errors.erl', _},
+           {:warn_return_no_exit, {~c"src/elixir_errors.erl", _},
             {:no_return, [:only_normal, :raise_reserved, 4]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
@@ -515,7 +515,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {'src/elixir_errors.erl', _},
+           {:warn_return_no_exit, {~c"src/elixir_errors.erl", _},
             {:no_return, [:only_normal, :raise_snippet, 5]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
@@ -535,7 +535,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {'src/elixir_fn.erl', {121, 1}},
+           {:warn_return_no_exit, {~c"src/elixir_fn.erl", {121, 1}},
             {:no_return, [:only_normal, :invalid_capture, 3]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
@@ -544,7 +544,7 @@ defmodule Dialyzer do
   expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
-         dialyzer_warning = {:warn_return_no_exit, {'lib/iex/cli.ex', 105}, {:no_return, [:only_normal]}}
+         dialyzer_warning = {:warn_return_no_exit, {~c"lib/iex/cli.ex", 105}, {:no_return, [:only_normal]}}
        ),
        do: filtered(comment: "not annotated exit", id: @id, data: dialyzer_warning)
 
@@ -553,7 +553,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {'lib/kernel/cli.ex', 368},
+           {:warn_return_no_exit, {~c"lib/kernel/cli.ex", 368},
             {:no_return, [:only_normal, :halt_standalone, 1]}}
        ),
        do: filtered(comment: "not annotated exit", id: @id, data: dialyzer_warning)
@@ -563,7 +563,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {'lib/gen_event.ex', 460},
+           {:warn_return_no_exit, {~c"lib/gen_event.ex", 460},
             {:no_return, [:only_normal, :system_terminate, 4]}}
        ),
        do: filtered(comment: "not annotated exit", id: @id, data: dialyzer_warning)
@@ -585,7 +585,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {'lib/elixir/src/elixir_parser.yrl', _},
+           {:warn_return_no_exit, {~c"lib/elixir/src/elixir_parser.yrl", _},
             {:no_return, [:only_normal, fun_name, _arity]}}
        )
        when fun_name in @yecc_yrl_functions,
