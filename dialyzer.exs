@@ -530,6 +530,18 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
 
+
+  @id __ENV__.line
+  expected_counts = Map.put(expected_counts, @id, 1)
+
+  defp filter(
+         dialyzer_warning =
+           {:warn_return_no_exit, {~c"src/elixir_errors.erl", _},
+            {:no_return, [:only_normal, :raise_token_missing, 4]}}
+       ),
+       do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
+
+
   @id __ENV__.line
   expected_counts = Map.put(expected_counts, @id, 1)
 
