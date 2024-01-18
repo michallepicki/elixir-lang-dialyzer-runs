@@ -337,7 +337,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {~c"lib/iex/helpers.ex", 646},
+           {:warn_matching, {~c"lib/iex/helpers.ex", 658},
             {:pattern_match,
              [
                'pattern <__key@1, \'nil\'>',
