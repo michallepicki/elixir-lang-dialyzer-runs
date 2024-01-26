@@ -155,7 +155,7 @@ defmodule Dialyzer do
   defp filter(
          dialyzer_warning =
            {:warn_opaque, {~c"lib/module/types/descr.ex", 266},
-             {:call_without_opaque, [:sets, :is_subset, _, _]]}}
+             {:call_without_opaque, [:sets, :is_subset, _, _]}}
        ),
        do:
          filtered(
