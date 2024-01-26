@@ -151,6 +151,22 @@ defmodule Dialyzer do
 
   @id __ENV__.line
   expected_counts = Map.put(expected_counts, @id, 1)
+  # also see https://github.com/erlang/otp/issues/5503
+  defp filter(
+         dialyzer_warning =
+           {:warn_opaque, {~c"lib/module/types/descr.ex", 266},
+             {:call_without_opaque, [:sets, :is_subset, _, _]]}}
+       ),
+       do:
+         filtered(
+           comment:
+             "opaque value baked in as module attribute",
+           id: @id,
+           data: dialyzer_warning
+         )
+
+  @id __ENV__.line
+  expected_counts = Map.put(expected_counts, @id, 1)
   # discussed in https://github.com/elixir-lang/elixir/issues/10279
   # and https://github.com/elixir-lang/elixir/pull/10280
   # mostly fixed in https://github.com/elixir-lang/elixir/pull/10287
