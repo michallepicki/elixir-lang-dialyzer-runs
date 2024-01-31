@@ -482,7 +482,7 @@ defmodule Dialyzer do
            {:warn_return_no_exit, {~c"src/elixir_clauses.erl", location},
             {:no_return, [:only_normal]}}
        )
-       when location in [{95, 43}, {114, 43}, {133, 16}, {220, 16}],
+       when location in [{95, 43}, {114, 43}, {133, 16}, {225, 16}],
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
