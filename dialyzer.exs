@@ -237,7 +237,7 @@ defmodule Dialyzer do
 
 
   @id __ENV__.line
-  expected_counts = Map.put(expected_counts, @id, 1)
+  expected_counts = Map.put(expected_counts, @id, 2)
 
   defp filter(
          dialyzer_warning =
