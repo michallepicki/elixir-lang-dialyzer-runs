@@ -203,8 +203,8 @@ defmodule Dialyzer do
            {:warn_matching, {~c"lib/calendar/time.ex", 729},
             {:pattern_match,
              [
-               'pattern {\'error\', _reason@1}',
-               '{\'ok\',\#{\'__struct__\':=\'Elixir.Time\', \'calendar\':=atom(), \'hour\':=non_neg_integer(), \'microsecond\':={non_neg_integer(),non_neg_integer()}, \'minute\':=non_neg_integer(), \'second\':=non_neg_integer()}}'
+               ~c"pattern {'error', _reason@1}",
+               ~c"{'ok',\#{'__struct__':='Elixir.Time', 'calendar':=atom(), 'hour':=non_neg_integer(), 'microsecond':={non_neg_integer(),non_neg_integer()}, 'minute':=non_neg_integer(), 'second':=non_neg_integer()}}"
              ]}}
        ),
        do: filtered(comment: "slightly dead code", id: @id, data: dialyzer_warning)
@@ -274,8 +274,8 @@ defmodule Dialyzer do
            {:warn_matching, {~c"lib/calendar/date_range.ex", 201},
             {:pattern_match_cov,
              [
-               'pattern _date_range@1 = \#{\'__struct__\':=\'Elixir.Date.Range\', \'first_in_iso_days\':=_first_days@1, \'last_in_iso_days\':=_last_days@1}',
-               '\#{\'__struct__\':=\'Elixir.Date.Range\', \'first\':=\#{\'calendar\':=_, _=>_}, \'first_in_iso_days\':=_, \'last_in_iso_days\':=_, \'step\':=_, _=>_}'
+               ~c"pattern _date_range@1 = \#{'__struct__':='Elixir.Date.Range', 'first_in_iso_days':=_first_days@1, 'last_in_iso_days':=_last_days@1}",
+               ~c"\#{'__struct__':='Elixir.Date.Range', 'first':=\#{'calendar':=_, _=>_}, 'first_in_iso_days':=_, 'last_in_iso_days':=_, 'step':=_, _=>_}"
              ]}}
        ),
        do:
@@ -385,8 +385,8 @@ defmodule Dialyzer do
            {:warn_matching, {~c"lib/dynamic_supervisor.ex", 459},
             {:pattern_match_cov,
              [
-               'variable _other@1',
-               '{_,_,_,_,_,_} | \#{\'id\':=_, \'start\':={atom(),atom(),[any()]}, \'modules\'=>\'dynamic\' | [atom()], \'restart\'=>\'permanent\' | \'temporary\' | \'transient\', \'shutdown\'=>\'brutal_kill\' | \'infinity\' | non_neg_integer(), \'significant\'=>boolean(), \'type\'=>\'supervisor\' | \'worker\'}'
+               ~c"variable _other@1",
+               ~c"{_,_,_,_,_,_} | \#{'id':=_, 'start':={atom(),atom(),[any()]}, 'modules'=>'dynamic' | [atom()], 'restart'=>'permanent' | 'temporary' | 'transient', 'shutdown'=>'brutal_kill' | 'infinity' | non_neg_integer(), 'significant'=>boolean(), 'type'=>'supervisor' | 'worker'}"
              ]}}
        ),
        do: filtered(comment: "overly defensive code", id: @id, data: dialyzer_warning)
@@ -399,8 +399,8 @@ defmodule Dialyzer do
            {:warn_matching, {~c"lib/mix/utils.ex", 772},
             {:pattern_match,
              [
-               'pattern \'nil\'',
-               '\#{\'__struct__\':=\'Elixir.URI\', \'authority\':=\'Elixir.URI\':authority(), \'fragment\':=\'nil\' | binary(), \'host\':=\'nil\' | binary(), \'path\':=\'nil\' | binary(), \'port\':=\'nil\' | char(), \'query\':=\'nil\' | binary(), \'scheme\':=\'nil\' | binary(), \'userinfo\':=\'nil\' | binary()}'
+               ~c"pattern 'nil'",
+               ~c"\#{'__struct__':='Elixir.URI', 'authority':='Elixir.URI':authority(), 'fragment':='nil' | binary(), 'host':='nil' | binary(), 'path':='nil' | binary(), 'port':='nil' | char(), 'query':='nil' | binary(), 'scheme':='nil' | binary(), 'userinfo':='nil' | binary()}"
              ]}}
        ),
        do: filtered(comment: "overly defensive code", id: @id, data: dialyzer_warning)
