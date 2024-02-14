@@ -18,7 +18,7 @@ defmodule Dialyzer do
       |> String.trim()
       |> String.to_charlist()
 
-    plt_filename = ~c"plt-dir/" ++ otp_version ++ ~c".plt"
+    plt_filename = ~c"plt/" ++ otp_version ++ ~c".plt"
 
     dirs =
       [
