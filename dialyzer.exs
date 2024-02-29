@@ -327,30 +327,6 @@ defmodule Dialyzer do
 
   @id __ENV__.line
   expected_counts =
-    if System.otp_release() < "26",
-      do: Map.put(expected_counts, @id, 1),
-      else: Map.put(expected_counts, @id, 0)
-
-  defp filter(
-          dialyzer_warning =
-            {:warn_callgraph, {~c"src/iex.erl", _}, {:call_to_missing, [:shell, :whereis, 0]}}
-        ),
-        do: filtered(comment: "function used only conditionally on otp 26+", id: @id, data: dialyzer_warning)
-
-  @id __ENV__.line
-  expected_counts =
-    if System.otp_release() < "26",
-      do: Map.put(expected_counts, @id, 1),
-      else: Map.put(expected_counts, @id, 0)
-
-  defp filter(
-            dialyzer_warning =
-              {:warn_callgraph, {~c"lib/iex.ex", _}, {:call_to_missing, [:shell, :start_interactive, 1]}}
-        ),
-        do: filtered(comment: "function used only conditionally on otp 26+", id: @id, data: dialyzer_warning)
-
-  @id __ENV__.line
-  expected_counts =
     if System.otp_release() >= "26",
       do: Map.put(expected_counts, @id, 1),
       else: Map.put(expected_counts, @id, 0)
