@@ -410,7 +410,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {~c"lib/iex/helpers.ex", 658},
+           {:warn_matching, {~c"lib/iex/helpers.ex", 674},
             {:pattern_match,
              [
                ~c"pattern <__key@1, 'nil'>",
@@ -447,7 +447,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {~c"lib/mix/tasks/test.ex", 616},
+           {:warn_return_no_exit, {~c"lib/mix/tasks/test.ex", 635},
             {:no_return, [:only_normal, :raise_with_shell, 2]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
@@ -643,7 +643,7 @@ defmodule Dialyzer do
   expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
-         dialyzer_warning = {:warn_return_no_exit, {~c"lib/iex/cli.ex", 105}, {:no_return, [:only_normal]}}
+         dialyzer_warning = {:warn_return_no_exit, {~c"lib/iex/cli.ex", 112}, {:no_return, [:only_normal]}}
        ),
        do: filtered(comment: "not annotated exit", id: @id, data: dialyzer_warning)
 
