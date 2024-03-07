@@ -343,9 +343,9 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_unknown, {~c"lib/mix/hex.ex", lines}, {:unknown_function, {Hex, function, 0}}}
+           {:warn_unknown, {~c"lib/mix/hex.ex", _}, {:unknown_function, {Hex, function, 0}}}
        )
-       when function in [:start, :version] and lines in [41, 60],
+       when function in [:start, :version],
        do:
          filtered(
            comment: "Hex package loading gets handled by the Mix task",
@@ -423,7 +423,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {~c"lib/mix/tasks/test.ex", 635},
+           {:warn_return_no_exit, {~c"lib/mix/tasks/test.ex", _},
             {:no_return, [:only_normal, :raise_with_shell, 2]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
@@ -443,7 +443,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {~c"lib/mix/dep/loader.ex", 254},
+           {:warn_return_no_exit, {~c"lib/mix/dep/loader.ex", _},
             {:no_return, [:only_normal, :invalid_dep_format, 1]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
@@ -453,7 +453,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {~c"lib/mix/scm/path.ex", 67},
+           {:warn_return_no_exit, {~c"lib/mix/scm/path.ex", _},
             {:no_return, [:only_normal, :checkout, 1]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
@@ -491,7 +491,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {~c"lib/mix/dep/converger.ex", 55},
+           {:warn_return_no_exit, {~c"lib/mix/dep/converger.ex", _},
             {:no_return, [:only_normal, :cycle_found, 1]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
@@ -501,7 +501,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {~c"lib/mix/tasks/iex.ex", 9},
+           {:warn_return_no_exit, {~c"lib/mix/tasks/iex.ex", _},
             {:no_return, [:only_normal, :run, 1]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
@@ -511,7 +511,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {~c"lib/config/provider.ex", 422},
+           {:warn_return_no_exit, {~c"lib/config/provider.ex", _},
             {:no_return, [:only_normal, :bad_path_abort, 2]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
@@ -543,7 +543,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {~c"src/elixir_erl_compiler.erl", {131, 1}},
+           {:warn_return_no_exit, {~c"src/elixir_erl_compiler.erl", _},
             {:no_return, [:only_normal, :handle_file_error, 2]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
@@ -583,7 +583,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {~c"src/elixir_fn.erl", {121, 1}},
+           {:warn_return_no_exit, {~c"src/elixir_fn.erl", _},
             {:no_return, [:only_normal, :invalid_capture, 3]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
@@ -628,7 +628,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {~c"lib/kernel/cli.ex", 368},
+           {:warn_return_no_exit, {~c"lib/kernel/cli.ex", _},
             {:no_return, [:only_normal, :halt_standalone, 1]}}
        ),
        do: filtered(comment: "not annotated exit", id: @id, data: dialyzer_warning)
@@ -638,7 +638,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {~c"lib/gen_event.ex", 460},
+           {:warn_return_no_exit, {~c"lib/gen_event.ex", _},
             {:no_return, [:only_normal, :system_terminate, 4]}}
        ),
        do: filtered(comment: "not annotated exit", id: @id, data: dialyzer_warning)
