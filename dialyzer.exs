@@ -200,7 +200,7 @@ defmodule Dialyzer do
   # discussed in https://github.com/elixir-lang/elixir/issues/11092
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {~c"lib/calendar/time.ex", 758},
+           {:warn_matching, {~c"lib/calendar/time.ex", 802},
             {:pattern_match,
              [
                ~c"pattern {'error', _reason@1}",
