@@ -173,7 +173,7 @@ defmodule Dialyzer do
   # may be resolved in https://github.com/elixir-lang/elixir/issues/9465
   defp filter(
          dialyzer_warning =
-           {:warn_failing_call, {~c"lib/logger.ex", 900},
+           {:warn_failing_call, {~c"lib/logger.ex", 903},
             {:call, [Logger, :__do_log__, _, [3], :only_sig, _, _, {false, :none}]}}
        ),
        do:
@@ -315,7 +315,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {~c"lib/mix/utils.ex", 772},
+           {:warn_matching, {~c"lib/mix/utils.ex", 781},
             {:pattern_match,
              [
                ~c"pattern 'nil'",
@@ -554,7 +554,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {~c"lib/mix/tasks/release.ex", 1214}, {:no_return, [:both]}}
+           {:warn_return_no_exit, {~c"lib/mix/tasks/release.ex", 1230}, {:no_return, [:both]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
 
