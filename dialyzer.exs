@@ -346,7 +346,7 @@ defmodule Dialyzer do
            {:warn_matching, {~c"lib/kernel.ex", line},
             {:pattern_match, [~c"pattern 'false'", ~c"'true'"]}}
        )
-       when line in [2082, 3641, 4036, 4133, 4520],
+       when line in [2089, 3648, 4043, 4140, 4527],
        do: filtered(comment: "inlined bootstrap check stuff", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
@@ -554,7 +554,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {~c"lib/mix/tasks/release.ex", 1230}, {:no_return, [:both]}}
+           {:warn_return_no_exit, {~c"lib/mix/tasks/release.ex", 1229}, {:no_return, [:both]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
 
