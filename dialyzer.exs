@@ -415,7 +415,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {~c"lib/iex.ex", 688}, {:no_return, [:only_normal]}}
+           {:warn_return_no_exit, {~c"lib/iex.ex", 695}, {:no_return, [:only_normal]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
 
