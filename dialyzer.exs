@@ -52,14 +52,21 @@ defmodule Dialyzer do
       )
     end
 
+    warnings_flags = [
+      :unknown,
+      :no_improper_lists
+    ]
+
+    warnings_flags = if System.otp_release() >= "26" do
+      [:overlapping_contract | warnings_flags]
+    else
+      warnings_flags
+    end
+
     results =
       :dialyzer.run(
         init_plt: plt_filename,
-        warnings: [
-          :unknown,
-          :overlapping_contract,
-          :no_improper_lists
-        ],
+        warnings: warnings_flags,
         files_rec: [
           ~c"elixir/lib/eex/ebin",
           ~c"elixir/lib/elixir/ebin",
