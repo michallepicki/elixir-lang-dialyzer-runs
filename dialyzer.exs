@@ -57,6 +57,7 @@ defmodule Dialyzer do
         init_plt: plt_filename,
         warnings: [
           :unknown,
+          :overlapping_contract,
           :no_improper_lists
         ],
         files_rec: [
