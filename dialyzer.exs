@@ -181,7 +181,7 @@ defmodule Dialyzer do
   # may be resolved in https://github.com/elixir-lang/elixir/issues/9465
   defp filter(
          dialyzer_warning =
-           {:warn_failing_call, {~c"lib/logger.ex", {932, 41}},
+           {:warn_failing_call, {~c"lib/logger.ex", {933, 41}},
             {:call, [Logger, :__do_log__, _, [3], :only_sig, _, _, {false, :none}]}}
        ),
        do:
@@ -202,20 +202,6 @@ defmodule Dialyzer do
             {:pattern_match, _lots_of_details}}
        ),
        do: filtered(comment: "return type not documented in erlang", id: @id, data: dialyzer_warning)
-
-  @id __ENV__.line
-  expected_counts = Map.put(expected_counts, @id, 1)
-  # discussed in https://github.com/elixir-lang/elixir/issues/11092
-  defp filter(
-         dialyzer_warning =
-           {:warn_matching, {~c"lib/calendar/time.ex", {804, 16}},
-            {:pattern_match,
-             [
-               ~c"pattern {'error', _reason@1}",
-               ~c"{'ok',\#{'__struct__':='Elixir.Time', 'calendar':=atom(), 'hour':=non_neg_integer(), 'microsecond':={non_neg_integer(),non_neg_integer()}, 'minute':=non_neg_integer(), 'second':=non_neg_integer()}}"
-             ]}}
-       ),
-       do: filtered(comment: "slightly dead code", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
   expected_counts = Map.put(expected_counts, @id, 1)
@@ -354,7 +340,7 @@ defmodule Dialyzer do
            {:warn_matching, {~c"lib/kernel.ex", location},
             {:pattern_match, [~c"pattern 'false'", ~c"'true'"]}}
        )
-       when location in [{2089, 15}, {3648, 17}, {4051, 13}, {4148, 13}, {4535, 15}],
+       when location in [{2092, 15}, {3643, 17}, {4047, 13}, {4144, 13}, {4537, 15}],
        do: filtered(comment: "inlined bootstrap check stuff", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
@@ -466,18 +452,7 @@ defmodule Dialyzer do
            {:warn_return_no_exit, {~c"src/elixir_clauses.erl", location},
             {:no_return, [:only_normal]}}
        )
-       when location in [{236, 43}, {255, 43}, {274, 16}, {366, 16}],
-       do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
-
-  @id __ENV__.line
-  expected_counts = Map.put(expected_counts, @id, 2)
-
-  defp filter(
-         dialyzer_warning =
-           {:warn_return_no_exit, {~c"src/elixir_erl_compiler.erl", location},
-            {:no_return, [:only_normal]}}
-       )
-       when location in [{102, 21}, {104, 21}],
+       when location in [{239, 43}, {258, 43}, {277, 16}, {369, 16}],
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
