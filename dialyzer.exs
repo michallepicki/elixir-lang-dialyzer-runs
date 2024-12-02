@@ -63,6 +63,8 @@ defmodule Dialyzer do
       warnings_flags
     end
 
+    IO.puts("Starting dialyzer analysis.")
+
     results =
       :dialyzer.run(
         init_plt: plt_filename,
