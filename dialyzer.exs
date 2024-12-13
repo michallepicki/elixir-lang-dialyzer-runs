@@ -183,7 +183,7 @@ defmodule Dialyzer do
   # may be resolved in https://github.com/elixir-lang/elixir/issues/9465
   defp filter(
          dialyzer_warning =
-           {:warn_failing_call, {~c"lib/logger.ex", {936, 41}},
+           {:warn_failing_call, {~c"lib/logger.ex", {949, 41}},
             {:call, [Logger, :__do_log__, _, [3], :only_sig, _, _, {false, :none}]}}
        ),
        do:
@@ -312,7 +312,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {~c"lib/iex/helpers.ex", {706, 8}},
+           {:warn_matching, {~c"lib/iex/helpers.ex", {708, 8}},
             {:pattern_match,
              [
                ~c"pattern <__key@1, 'nil'>",
@@ -329,7 +329,7 @@ defmodule Dialyzer do
            {:warn_matching, {~c"lib/kernel.ex", location},
             {:pattern_match, [~c"pattern 'false'", ~c"'true'"]}}
        )
-       when location in [{2090, 15}, {3641, 17}, {4045, 13}, {4142, 13}, {4535, 15}],
+       when location in [{2092, 15}, {3643, 17}, {4047, 13}, {4144, 13}, {4537, 15}],
        do: filtered(comment: "inlined bootstrap check stuff", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
