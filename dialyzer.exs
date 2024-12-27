@@ -316,7 +316,7 @@ defmodule Dialyzer do
        ),
        do: filtered(comment: "overly_defensive code", id: @id, data: dialyzer_warning)
 
-  @id __ENC__.line
+  @id __ENV__.line
   expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
