@@ -280,8 +280,7 @@ defmodule Dialyzer do
   defp filter(
          dialyzer_warning =
            {:warn_unknown, {~c"lib/mix/tasks/local.hex.ex", _}, {:unknown_function, {Hex, :version, 0}}}
-       )
-       when function in [:start, :version],
+       ),
        do:
          filtered(
            comment: "Hex package loading gets handled by the Mix task",
