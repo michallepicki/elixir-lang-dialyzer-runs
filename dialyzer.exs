@@ -279,6 +279,21 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
+           {:warn_unknown, {~c"lib/mix/tasks/local.hex.ex", _}, {:unknown_function, {Hex, :version, 0}}}
+       )
+       when function in [:start, :version],
+       do:
+         filtered(
+           comment: "Hex package loading gets handled by the Mix task",
+           id: @id,
+           data: dialyzer_warning
+         )
+
+  @id __ENV__.line
+  expected_counts = Map.put(expected_counts, @id, 1)
+
+  defp filter(
+         dialyzer_warning =
            {:warn_matching, {~c"lib/dynamic_supervisor.ex", {464, 8}},
             {:pattern_match_cov,
              [
