@@ -181,10 +181,10 @@ defmodule Dialyzer do
   # discussed in https://github.com/elixir-lang/elixir/issues/10279
   # and https://github.com/elixir-lang/elixir/pull/10280
   # mostly fixed in https://github.com/elixir-lang/elixir/pull/10287
-  # may be resolved in https://github.com/elixir-lang/elixir/issues/9465
+  # should have been but wasn't resolved in https://github.com/elixir-lang/elixir/issues/9465
   defp filter(
          dialyzer_warning =
-           {:warn_failing_call, {~c"lib/logger.ex", {949, 41}},
+           {:warn_failing_call, {~c"lib/logger.ex", {953, 41}},
             {:call, [Logger, :__do_log__, _, [3], :only_sig, _, _, {false, :none}]}}
        ),
        do:
@@ -209,7 +209,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {~c"lib/calendar/date_range.ex", {201, 10}},
+           {:warn_matching, {~c"lib/calendar/date_range.ex", {205, 10}},
             {:pattern_match_cov,
              [
                ~c"pattern _date_range@1 = \#{'__struct__':='Elixir.Date.Range', 'first_in_iso_days':=_first_days@1, 'last_in_iso_days':=_last_days@1}",
@@ -293,7 +293,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {~c"lib/dynamic_supervisor.ex", {464, 8}},
+           {:warn_matching, {~c"lib/dynamic_supervisor.ex", {468, 8}},
             {:pattern_match_cov,
              [
                ~c"variable _other@1",
@@ -307,7 +307,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {~c"lib/mix/utils.ex", {781, 8}},
+           {:warn_matching, {~c"lib/mix/utils.ex", {785, 8}},
             {:pattern_match,
              [
                ~c"pattern 'nil'",
@@ -321,7 +321,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {~c"lib/iex/helpers.ex", {712, 8}},
+           {:warn_matching, {~c"lib/iex/helpers.ex", {716, 8}},
             {:pattern_match,
              [
                ~c"pattern <__key@1, 'nil'>",
@@ -346,7 +346,7 @@ defmodule Dialyzer do
          dialyzer_warning =
            {:warn_matching, {~c"lib/kernel.ex", location}, {:pattern_match, [~c"pattern 'false'", ~c"'true'"]}}
        )
-       when location in [{2092, 15}, {3643, 17}, {4047, 13}, {4144, 13}, {4537, 15}],
+       when location in [{2096, 15}, {3647, 17}, {4051, 13}, {4148, 13}, {4541, 15}],
        do: filtered(comment: "inlined bootstrap check stuff", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
