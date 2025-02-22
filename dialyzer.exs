@@ -335,7 +335,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {~c"src/elixir_erl.erl", {519, 1}}, {:pattern_match, [~c"pattern <[], Opts>", ~c"<[any(),...],[any(),...]>"]}}
+           {:warn_matching, {~c"src/elixir_erl.erl", {524, 1}}, {:pattern_match, [~c"pattern <[], Opts>", ~c"<[any(),...],[any(),...]>"]}}
        ),
        do: filtered(comment: "currently redundant clause because at least the ExCk chunk will be present", id: @id, data: dialyzer_warning)
 
@@ -346,7 +346,7 @@ defmodule Dialyzer do
          dialyzer_warning =
            {:warn_matching, {~c"lib/kernel.ex", location}, {:pattern_match, [~c"pattern 'false'", ~c"'true'"]}}
        )
-       when location in [{2096, 15}, {3647, 17}, {4051, 13}, {4148, 13}, {4541, 15}],
+       when location in [{2096, 15}, {3648, 17}, {4052, 13}, {4149, 13}, {4241, 15}],
        do: filtered(comment: "inlined bootstrap check stuff", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
