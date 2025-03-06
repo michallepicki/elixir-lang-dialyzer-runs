@@ -349,6 +349,18 @@ defmodule Dialyzer do
          )
 
   @id __ENV__.line
+  expected_counts =
+    if System.otp_release() < "28",
+      do: Map.put(expected_counts, @id, 0),
+      else: Map.put(expected_counts, @id, 1)
+
+  defp filter(
+         dialyzer_warning =
+           {:warn_matching, {~c"lib/system.ex", {267, 42}}, {:exact_compare, [~c"<<_:56>>", :"/=", ~c"<<>>"]}}
+       ),
+       do: filtered(comment: "dead code warning caused by string literal baked in at compile time", id: @id, data: dialyzer_warning)
+
+  @id __ENV__.line
   expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
