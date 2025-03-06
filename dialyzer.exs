@@ -56,7 +56,8 @@ defmodule Dialyzer do
 
     warnings_flags = [
       :unknown,
-      :no_improper_lists
+      :no_improper_lists,
+      :no_opaque
     ]
 
     warnings_flags =
@@ -161,20 +162,6 @@ defmodule Dialyzer do
   defp filter_results([], acc), do: acc
 
   defp filter_results([warning | rest], acc), do: filter_results(rest, [filter(warning) | acc])
-
-  @id __ENV__.line
-  expected_counts = Map.put(expected_counts, @id, 1)
-  # also see https://github.com/erlang/otp/issues/5503
-  defp filter(
-         dialyzer_warning =
-           {:warn_opaque, {~c"lib/module/types/descr.ex", _}, {:call_without_opaque, [:sets, :is_subset, _, _]}}
-       ),
-       do:
-         filtered(
-           comment: "opaque value baked in as module attribute",
-           id: @id,
-           data: dialyzer_warning
-         )
 
   @id __ENV__.line
   expected_counts = Map.put(expected_counts, @id, 1)
