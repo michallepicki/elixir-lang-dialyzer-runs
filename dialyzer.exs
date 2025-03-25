@@ -294,7 +294,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {~c"lib/mix/utils.ex", {854, 8}},
+           {:warn_matching, {~c"lib/mix/utils.ex", {859, 8}},
             {:pattern_match,
              [
                ~c"pattern 'nil'",
@@ -522,6 +522,16 @@ defmodule Dialyzer do
   defp filter(
          dialyzer_warning =
            {:warn_return_no_exit, {~c"lib/gen_event.ex", _}, {:no_return, [:only_normal, :system_terminate, 4]}}
+       ),
+       do: filtered(comment: "not annotated exit", id: @id, data: dialyzer_warning)
+
+
+  @id __ENV__.line
+  expected_counts = Map.put(expected_counts, @id, 1)
+
+  defp filter(
+         dialyzer_warning =
+           {:warn_return_no_exit, {~c"lib/mix/tasks/deps.partition.ex", {226, 11}}, {:no_return, [:only_normal]}}
        ),
        do: filtered(comment: "not annotated exit", id: @id, data: dialyzer_warning)
 
