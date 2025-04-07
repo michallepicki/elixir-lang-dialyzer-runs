@@ -196,7 +196,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {~c"lib/calendar/date_range.ex", {205, 10}},
+           {:warn_matching, {~c"lib/calendar/date_range.ex", {209, 10}},
             {:pattern_match_cov,
              [
                ~c"pattern _date_range@1 = \#{'__struct__':='Elixir.Date.Range', 'first_in_iso_days':=_first_days@1, 'last_in_iso_days':=_last_days@1}",
