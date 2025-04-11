@@ -171,7 +171,7 @@ defmodule Dialyzer do
   # should have been but wasn't resolved in https://github.com/elixir-lang/elixir/issues/9465
   defp filter(
          dialyzer_warning =
-           {:warn_failing_call, {~c"lib/logger.ex", {980, 41}},
+           {:warn_failing_call, {~c"lib/logger.ex", {981, 41}},
             {:call, [Logger, :__do_log__, _, [3], :only_sig, _, _, {false, :none}]}}
        ),
        do:
@@ -302,20 +302,6 @@ defmodule Dialyzer do
              ]}}
        ),
        do: filtered(comment: "overly defensive code", id: @id, data: dialyzer_warning)
-
-  @id __ENV__.line
-  expected_counts = Map.put(expected_counts, @id, 1)
-
-  defp filter(
-         dialyzer_warning =
-           {:warn_matching, {~c"lib/iex/helpers.ex", {716, 8}},
-            {:pattern_match,
-             [
-               ~c"pattern <__key@1, 'nil'>",
-               ~c"<<<_:64,_:_*8>>,binary() | string() | non_neg_integer()>"
-             ]}}
-       ),
-       do: filtered(comment: "overly_defensive code", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
   expected_counts = Map.put(expected_counts, @id, 1)
