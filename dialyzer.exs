@@ -187,7 +187,7 @@ defmodule Dialyzer do
   # discussed in https://github.com/elixir-lang/elixir/pull/9979#discussion_r416206411
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {~c"src/elixir_erl_compiler.erl", {85, _}}, {:pattern_match, _lots_of_details}}
+           {:warn_matching, {~c"src/elixir_erl_compiler.erl", {87, _}}, {:pattern_match, _lots_of_details}}
        ),
        do: filtered(comment: "return type not documented in erlang", id: @id, data: dialyzer_warning)
 
@@ -308,7 +308,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {~c"src/elixir_erl.erl", {534, 1}}, {:pattern_match, [~c"pattern <[], Opts>", ~c"<[any(),...],[any(),...]>"]}}
+           {:warn_matching, {~c"src/elixir_erl.erl", {536, 1}}, {:pattern_match, [~c"pattern <[], Opts>", ~c"<[any(),...],[any(),...]>"]}}
        ),
        do: filtered(comment: "currently redundant clause because at least the ExCk chunk will be present", id: @id, data: dialyzer_warning)
 
@@ -454,7 +454,7 @@ defmodule Dialyzer do
          dialyzer_warning =
            {:warn_return_no_exit, {~c"src/elixir_erl_compiler.erl", location}, {:no_return, [:only_normal]}}
        )
-       when location in [{120, 21}, {122, 21}],
+       when location in [{120, 21}, {124, 21}],
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
