@@ -288,7 +288,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-            {:warn_matching, {:warn_matching, {~c"lib/iex/info.ex", {_, 7}}, {:pattern_match_cov, [~c"variable _doc@2", ~c"{nonempty_maybe_improper_list() | {'doc_group',nonempty_maybe_improper_list(),'normal'},\#{'__struct__':='Elixir.Inspect.Opts', 'base':='binary' | 'decimal' | 'hex' | 'octal', 'binaries':='as_binaries' | 'as_strings' | 'infer', 'char_lists':=_, 'charlists':='as_charlists' | 'as_lists' | 'infer', 'custom_options':=[any()], 'inspect_fun':=fun((_,_) -> any()), 'limit':='infinity' | non_neg_integer(), 'pretty':=boolean(), 'printable_limit':='infinity' | non_neg_integer(), 'safe':=boolean(), 'structs':=boolean(), 'syntax_colors':=[any()], 'width':='infinity' | non_neg_integer()}}"]}}}
+            {:warn_matching, {~c"lib/iex/info.ex", {_, 7}}, {:pattern_match_cov, [~c"variable _doc@2", ~c"{nonempty_maybe_improper_list() | {'doc_group',nonempty_maybe_improper_list(),'normal'},\#{'__struct__':='Elixir.Inspect.Opts', 'base':='binary' | 'decimal' | 'hex' | 'octal', 'binaries':='as_binaries' | 'as_strings' | 'infer', 'char_lists':=_, 'charlists':='as_charlists' | 'as_lists' | 'infer', 'custom_options':=[any()], 'inspect_fun':=fun((_,_) -> any()), 'limit':='infinity' | non_neg_integer(), 'pretty':=boolean(), 'printable_limit':='infinity' | non_neg_integer(), 'safe':=boolean(), 'structs':=boolean(), 'syntax_colors':=[any()], 'width':='infinity' | non_neg_integer()}}"]}}
        ),
        do: filtered(comment: "overly defensive code", id: @id, data: dialyzer_warning)
 
