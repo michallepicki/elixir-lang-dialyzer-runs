@@ -297,7 +297,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {~c"src/elixir_erl.erl", {536, 1}}, {:pattern_match, [~c"pattern <[], Opts>", ~c"<[any(),...],[any(),...]>"]}}
+           {:warn_matching, {~c"src/elixir_erl.erl", {531, 1}}, {:pattern_match, [~c"pattern <[], Opts>", ~c"<[any(),...],[any(),...]>"]}}
        ),
        do: filtered(comment: "currently redundant clause because at least the ExCk chunk will be present", id: @id, data: dialyzer_warning)
 
