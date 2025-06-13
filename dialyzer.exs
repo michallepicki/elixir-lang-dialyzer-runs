@@ -62,8 +62,7 @@ defmodule Dialyzer do
         warnings: [
           :overlapping_contract,
           :unknown,
-          :no_improper_lists,
-          :no_opaque
+          :no_improper_lists
         ],
         files_rec: [
           ~c"elixir/lib/eex/ebin",
