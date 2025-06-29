@@ -506,9 +506,20 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {~c"lib/mix/tasks/deps.partition.ex", {226, 11}}, {:no_return, [:only_normal]}}
+           {:warn_return_no_exit, {~c"lib/mix/tasks/deps.partition.ex", {249, 11}}, {:no_return, [:only_normal]}}
        ),
        do: filtered(comment: "not annotated exit", id: @id, data: dialyzer_warning)
+
+
+  @id __ENV__.line
+  expected_counts = Map.put(expected_counts, @id, 1)
+
+  defp filter(
+         dialyzer_warning =
+           {:warn_return_no_exit, {~c"lib/mix/tasks/deps.partition.ex", {191, 8}}, {:no_return, [:only_normal, :tcp_failed!, 4]}}
+       ),
+       do: filtered(comment: "not annotated exit", id: @id, data: dialyzer_warning)
+
 
   @yecc_yrl_functions [
     :error_invalid_stab,
