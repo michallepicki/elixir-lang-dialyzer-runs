@@ -331,7 +331,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {~c"lib/system.ex", {267, 42}}, {:exact_compare, [~c"<<_:56>>", :"/=", ~c"<<>>"]}}
+           {:warn_matching, {~c"lib/system.ex", {289, 42}}, {:exact_compare, [~c"<<_:56>>", :"/=", ~c"<<>>"]}}
        ),
        do: filtered(comment: "dead code warning caused by string literal baked in at compile time", id: @id, data: dialyzer_warning)
 
