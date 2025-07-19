@@ -274,7 +274,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {~c"lib/mix/utils.ex", {866, 8}},
+           {:warn_matching, {~c"lib/mix/utils.ex", {892, 8}},
             {:pattern_match,
              [
                ~c"pattern 'nil'",
