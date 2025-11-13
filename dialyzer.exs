@@ -227,6 +227,18 @@ defmodule Dialyzer do
        do: filtered(comment: "function used only conditionally on otp 26", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
+  expected_counts =
+    if System.otp_release() < "28",
+      do: Map.put(expected_counts, @id, 1),
+      else: Map.put(expected_counts, @id, 0)
+
+  defp filter(
+         dialyzer_warning =
+           {:warn_callgraph, {~c"lib/regex.ex", {601, 13}}, {:call_to_missing, [:re, :import, 1]}}
+       ),
+       do: filtered(comment: "function effectively called only on otp 28.1+, because if the regex has the shape of :re.exported() type, the :re.import/1 function will be available", id: @id, data: dialyzer_warning)
+
+  @id __ENV__.line
   expected_counts = Map.put(expected_counts, @id, 2)
 
   defp filter(
