@@ -257,6 +257,16 @@ defmodule Dialyzer do
 
   @id __ENV__.line
   expected_counts = Map.put(expected_counts, @id, 1)
+  defp filter(
+         dialyzer_warning =
+           {:warn_matching, {~c"lib/mix/utils.ex", {1051, 8}},
+             {:pattern_match_cov, [~c"variable _other@1", ~c"[any()]"]}}
+       ),
+       do: filtered(comment: "dialyzer wrongly assuming from List.ascii_printable?/1 spec that there can't be an improper list here", id: @id, data: dialyzer_warning)
+
+
+  @id __ENV__.line
+  expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
          dialyzer_warning =
