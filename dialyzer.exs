@@ -300,7 +300,7 @@ defmodule Dialyzer do
             {:pattern_match,
              [
                ~c"pattern 'nil'",
-               ~c"\#{'__struct__':='Elixir.URI', 'authority':='Elixir.URI':authority(), 'fragment':='nil' | binary(), 'host':='nil' | binary(), 'path':='nil' | binary(), 'port':='nil' | char(), 'query':='nil' | binary(), 'scheme':='nil' | binary(), 'userinfo':='nil' | binary()}"
+               ~c"\#{'__struct__':='Elixir.URI', 'authority':='nil' | binary(), 'fragment':='nil' | binary(), 'host':='nil' | binary(), 'path':='nil' | binary(), 'port':='nil' | char(), 'query':='nil' | binary(), 'scheme':='nil' | binary(), 'userinfo':='nil' | binary()}"
              ]}}
        ),
        do: filtered(comment: "overly defensive code", id: @id, data: dialyzer_warning)
