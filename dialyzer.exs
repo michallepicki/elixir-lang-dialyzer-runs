@@ -407,15 +407,6 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {~c"lib/mix/dep/converger.ex", _}, {:no_return, [:only_normal, :cycle_found, 1]}}
-       ),
-       do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
-
-  @id __ENV__.line
-  expected_counts = Map.put(expected_counts, @id, 1)
-
-  defp filter(
-         dialyzer_warning =
            {:warn_return_no_exit, {~c"lib/mix/tasks/iex.ex", _}, {:no_return, [:only_normal, :run, 1]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
