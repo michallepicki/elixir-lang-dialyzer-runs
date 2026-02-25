@@ -554,7 +554,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_failing_call, {~c"src/elixir_map.erl", {132, 31}}, {:call, [:elixir_errors, :function_error, ~c"(Meta::any(),E::\#{'function':='nil', _=>_},'elixir_map',{'unknown_key_for_struct',atom(),_})", [2], :only_sig, ~c"([any()],\#{'file':=_, 'function':={_,_}, 'module':=_, _=>_},atom(),any())", ~c"'ok'", {false, :none}]}}
+           {:warn_failing_call, {~c"src/elixir_map.erl", {132, 31}}, {:call, [:elixir_errors, :function_error, ~c"(Meta::any(),E::\#{'function':='nil', _=>_},'elixir_map',{'unknown_key_for_struct',atom(),_})", [2], :only_sig, ~c"([any()],\#{'file':=binary(), 'function':={_,_}, 'module':=atom(), _=>_},atom(),any())", ~c"'ok'", {true, ~c"([any()],\#{'file':=binary(),'function'=>{term(),term()} | 'nil',_=>_},module(),any()) -> 'ok'"}]}}
        ),
        do: filtered(comment: "function_error called instead of file_error, not possible to spec with Dialyzer that function_error raises only for some arguments shapes", id: @id, data: dialyzer_warning)
 
