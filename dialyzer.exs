@@ -548,6 +548,17 @@ defmodule Dialyzer do
        when fun_name in @yecc_yrl_functions,
        do: filtered(comment: "parser not annotated exception", id: @id, data: dialyzer_warning)
 
+
+  @id __ENV__.line
+  expected_counts = Map.put(expected_counts, @id, 1)
+
+  defp filter(
+         dialyzer_warning =
+           {:warn_failing_call, {~c"src/elixir_map.erl", {132, 31}}, {:call, [:elixir_errors, :function_error, ~c"(Meta::any(),E::\#{'function':='nil', _=>_},'elixir_map',{'unknown_key_for_struct',atom(),_})", [2], :only_sig, ~c"([any()],\#{'file':=_, 'function':={_,_}, 'module':=_, _=>_},atom(),any())", ~c"'ok'", {false, :none}]}}
+       ),
+       do: filtered(comment: "function_error called instead of file_error, not possible to spec with Dialyzer that function_error raises only for some arguments shapes", id: @id, data: dialyzer_warning)
+
+
   defp filter(dialyzer_warning),
     do: unfiltered(data: dialyzer_warning)
 
