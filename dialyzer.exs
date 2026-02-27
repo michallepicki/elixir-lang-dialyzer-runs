@@ -321,7 +321,7 @@ defmodule Dialyzer do
          dialyzer_warning =
            {:warn_matching, {~c"lib/kernel.ex", location}, {:pattern_match, [~c"pattern 'false'", ~c"'true'"]}}
        )
-       when location in [{2193, 15}, {3745, 17}, {4191, 13}, {4288, 13}, {4694, 15}],
+       when location in [{2193, 15}, {3745, 17}, {4197, 13}, {4294, 13}, {4700, 15}],
        do: filtered(comment: "inlined bootstrap check stuff", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
