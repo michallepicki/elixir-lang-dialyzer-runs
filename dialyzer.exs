@@ -203,15 +203,6 @@ defmodule Dialyzer do
          )
 
   @id __ENV__.line
-  expected_counts = Map.put(expected_counts, @id, 1)
-
-  defp filter(
-         dialyzer_warning =
-           {:warn_callgraph, {~c"lib/iex/config.ex", {41, 17}}, {:call_to_missing, [:prim_tty, :npwcwidthstring, 1]}}
-       ),
-       do: filtered(comment: "function used only conditionally on otp 26", id: @id, data: dialyzer_warning)
-
-  @id __ENV__.line
   expected_counts =
     if System.otp_release() < "28",
       do: Map.put(expected_counts, @id, 2),
@@ -304,7 +295,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {~c"lib/module/types/descr.ex", {2860, 7}}, {:pattern_match_cov, [~c"variable _", ~c"'all_equal' | 'left_subtype_of_right' | 'right_subtype_of_left' | {'one_key_difference',_,_,_}"]}}
+           {:warn_matching, {~c"lib/module/types/descr.ex", {2874, 7}}, {:pattern_match_cov, [~c"variable _", ~c"'all_equal' | 'left_subtype_of_right' | 'right_subtype_of_left' | {'one_key_difference',_,_,_}"]}}
        ),
        do: filtered(comment: "overly defensive code", id: @id, data: dialyzer_warning)
 
