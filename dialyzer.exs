@@ -203,22 +203,7 @@ defmodule Dialyzer do
          )
 
   @id __ENV__.line
-  expected_counts =
-    if System.otp_release() < "27",
-      do: Map.put(expected_counts, @id, 1),
-      else: Map.put(expected_counts, @id, 0)
-
-  defp filter(
-         dialyzer_warning =
-           {:warn_callgraph, {~c"lib/iex/config.ex", {43, 14}}, {:call_to_missing, [:shell, :prompt_width, 1]}}
-       ),
-       do: filtered(comment: "function used only conditionally on otp 27+", id: @id, data: dialyzer_warning)
-
-  @id __ENV__.line
-  expected_counts =
-    if System.otp_release() > "26",
-      do: Map.put(expected_counts, @id, 1),
-      else: Map.put(expected_counts, @id, 0)
+  expected_counts = Map.put(expected_counts, @id, 1)
 
   defp filter(
          dialyzer_warning =
@@ -311,6 +296,15 @@ defmodule Dialyzer do
   defp filter(
          dialyzer_warning =
             {:warn_matching, {~c"lib/iex/info.ex", {_, 7}}, {:pattern_match_cov, [~c"variable _doc@2", ~c"{nonempty_maybe_improper_list() | {'doc_group',nonempty_maybe_improper_list(),'normal'},\#{'__struct__':='Elixir.Inspect.Opts', 'base':='binary' | 'decimal' | 'hex' | 'octal', 'binaries':='as_binaries' | 'as_strings' | 'infer', 'char_lists':=_, 'charlists':='as_charlists' | 'as_lists' | 'infer', 'custom_options':=[any()], 'inspect_fun':=fun((_,_) -> any()), 'limit':='infinity' | non_neg_integer(), 'pretty':=boolean(), 'printable_limit':='infinity' | non_neg_integer(), 'safe':=boolean(), 'structs':=boolean(), 'syntax_colors':=[any()], 'width':='infinity' | non_neg_integer()}}"]}}
+       ),
+       do: filtered(comment: "overly defensive code", id: @id, data: dialyzer_warning)
+
+  @id __ENV__.line
+  expected_counts = Map.put(expected_counts, @id, 1)
+
+  defp filter(
+         dialyzer_warning =
+           {:warn_matching, {~c"lib/module/types/descr.ex", {2860, 7}}, {:pattern_match_cov, [~c"variable _", ~c"'all_equal' | 'left_subtype_of_right' | 'right_subtype_of_left' | {'one_key_difference',_,_,_}"]}}
        ),
        do: filtered(comment: "overly defensive code", id: @id, data: dialyzer_warning)
 
