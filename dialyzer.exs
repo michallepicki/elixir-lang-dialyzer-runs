@@ -295,7 +295,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {~c"lib/module/types/descr.ex", {2874, 7}}, {:pattern_match_cov, [~c"variable _", ~c"'all_equal' | 'left_subtype_of_right' | 'right_subtype_of_left' | {'one_key_difference',_,_,_}"]}}
+           {:warn_matching, {~c"lib/module/types/descr.ex", {2981, 7}}, {:pattern_match_cov, [~c"variable _", ~c"'all_equal' | 'left_subtype_of_right' | 'right_subtype_of_left' | {'one_key_difference',_,_,_}"]}}
        ),
        do: filtered(comment: "overly defensive code", id: @id, data: dialyzer_warning)
 
