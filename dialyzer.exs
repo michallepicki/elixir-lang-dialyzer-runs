@@ -211,7 +211,7 @@ defmodule Dialyzer do
   defp filter(
          dialyzer_warning =
            {:warn_callgraph, {~c"lib/regex.ex", location}, {:call_to_missing, [:re, :import, 1]}}
-       ) when location in [{300, 35}, {631, 13}],
+       ) when location in [{299, 35}, {630, 13}],
        do: filtered(comment: "function effectively called only on otp 28.1+, because if the regex has the shape of :re.exported() type, the :re.import/1 function will be available", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
