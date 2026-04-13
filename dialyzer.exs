@@ -295,7 +295,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {~c"lib/module/types/descr.ex", {2991, 7}}, {:pattern_match_cov, [~c"variable _", ~c"'all_equal' | 'left_subtype_of_right' | 'right_subtype_of_left' | {'one_key_difference',_,_,_}"]}}
+           {:warn_matching, {~c"lib/module/types/descr.ex", {2992, 7}}, {:pattern_match_cov, [~c"variable _", ~c"'all_equal' | 'left_subtype_of_right' | 'right_subtype_of_left' | {'one_key_difference',_,_,_}"]}}
        ),
        do: filtered(comment: "overly defensive code", id: @id, data: dialyzer_warning)
 
@@ -412,7 +412,7 @@ defmodule Dialyzer do
          dialyzer_warning =
            {:warn_return_no_exit, {~c"src/elixir_clauses.erl", location}, {:no_return, [:only_normal]}}
        )
-       when location in [{247, 43}, {266, 43}, {285, 16}, {377, 16}],
+       when location in [{250, 43}, {269, 43}, {288, 16}, {382, 16}],
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
