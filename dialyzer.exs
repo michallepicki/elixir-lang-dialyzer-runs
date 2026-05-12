@@ -163,7 +163,7 @@ defmodule Dialyzer do
   # should have been but wasn't resolved in https://github.com/elixir-lang/elixir/issues/9465
   defp filter(
          dialyzer_warning =
-           {:warn_failing_call, {~c"lib/logger.ex", {1003, 41}},
+           {:warn_failing_call, {~c"lib/logger.ex", {1009, 41}},
             {:call, [Logger, :__do_log__, _, [3], :only_sig, _, _, {false, :none}]}}
        ),
        do:
@@ -247,7 +247,7 @@ defmodule Dialyzer do
   expected_counts = Map.put(expected_counts, @id, 1)
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {~c"lib/mix/utils.ex", {1051, 8}},
+           {:warn_matching, {~c"lib/mix/utils.ex", {1121, 8}},
              {:pattern_match_cov, [~c"variable _other@1", ~c"[any()]"]}}
        ),
        do: filtered(comment: "dialyzer wrongly assuming from List.ascii_printable?/1 spec that there can't be an improper list here", id: @id, data: dialyzer_warning)
@@ -272,7 +272,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {~c"lib/mix/utils.ex", {935, 8}},
+           {:warn_matching, {~c"lib/mix/utils.ex", {1005, 8}},
             {:pattern_match,
              [
                ~c"pattern 'nil'",
