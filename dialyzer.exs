@@ -179,7 +179,7 @@ defmodule Dialyzer do
   # discussed in https://github.com/elixir-lang/elixir/pull/9979#discussion_r416206411
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {~c"src/elixir_erl_compiler.erl", {87, _}}, {:pattern_match, _lots_of_details}}
+           {:warn_matching, {~c"src/elixir_erl_compiler.erl", {101, 9}}, {:pattern_match, _lots_of_details}}
        ),
        do: filtered(comment: "return type not documented in erlang", id: @id, data: dialyzer_warning)
 
@@ -286,7 +286,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {~c"lib/module/types/descr.ex", {3029, 7}}, {:pattern_match_cov, [~c"variable _", ~c"'all_equal' | 'left_subtype_of_right' | 'right_subtype_of_left' | {'one_key_difference',_,_,_}"]}}
+           {:warn_matching, {~c"lib/module/types/descr.ex", {6323, 7}}, {:pattern_match_cov, [~c"variable _", ~c"'all_equal' | 'left_subtype_of_right' | 'right_subtype_of_left' | {'one_key_difference',_,_,_}"]}}
        ),
        do: filtered(comment: "overly defensive code", id: @id, data: dialyzer_warning)
 
@@ -423,7 +423,7 @@ defmodule Dialyzer do
          dialyzer_warning =
            {:warn_return_no_exit, {~c"src/elixir_erl_compiler.erl", location}, {:no_return, [:only_normal]}}
        )
-       when location in [{122, 21}, {124, 21}],
+       when location in [{136, 21}, {138, 21}],
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
