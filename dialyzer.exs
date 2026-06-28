@@ -298,7 +298,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_matching, {~c"lib/module/types/descr.ex", {6323, 7}}, {:pattern_match_cov, [~c"variable _", ~c"'all_equal' | 'left_subtype_of_right' | 'right_subtype_of_left' | {'one_key_difference',_,_,_}"]}}
+           {:warn_matching, {~c"lib/module/types/descr.ex", {6390, 7}}, {:pattern_match_cov, [~c"variable _", ~c"'all_equal' | 'left_subtype_of_right' | 'right_subtype_of_left' | {'one_key_difference',_,_,_}"]}}
        ),
        do: filtered(comment: "overly defensive code", id: @id, data: dialyzer_warning)
 
@@ -471,6 +471,24 @@ defmodule Dialyzer do
   defp filter(
          dialyzer_warning =
            {:warn_return_no_exit, {~c"src/elixir_fn.erl", _}, {:no_return, [:only_normal, :invalid_capture, 3]}}
+       ),
+       do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
+
+  @id __ENV__.line
+  expected_counts = Map.put(expected_counts, @id, 1)
+
+  defp filter(
+         dialyzer_warning =
+           {:warn_return_no_exit, {~c"lib/string.ex", {3065, 7}}, {:no_return, [:only_normal, :__to_existing_atom__, 2]}}
+       ),
+       do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
+
+  @id __ENV__.line
+  expected_counts = Map.put(expected_counts, @id, 1)
+
+  defp filter(
+         dialyzer_warning =
+           {:warn_return_no_exit, {~c"lib/list.ex", {1122, 7}}, {:no_return, [:only_normal, :__to_existing_atom__, 2]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
 
