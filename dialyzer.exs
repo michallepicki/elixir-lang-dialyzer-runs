@@ -470,7 +470,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {~c"lib/string.ex", {3087, 7}}, {:no_return, [:only_normal, :__to_existing_atom__, 2]}}
+           {:warn_return_no_exit, {~c"lib/string.ex", {1131, 7}}, {:no_return, [:only_normal, :__to_existing_atom__, 2]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
 
@@ -479,7 +479,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {~c"lib/list.ex", {1137, 7}}, {:no_return, [:only_normal, :__to_existing_atom__, 2]}}
+           {:warn_return_no_exit, {~c"lib/list.ex", {3111, 7}}, {:no_return, [:only_normal, :__to_existing_atom__, 2]}}
        ),
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
 
