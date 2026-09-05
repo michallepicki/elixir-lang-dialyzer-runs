@@ -22,7 +22,7 @@ jobs:
   dialyzer:
     strategy:
       matrix:
-          otp_release: ['OTP-27.3.4.16', 'OTP-28.5.0.5', 'OTP-29.0.5']
+          otp_release: ['OTP-27.3.4.17', 'OTP-28.5.0.6', 'OTP-29.0.6']
       fail-fast: false
     runs-on: ubuntu-22.04
     steps:
