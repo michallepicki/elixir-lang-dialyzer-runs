@@ -184,25 +184,6 @@ defmodule Dialyzer do
        do: filtered(comment: "return type not documented in erlang", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
-  expected_counts = Map.put(expected_counts, @id, 1)
-
-  defp filter(
-         dialyzer_warning =
-           {:warn_matching, {~c"lib/calendar/date_range.ex", {218, 10}},
-            {:pattern_match_cov,
-             [
-               ~c"pattern _date_range@1 = \#{'__struct__':='Elixir.Date.Range', 'first_in_iso_days':=_first_days@1, 'last_in_iso_days':=_last_days@1}",
-               ~c"\#{'__struct__':='Elixir.Date.Range', 'first':=\#{'calendar':=_, _=>_}, 'first_in_iso_days':=_, 'last_in_iso_days':=_, 'step':=_, _=>_}"
-             ]}}
-       ),
-       do:
-         filtered(
-           comment: "code added for backwards compatibility with old date ranges without step field",
-           id: @id,
-           data: dialyzer_warning
-         )
-
-  @id __ENV__.line
   expected_counts =
     if System.otp_release() < "28",
       do: Map.put(expected_counts, @id, 2),
