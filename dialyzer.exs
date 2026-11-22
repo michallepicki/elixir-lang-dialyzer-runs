@@ -203,7 +203,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_callgraph, {~c"src/elixir_erl_compiler.erl", {68, 24}}, {:call_to_missing, [:sys_coverage, :beam_debug_info, 1]}}
+           {:warn_callgraph, {~c"src/elixir_erl_compiler.erl", {72, 24}}, {:call_to_missing, [:sys_coverage, :beam_debug_info, 1]}}
        ),
        do: filtered(comment: "function effectively called only on otp 28.0+, when the beam_debug_info compiler option was added", id: @id, data: dialyzer_warning)
 
