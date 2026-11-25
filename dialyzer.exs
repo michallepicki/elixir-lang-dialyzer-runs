@@ -387,7 +387,7 @@ defmodule Dialyzer do
          dialyzer_warning =
            {:warn_return_no_exit, {~c"src/elixir_clauses.erl", location}, {:no_return, [:only_normal]}}
        )
-       when location in [{260, 43}, {279, 43}, {298, 16}, {392, 16}],
+       when location in [{260, 43}, {279, 43}, {298, 16}, {394, 16}],
        do: filtered(comment: "not annotated exception", id: @id, data: dialyzer_warning)
 
   @id __ENV__.line
@@ -488,7 +488,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {~c"lib/mix/tasks/deps.partition.ex", {261, 11}}, {:no_return, [:only_normal]}}
+           {:warn_return_no_exit, {~c"lib/mix/tasks/deps.partition.ex", {278, 11}}, {:no_return, [:only_normal]}}
        ),
        do: filtered(comment: "not annotated exit", id: @id, data: dialyzer_warning)
 
@@ -497,7 +497,7 @@ defmodule Dialyzer do
 
   defp filter(
          dialyzer_warning =
-           {:warn_return_no_exit, {~c"lib/mix/tasks/deps.partition.ex", {196, 8}}, {:no_return, [:only_normal, :tcp_failed!, 4]}}
+           {:warn_return_no_exit, {~c"lib/mix/tasks/deps.partition.ex", {213, 8}}, {:no_return, [:only_normal, :tcp_failed!, 4]}}
        ),
        do: filtered(comment: "not annotated exit", id: @id, data: dialyzer_warning)
 
